@@ -6,7 +6,7 @@ export const addTrainer = async (req, res) => {
         let exist;
         console.log(req.body);
         try {
-            exist = await User.findOne({email})
+            exist = await Trainer.findOne({email})
             
         } catch (error) {
             console.log(error.message);
@@ -17,7 +17,6 @@ export const addTrainer = async (req, res) => {
         const trainer = new Trainer({
             lastName ,
             firstName,
-            userName,
             email,
             password
         })
