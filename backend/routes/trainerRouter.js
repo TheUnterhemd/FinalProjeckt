@@ -1,5 +1,5 @@
 import express from "express";
-import {addTrainer} from "../controler/trainerController.js"
+import {addTrainer} from "../controller/trainerController.js"
 
 const trainerRouter = express.Router();
 
