@@ -20,6 +20,9 @@ const trainerSchema = new Schema({
         type: String,
         required: true,
     },
+    courses:{
+        type: Array,
+    }
 })
 
 export default mongoose.model('Trainer', trainerSchema);
