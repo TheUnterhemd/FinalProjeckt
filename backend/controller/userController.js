@@ -1,34 +1,92 @@
 //imports
 /* import express from 'express'; */
 import dotenv from 'dotenv';
-/* import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken'; */
-import User from '../models/User.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { v2 as cloudinary } from 'cloudinary';
+import User from '../models/userModel.js';
 
-//environmentals
-const saltRounds = 10;
-const jwtSecret = "y<vdgkshjöshkhjsdghöouidgyfohöysdgöoysdgöhooi";
 
 //config
 dotenv.config();
 
+//environmentals
+const saltRounds = Number(process.env.SALT_ROUNDS);
+const jwtSecret = process.env.JWT_SECRET;
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+cloudinary.config({
+    cloud_name: cloudName,
+    api_key: apiKey,
+    api_secret: apiSecret
+})
+
 //user functions
 //register
-export const addUser = async (req, res) => {
-    const {firstName, lastName, email, password} = req.body;
+export const registerUser = async (req, res) => {
+    const {firstName, lastName, email, password, profilePicture} = req.body;
+    console.log(req.body);
+
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(password, salt);
+
     const newUser = new User({
         firstName,
         lastName,
         email,
-        password,
+        password: hash,
+        profilePicture
     })
 
     try{
         await newUser.save();
+
+        if(req.file){
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                public_id: `profile_picture_${newUser.id}`,
+                folder: `localtrainer/avatar/user/${newUser.id}`
+            })
+
+            newUser.profilePicture = result.secure_url;
+
+        }
+
+        await newUser.save();
+
         res.status(201).json(newUser);
     }catch(err){
         console.log(err);
         res.status(500).json({error: "Server error"});
     }
 }
+
+export const loginUser = async (req, res) => {
+    const {email, password} = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({msg: "User does not exist. "});
+
+    const passAuth = bcrypt.compareSync(password, user.password);
+    if(passAuth){
+        jwt.sign({
+            email,
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            profilePicture: user.profilePicture
+        }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
+            if (err) throw err;
+            res.cookie("token", token);
+        })
+    }else {
+        res.status(400).json("wrong credentials");
+    }
+}
+
+export const logoutUser = async (req, res) => {
+    res.cookie("token", "").json("logged out");
+}
+
 
