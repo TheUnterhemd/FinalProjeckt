@@ -3,10 +3,10 @@ import mongoose from "mongoose";
  const userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
-    adress: String,
-    email: String,
+    address: String,
+    email: {type: String },
     password: String,
-    imgURL: String,
+    profilePicture: {type: String, default: "https://res.cloudinary.com/dhdugvhj3/image/upload/v1680609327/default_profile_picture/default_profile_picture_qssq71.jpg"},
     interests: [String],
     bookedCourses: Array,
     solvedCourses: Array,
