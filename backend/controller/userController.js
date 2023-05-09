@@ -26,7 +26,7 @@ cloudinary.config({
 //user functions
 //register
 export const registerUser = async (req, res) => {
-    const {firstName, lastName, email, password, profilePicture} = req.body;
+    const {firstName, lastName, email, password, imgURL} = req.body;
     console.log(req.body);
 
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -37,7 +37,7 @@ export const registerUser = async (req, res) => {
         lastName,
         email,
         password: hash,
-        profilePicture
+        imgURL
     })
 
     try{
@@ -45,11 +45,11 @@ export const registerUser = async (req, res) => {
 
         if(req.file){
             const result = await cloudinary.uploader.upload(req.file.path, {
-                public_id: `profile_picture_${newUser.id}`,
-                folder: `localtrainer/avatar/user/${newUser.id}`
+                public_id: `profile_picture_${newUser._id}`,
+                folder: `localtrainer/avatar/user/${newUser._id}`
             })
 
-            newUser.profilePicture = result.secure_url;
+            newUser.imgURL = result.secure_url;
 
         }
 
@@ -75,7 +75,7 @@ export const loginUser = async (req, res) => {
             id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
-            profilePicture: user.profilePicture
+            imgURL: user.imgURL
         }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
             if (err) throw err;
             res.cookie("token", token);
