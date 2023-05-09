@@ -12,6 +12,17 @@ const trainerSchema = new Schema({
         type: String,
         required: true,
     },
+    adress:{
+        type: Object,
+        //required: true,
+    },
+    profession:{
+        type: String,
+        required: true,
+    },
+    imageURL:{
+        type: String,
+    },
     password:{
         type: String,
         required: true,
@@ -21,6 +32,12 @@ const trainerSchema = new Schema({
         required: true,
     },
     courses:{
+        type: Array,
+    },
+    comments:{
+        type: Array,
+    },
+    likes:{
         type: Array,
     }
 })

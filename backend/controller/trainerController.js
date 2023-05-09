@@ -1,13 +1,32 @@
+//IMPORTS OF MODULES
 import Trainer from "../models/trainerModel.js"
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { v2 as cloudinary } from 'cloudinary';
 
+//ENVIROMENTALS
+const secret = process.env.JWT_SECRET;
+const salt = Number(process.env.SALT_ROUNDS);
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+
+
+//CONFIGS
 dotenv.config()
 
+cloudinary.config({
+    cloud_name: cloudName,
+    api_key: apiKey,
+    api_secret: apiSecret
+})
+
+//FUNCTIONS
 
 export const addTrainer = async (req, res) => {
-    const {courses,email,firstName,lastName, password} = req.body;
+    const {courses,email,firstName,lastName, password,adress,imageURL,comments,likes,profession} = req.body;
         let exist;
         console.log(req.body);
         try {
@@ -19,16 +38,32 @@ export const addTrainer = async (req, res) => {
         if(exist){
             return res.status(404).json({message: "Trainer already exists! Login instead"});
         }
-        const hashedPW = bcrypt.hashSync(password,Number(process.env.SALT_ROUNDS))
+        const hashedPW = bcrypt.hashSync(password,salt)
         const trainer = new Trainer({
             lastName ,
             firstName,
+            adress,
             email,
             password:hashedPW,
-            courses
+            courses,
+            imageURL,
+            profession,
+            comments,
+            likes
         })
        try {
             trainer.save() 
+            if(req.file){
+                const result = await cloudinary.uploader.upload(req.file.path, {
+                    public_id: `profile_picture_${trainer._id}`,
+                    folder: `localtrainer/avatar/trainer/${trainer._id}`
+                })
+    
+                trainer.imageURL = result.secure_url;
+    
+            }
+    
+            await trainer.save();
        } catch (error) { 
         console.log(error.message);
        }
@@ -51,8 +86,8 @@ export const addTrainer = async (req, res) => {
             return res.status(400).json({ message: 'Wrong password' });
           }
       
-          const token = jwt.sign( trainer.toJSON(), process.env.JWT_SECRET, { expiresIn: '1h' });
-          res.cookie("LocalTrainer", token+trainer,{
+          const token = jwt.sign( trainer.toJSON(), secret, { expiresIn: '1h' });
+          res.cookie("LocalTrainer", token + trainer,{
             withCredentials: true,
             httpOnly: true,
             expiresIn: '1h'
@@ -67,14 +102,29 @@ export const addTrainer = async (req, res) => {
 
       export const updateTrainer = async (req,res,next) =>{
         const id = req.params.id;
-        const {courses} = req.body;
+        const {courses,likes,comments,adress,profession} = req.body;
         let trainer;
-        console.log(id);
-        console.log(courses);
+        let imageURL;
+        
         try {
+            if(req.file){
+                const result = await cloudinary.uploader.upload(req.file.path, {
+                    public_id: `profile_picture_${id}`,
+                    folder: `localtrainer/avatar/trainer/${id}`
+                })
+    
+                imageURL = result.secure_url;
+    
+            }
             trainer = await Trainer.findByIdAndUpdate({_id:id},{
-                courses
+                courses,
+                likes,
+                comments,
+                adress,
+                profession,
+                imageURL
             })
+            
             if(!trainer){
                 return res.status(500).json({message:"Not able to update trainer"})
             }
