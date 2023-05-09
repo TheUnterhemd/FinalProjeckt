@@ -23,21 +23,19 @@ export default function SmallCards({ data }) {
       }}
     >
       {data.map((course) => (
-        <Grid item xs={12} md={4}>
-          <Card key={uuid()}>
-            <CardMedia
-              image={course.picture}
-              title={course.cname}
-              sx={{ height: 80 }}
-            />
-            <CardContent>
-              <Typography variant="h6">{course.cname}</Typography>
-              <Typography varant="body2">
-                mit <Link>{course.trainer}</Link>
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+        <Card key={uuid()} sx={{ maxWidth: 120, maxHeight: 200 }}>
+          <CardMedia
+            image={course.picture}
+            title={course.cname}
+            sx={{ height: 80 }}
+          />
+          <CardContent>
+            <Typography variant="h6">{course.cname}</Typography>
+            <Typography varant="body2">
+              mit <Link>{course.trainer}</Link>
+            </Typography>
+          </CardContent>
+        </Card>
       ))}
     </Grid>
   );
