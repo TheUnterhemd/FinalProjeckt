@@ -71,11 +71,7 @@ export const loginUser = async (req, res) => {
     const passAuth = bcrypt.compareSync(password, user.password);
     if(passAuth){
         jwt.sign({
-            email,
             id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            imgURL: user.imgURL
         }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
             if (err) throw err;
             res.cookie("token", token);
@@ -90,3 +86,46 @@ export const logoutUser = async (req, res) => {
 }
 
 
+export const updateUser = async (req, res) => {
+    const id = req.params.id;
+    const filter = {_id: id};
+
+    const updates = req.body;
+    console.log(updates);
+
+    try {
+        if(req.file){
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                public_id: `profile_picture_${id}`,
+                folder: `localtrainer/avatar/user/${id}`
+            })
+
+            updates.imgURL = result.secure_url;
+        }
+
+        const result = await User.findOneAndUpdate(filter, updates, {new: true})
+
+        res.send(result);
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const result = await User.find()
+        res.send(result);
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+export const getUser = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const result = await User.findById(id);
+        res.send(result);
+    } catch (error) {
+        res.send(error);
+    }
+}
