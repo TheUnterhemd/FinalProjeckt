@@ -7,6 +7,8 @@ import { AuthContext } from "./context/AuthContext";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
+
+  // useEffect ist nur für einen Testuser aktuell da.
   useEffect(() => {
     dispatch({
       type: "LOGIN",

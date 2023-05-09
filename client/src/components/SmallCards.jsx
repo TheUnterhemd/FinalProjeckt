@@ -23,7 +23,10 @@ export default function SmallCards({ data }) {
       }}
     >
       {data.map((course) => (
-        <Card key={uuid()} sx={{ maxWidth: 120, maxHeight: 200 }}>
+        <Card
+          key={uuid()}
+          sx={{ maxWidth: 120, minWidth: 120, minHeight: 200, maxHeight: 200 }}
+        >
           <CardMedia
             image={course.picture}
             title={course.cname}
