@@ -50,11 +50,7 @@ function UserProfile() {
             alignItems="center"
             justifyContent="center"
           >
-            <Typography
-              variant="h4"
-              gutterBottom
-              sx={{ color: theme.palette.primary.main }}
-            >
+            <Typography variant="h4" gutterBottom>
               {user.firstName} {user.lastName}
             </Typography>
             <Typography variant="h6">Interests</Typography>
