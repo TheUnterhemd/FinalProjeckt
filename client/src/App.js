@@ -4,6 +4,8 @@ import Startseite from "./pages/Startseite";
 import UserProfile from "./pages/UserProfile";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
+import LandingPage from "./pages/LandingPage";
+import Navbar from "./components/Navbar";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
@@ -59,13 +61,18 @@ function App() {
     });
   }, []);
   return (
-    <BrowserRouter>
-      <div className="App">
+    <div className="App">
+      <BrowserRouter>
+      <Navbar/>
         <Routes>
-          <Route path="/" element={user ? <UserProfile /> : <Startseite />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/user"
+            element={user ? <UserProfile /> : <Startseite />}
+          />
         </Routes>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </div>
   );
 }
 
