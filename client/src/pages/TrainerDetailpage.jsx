@@ -1,16 +1,28 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../context/AuthContext.js";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
 import { Avatar, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import SmallCards from "../components/SmallCards.jsx";
+import SmallCards from "../components/SmallCards";
+import CommentCard from "../components/CommentCard";
+import CommentForm from "../components/CommentForm";
 
-function UserProfile() {
+export default function TrainerDetailpage() {
   const theme = useTheme();
-  const { user } = useContext(AuthContext);
+  const { id } = useParams();
+  // "counter" gibt es nur um die kommentarspalte realtime upzudaten
+  const [counter, setCounter] = useState("");
+
+  const url = "http://localhost:5002";
+  const { data } = useFetch(`${url}/trainer/${id}`);
+  useEffect(() => {
+    setCounter(data?.comments.length);
+    console.log("data in detailpage", data);
+  }, [data]);
 
   return (
     <div>
-      {user && (
+      {data && (
         <Grid container spacing={2} sx={{ mt: "2rem" }}>
           <Grid
             item
@@ -27,8 +39,8 @@ function UserProfile() {
             }}
           >
             <Avatar
-              alt="This is just a test"
-              src={user.imgURL}
+              alt={`picture of ${data.firstName}`}
+              src={data.imageURL}
               sx={{
                 width: 200,
                 height: 200,
@@ -51,25 +63,30 @@ function UserProfile() {
             justifyContent="center"
           >
             <Typography variant="h4" gutterBottom>
-              {user.firstName} {user.lastName}
+              {data.firstName} {data.lastName}
             </Typography>
-            <Typography variant="h6">Interests</Typography>
+            <Typography variant="h6">Profession</Typography>
             <Typography variant="body2" gutterBottom>
-              {user.interests.join(", ")}
+              {data.profession}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Booked Courses
+              Courses offered
             </Typography>
-            <SmallCards data={user.bookedCourses} />
+            {data.courses.length > 0 ? (
+              <SmallCards data={data.courses} />
+            ) : (
+              "Currrently no courses offered."
+            )}
             <Typography variant="h6" gutterBottom>
-              Past Courses
+              {counter} Comments
             </Typography>
-            <SmallCards data={user.solvedCourses} />
+            <CommentForm data={data} setCounter={setCounter} />
+            {data.comments.length > 0
+              ? data.comments.map((comment) => <CommentCard data={comment} />)
+              : "Be the first to comment!"}
           </Grid>
         </Grid>
       )}
     </div>
   );
 }
-
-export default UserProfile;

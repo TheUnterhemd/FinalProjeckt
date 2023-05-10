@@ -6,6 +6,9 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import Navbar from "./components/Navbar";
+import AllTrainers from "./pages/AllTrainers";
+import AllCourses from "./pages/AllCourses";
+import TrainerDetailpage from "./pages/TrainerDetailpage";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
@@ -15,40 +18,41 @@ function App() {
     dispatch({
       type: "LOGIN",
       payload: {
+        _id: "fakeidfortestingpurposes",
         firstName: "Micha",
         lastName: "Dings",
         imgURL: "https://picsum.photos/200",
         interests: ["Surfing", "Climbing", "Chilling"],
         bookedCourses: [
           {
-            cname: "Rückenfit",
+            title: "Rückenfit",
             trainer: "Kim",
             picture: "https://picsum.photos/200",
           },
           {
-            cname: "Rückenfit",
+            title: "Rückenfit",
             trainer: "Kim",
             picture: "https://picsum.photos/250",
           },
           {
-            cname: "Rückenfit",
+            title: "Rückenfit",
             trainer: "Kim",
             picture: "https://picsum.photos/300",
           },
         ],
         solvedCourses: [
           {
-            cname: "Rückenfit",
+            title: "Rückenfit",
             trainer: "Toni",
             picture: "https://picsum.photos/200",
           },
           {
-            cname: "Rückenfit",
+            title: "Rückenfit",
             trainer: "Toni",
             picture: "https://picsum.photos/250",
           },
           {
-            cname: "Bauch Beine Po",
+            title: "Bauch Beine Po",
             trainer: "Toni",
             picture: "https://picsum.photos/300",
           },
@@ -65,13 +69,16 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <Navbar/>
+        {/* <Navbar/> */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
             path="/user"
             element={user ? <UserProfile /> : <Startseite />}
           />
+          <Route path="/trainers" element={<AllTrainers />} />
+          <Route path="/trainers/:id" element={<TrainerDetailpage />} />
+          <Route path="/courses" element={<AllCourses />} />
         </Routes>
       </BrowserRouter>
     </div>
