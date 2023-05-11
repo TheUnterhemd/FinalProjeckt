@@ -61,6 +61,8 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     const {email, password} = req.body;
 
+    console.log(req.body);
+
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({msg: "User does not exist. "});
 
@@ -70,7 +72,8 @@ export const loginUser = async (req, res) => {
             id: user._id,
         }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
             if (err) throw err;
-            res.cookie("LocalTrainer",{user:newUser._id} + token);
+
+            res.cookie("LocalTrainer",{user:newUser._id} + token).json("User logged in.");
         })
     }else {
         res.status(400).json("wrong credentials");
@@ -78,7 +81,7 @@ export const loginUser = async (req, res) => {
 }
 
 export const logoutUser = async (req, res) => {
-    res.clarCookie("LocalTrainer").json("logged out");
+    res.clearCookie("LocalTrainer").json("logged out");
 }
 
 

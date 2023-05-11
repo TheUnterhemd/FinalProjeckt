@@ -1,8 +1,37 @@
-import React from 'react'
+import { useState } from 'react'
 import { Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+/* import { useNavigate } from 'react-router-dom'; */
 
-const Login = () => {
+const Login = ({ setReg }) => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    /* const navigate = useNavigate(); */
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        postData({ email, password });
+    }
+
+    const postData = async ({ email, password }) => {
+        try {
+
+            const response = await fetch(`http://localhost:5002/user/login`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                })
+
+            const data = await response.json();
+            console.log(data);
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <Box
@@ -19,7 +48,7 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box component="form" /* onSubmit={} */ noValidate sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
                         required
@@ -29,6 +58,7 @@ const Login = () => {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <TextField
                         margin="normal"
@@ -39,6 +69,7 @@ const Login = () => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
@@ -59,7 +90,7 @@ const Login = () => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="#" variant="body2" onClick={setReg}>
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
