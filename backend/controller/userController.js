@@ -73,7 +73,7 @@ export const loginUser = async (req, res) => {
             id: user._id,
         }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
             if (err) throw err;
-            res.cookie("LocalTrainer",{user:newUser._id} + token);
+            res.cookie("LocalTrainer",{user:user._id} + token);
         })
     }else {
         res.status(400).json("wrong credentials");
