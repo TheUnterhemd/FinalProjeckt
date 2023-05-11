@@ -130,17 +130,7 @@ export const addTrainer = async (req, res) => {
         } catch (error) {
             console.log(error.message);
         }
-      }
-    );
-
-    if (!trainer) {
-      return res.status(500).json({ message: "Not able to update trainer" });
-    }
-    return res.status(200).json({ trainer, message: "trainer updated" });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+      };
 
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
