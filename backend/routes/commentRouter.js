@@ -1,5 +1,5 @@
 import express from "express";
-//import {addCourse,updateCourse,getAllCourses,getCourse,deleteCourse} from "../controller/courseController.js"
+import {addComment,updateComment,getAllComments,deleteComment} from "../controller/commentController.js"
 
 const commentRouter = express.Router();
 
