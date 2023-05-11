@@ -27,7 +27,6 @@ cloudinary.config({
 //register
 export const registerUser = async (req, res) => {
     const {firstName, lastName, email, password, imgURL} = req.body;
-    console.log(req.body);
 
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
@@ -55,7 +54,7 @@ export const registerUser = async (req, res) => {
 
         await newUser.save();
 
-        res.status(201).json(newUser);
+        res.status(201).json({user: newUser._id, email: newUser.email, imgURL: newUser.imgURL});
     }catch(err){
         console.log(err);
         res.status(500).json({error: "Server error"});
@@ -74,7 +73,7 @@ export const loginUser = async (req, res) => {
             id: user._id,
         }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
             if (err) throw err;
-            res.cookie("token", token);
+            res.cookie("LocalTrainer",{user:newUser._id} + token);
         })
     }else {
         res.status(400).json("wrong credentials");
@@ -82,7 +81,7 @@ export const loginUser = async (req, res) => {
 }
 
 export const logoutUser = async (req, res) => {
-    res.cookie("token", "").json("logged out");
+    res.clarCookie("LocalTrainer").json("logged out");
 }
 
 
@@ -114,8 +113,8 @@ export const updateUser = async (req, res) => {
 export const getUser = async (req, res) => {
     const id = req.params.id;
     try {
-        const result = await User.findById(id);
-        res.send(result);
+        const user = await User.findById(id);
+        res.send({user: user._id, email: user.email, imgURL: user.imgURL});
     } catch (error) {
         res.send(error);
     }
