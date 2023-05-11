@@ -8,6 +8,7 @@ import LandingPage from "./pages/LandingPage";
 import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
+import CourseDetailPage from "./pages/CourseDetailPage";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
@@ -68,16 +69,17 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <Navbar/> */}
+        <Navbar/>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
             path="/user"
             element={user ? <UserDetailpage /> : <Startseite />}
           />
-          <Route path="/trainers" element={<AllTrainers />} />
-          <Route path="/trainers/:id" element={<TrainerDetailpage />} />
-          <Route path="/courses" element={<AllCourses />} />
+          <Route path="/trainer" element={<AllTrainers />} />
+          <Route path="/trainer/:id" element={<TrainerDetailpage />} />
+          <Route path="/course" element={<AllCourses />} />
+          <Route path="/course/:id" element={<CourseDetailPage />} />
         </Routes>
       </BrowserRouter>
     </div>

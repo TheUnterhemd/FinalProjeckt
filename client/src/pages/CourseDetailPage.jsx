@@ -1,29 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { Avatar, Grid, Typography } from "@mui/material";
+import { Avatar, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import SmallCards from "../components/SmallCards";
-import CommentCard from "../components/CommentCard";
-import CommentForm from "../components/CommentForm";
-import Favorite from "@mui/icons-material/Favorite";
 
-export default function TrainerDetailpage() {
+export default function CourseDetailPage() {
   const theme = useTheme();
   const { id } = useParams();
-  // "counter" gibt es nur um die kommentarspalte realtime upzudaten
-  const [counter, setCounter] = useState("");
+
   const url = process.env.REACT_APP_SERVER_URL;
-  const { data } = useFetch(`${url}/trainer/${id}`);
+  const { data } = useFetch(`${url}/course/${id}`);
 
   useEffect(() => {
-    setCounter(data?.comments.length);
-    console.log("data in detailpage", data);
+    console.log("data in CourseDetailPage", data);
   }, [data]);
-
-  function handleLike(e) {
+  /** starts booking process for a course */
+  function startBooking(e) {
     e.preventDefault();
-    console.log("currently not enabled");
+    console.log("does nothing at the moment");
   }
   return (
     <div>
@@ -44,7 +38,7 @@ export default function TrainerDetailpage() {
             }}
           >
             <Avatar
-              alt={`picture of ${data.firstName}`}
+              alt={`picture of ${data.title}`}
               src={data.imgURL}
               sx={{
                 width: 200,
@@ -68,28 +62,32 @@ export default function TrainerDetailpage() {
             justifyContent="center"
           >
             <Typography variant="h4" gutterBottom>
-              {data.firstName} {data.lastName}{" "}
-              <Favorite color="error" onClick={(e) => handleLike(e)} />
+              {data.title} <Chip label={`${data.price}€`} />
             </Typography>
-            <Typography variant="h6">Profession</Typography>
             <Typography variant="body2" gutterBottom>
-              {data.profession}
+              {data.description}
             </Typography>
+            <Typography variant="body1">Location: {data.location}</Typography>
+            <Typography variant="body1">{data.start.split("_")[0]}</Typography>
+            <Typography variant="body1">
+              Starts {data.start.split("_")[1]}
+            </Typography>
+            <Typography variant="body1">Duration {data.duration}</Typography>
             <Typography variant="h6" gutterBottom>
-              Courses offered
+              Participants
             </Typography>
-            {data.courses.length > 0 ? (
-              <SmallCards data={data.courses} />
-            ) : (
-              "Currrently no courses offered."
-            )}
-            <Typography variant="h6" gutterBottom>
-              {counter} Comments
-            </Typography>
-            {/* <CommentForm data={data} setCounter={setCounter} /> */}
-            {data.comments.length > 0
-              ? data.comments.map((comment) => <CommentCard data={comment} />)
-              : "Be the first to comment!"}
+            {data.currentStudents.length > 0
+              ? data.currentStudents.map((student) => (
+                  <Avatar src={student.imgURL} alt={student.firstName} />
+                ))
+              : "Be the first to participate!"}
+            <Button
+              variant="outlined"
+              sx={{ mt: 1 }}
+              onClick={(e) => startBooking(e)}
+            >
+              Book now!
+            </Button>
           </Grid>
         </Grid>
       )}

@@ -1,64 +1,22 @@
-import * as React from "react";
+
+import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { Button, Avatar, Box } from "@mui/material/";
+import Logo from "./logo.png";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
-
-function App() {
-  const classes = useStyles();
-  const [showLogin, setShowLogin] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
-
-  const handleLoginClick = () => {
-    setShowLogin(true);
-    setShowRegister(false);
-  };
-
-  const handleRegisterClick = () => {
-    setShowRegister(true);
-    setShowLogin(false);
-  };
-
+const Navbar = () => {
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            <img src="/logo.jpg" alt="logo" width="30" height="30" /> My App
-          </Typography>
-          <Button color="inherit" onClick={handleLoginClick}>
-            Login
-          </Button>
-          <Button color="inherit" onClick={handleRegisterClick}>
-            Register
-          </Button>
-        </Toolbar>
-      </AppBar>
-      {showLogin && <Login />}
-      {showRegister && <Register />}
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <Avatar alt="Logo" src={Logo} />
+        <Box>?????????????</Box>
+        <Box sx={{ flexGrow: 0 }}>
+          <Button color="inherit">Login</Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
-}
+};
 
-export default App;
+export default Navbar;

@@ -25,6 +25,8 @@ cloudinary.config({
 //FUNCTIONS
 
 export const addTrainer = async (req, res) => {
+
+
     const {courses,email,firstName,lastName, password,adress,imgURL,comments,likes,profession} = req.body;
         let exist;
         console.log(req.body);
@@ -133,6 +135,7 @@ export const addTrainer = async (req, res) => {
             console.log(error.message);
         }
       };
+
 
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
