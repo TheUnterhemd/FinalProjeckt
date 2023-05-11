@@ -23,22 +23,34 @@ export default function ToggleColorMode({children}) {
             ...(mode === 'dark' 
             ? {
               primary: {
-                main: "#f5f5f5",
+                main: '#5cade5',
               },
               secondary: {
-                main: "#ffffff",
+                main: '#c73e9d',
               },
               text: {
-                primary: "#f5f5f5",
-                secondary: "#EBCBE5",
+                primary: '#f5f5f5',
               },
               background: {
-                default: "#0a1d30",
-                paper: "#276fc1",
+                default: '#0a1d30',
+                paper: '#08437d',
+              },
+              error: {
+                main: '#e62f21',
               },
             } : {
               primary: {
-                main: "#00FF09"
+                main: '#0d4073',
+              },
+              secondary: {
+                main: '#ca4e9e',
+              },
+              background: {
+                default: '#eeeeee',
+                paper: '#419ec5',
+              },
+              error: {
+                main: '#e62f21',
               },
             })
           },
