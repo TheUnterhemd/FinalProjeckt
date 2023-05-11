@@ -5,7 +5,6 @@ import UserDetailpage from "./pages/UserDetailpage";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
-import Navbar from "./components/Navbar";
 import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
