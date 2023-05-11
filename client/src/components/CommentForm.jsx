@@ -13,7 +13,11 @@ export default function CommentForm({ data, setCounter }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    data.comments.unshift({ userid: user._id, text: comment });
+    data.comments.unshift({
+      userid: user._id,
+      username: user.firstName,
+      text: comment,
+    });
     console.log("data.comments in commentForm", data.comments);
     const update = {
       courses: data.courses,

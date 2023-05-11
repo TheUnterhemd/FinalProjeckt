@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Startseite from "./pages/Startseite";
-import UserProfile from "./pages/UserProfile";
+import UserDetailpage from "./pages/UserDetailpage";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
@@ -74,7 +74,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route
             path="/user"
-            element={user ? <UserProfile /> : <Startseite />}
+            element={user ? <UserDetailpage /> : <Startseite />}
           />
           <Route path="/trainers" element={<AllTrainers />} />
           <Route path="/trainers/:id" element={<TrainerDetailpage />} />

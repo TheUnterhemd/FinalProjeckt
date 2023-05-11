@@ -5,7 +5,7 @@ export default function CommentCard({ data }) {
   return (
     <>
       {data && (
-        <Card sx={{ width: 250, maxWidth: 250 }}>
+        <Card sx={{ width: 300, maxWidth: 300 }}>
           <Avatar
             alt={`picture of ${data.firstName}`}
             src={data.imageURL}
