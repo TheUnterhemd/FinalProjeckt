@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 
+//CONFIGS
+dotenv.config();
+
 //ENVIROMENTALS
 const secret = process.env.JWT_SECRET;
 const salt = Number(process.env.SALT_ROUNDS);
@@ -12,8 +15,6 @@ const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-//CONFIGS
-dotenv.config();
 
 cloudinary.config({
   cloud_name: cloudName,
@@ -50,7 +51,7 @@ export const addTrainer = async (req, res) => {
             likes
         })
        try {
-            trainer.save() 
+           await trainer.save() 
             if(req.file){
                 const result = await cloudinary.uploader.upload(req.file.path, {
                     public_id: `profile_picture_${trainer._id}`,
@@ -69,10 +70,10 @@ export const addTrainer = async (req, res) => {
     };
 
     export const loginTrainer = async (req, res, next) => {
-        const { mail, password } = req.body;
+        const { email, password } = req.body;
       
         try {
-          const trainer = await Trainer.findOne({ mail });
+          const trainer = await Trainer.findOne({ email });
       
           if (!trainer) {
             return res.status(404).json({ message: 'Trainer not found! Register instead' });
@@ -103,6 +104,7 @@ export const addTrainer = async (req, res) => {
         const {courses,likes,comments,adress,profession} = req.body;
         let trainer;
         let imgURL;
+
         
         try {
             if(req.file){
