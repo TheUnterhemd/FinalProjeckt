@@ -10,7 +10,7 @@ const userRouter = express.Router();
 userRouter.post("/register", upload.single("imgURL"), registerUser)
 .post("/login", loginUser)
 .post("/logout", logoutUser)
-.post("/update/:id", upload.single("imgURL"), updateUser)
+.put("/update/:id", upload.single("imgURL"), updateUser)
 .post("/all", getAllUsers)
 .post("/:id", getUser);
 

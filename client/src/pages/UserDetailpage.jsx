@@ -7,7 +7,7 @@ import SmallCards from "../components/SmallCards.jsx";
 function UserProfile() {
   const theme = useTheme();
   const { user } = useContext(AuthContext);
-  console.log("theme", theme);
+
   return (
     <div>
       {user && (

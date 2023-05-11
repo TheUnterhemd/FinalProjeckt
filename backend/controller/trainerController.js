@@ -1,9 +1,9 @@
 //IMPORTS OF MODULES
-import Trainer from "../models/trainerModel.js"
+import Trainer from "../models/trainerModel.js";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import { v2 as cloudinary } from 'cloudinary';
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
 
 //ENVIROMENTALS
 const secret = process.env.JWT_SECRET;
@@ -12,16 +12,14 @@ const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-
-
 //CONFIGS
-dotenv.config()
+dotenv.config();
 
 cloudinary.config({
-    cloud_name: cloudName,
-    api_key: apiKey,
-    api_secret: apiSecret
-})
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
+});
 
 //FUNCTIONS
 
@@ -132,39 +130,42 @@ export const addTrainer = async (req, res) => {
         } catch (error) {
             console.log(error.message);
         }
-
       }
+    );
 
+    if (!trainer) {
+      return res.status(500).json({ message: "Not able to update trainer" });
+    }
+    return res.status(200).json({ trainer, message: "trainer updated" });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
+export const getAllTrainers = async (req, res, next) => {
+  let trainers;
+  try {
+    trainers = await Trainer.find();
+    console.log(trainers);
+  } catch (error) {
+    console.log(error.message);
+  }
+  if (!trainers) {
+    return res.status(404).json({ message: "No trainers found" });
+  }
+  return res.status(200).json(trainers);
+};
 
-
-
-
-      export const getAllTrainers = async (req, res, next) => {
-        let trainers;
-        try {
-            trainers = await Trainer.find();
-            console.log(trainers);
-        } catch (error) {
-            console.log(error.message);
-        }
-        if(!trainers){
-            return res.status(404).json({message: "No trainers found"})
-        }
-        return res.status(200).json(trainers);
-        };
-
-        export const getTrainer = async (req, res, next) => {
-            let trainer;
-            const id = req.params.id;
-            try {
-                trainer = await Trainer.find({_id:id});
-                console.log(trainer);
-            } catch (error) {
-                console.log(error.message);
-            }
-            if(!trainer){
-                return res.status(404).json({message: "No trainer found"})
-            }
-            return res.status(200).json(trainer);
-            };
+export const getTrainer = async (req, res, next) => {
+  let trainer;
+  const id = req.params.id;
+  try {
+    trainer = await Trainer.findOne({ _id: id });
+  } catch (error) {
+    console.log(error.message);
+  }
+  if (!trainer) {
+    return res.status(404).json({ message: "No trainer found" });
+  }
+  return res.status(200).json(trainer);
+};

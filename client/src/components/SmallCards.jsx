@@ -22,24 +22,32 @@ export default function SmallCards({ data }) {
         mb: "1.5rem",
       }}
     >
-      {data.map((course) => (
-        <Card
-          key={uuid()}
-          sx={{ maxWidth: 120, minWidth: 120, minHeight: 200, maxHeight: 200 }}
-        >
-          <CardMedia
-            image={course.picture}
-            title={course.cname}
-            sx={{ height: 80 }}
-          />
-          <CardContent>
-            <Typography variant="h6">{course.cname}</Typography>
-            <Typography varant="body2">
-              mit <Link>{course.trainer}</Link>
-            </Typography>
-          </CardContent>
-        </Card>
-      ))}
+      {data &&
+        data.map((course) => (
+          <Card
+            key={uuid()}
+            sx={{
+              maxWidth: 120,
+              minWidth: 120,
+              minHeight: 200,
+              maxHeight: 200,
+            }}
+          >
+            <CardMedia
+              image={course.picture}
+              title={course.title}
+              sx={{ height: 80 }}
+            />
+            <CardContent>
+              <Typography variant="h6">{course.title}</Typography>
+              {course.trainer && (
+                <Typography varant="body2">
+                  mit <Link>{course.trainer}</Link>
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        ))}
     </Grid>
   );
 }
