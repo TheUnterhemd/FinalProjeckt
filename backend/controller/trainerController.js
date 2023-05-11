@@ -24,113 +24,130 @@ cloudinary.config({
 //FUNCTIONS
 
 export const addTrainer = async (req, res) => {
-    const {courses,email,firstName,lastName, password,adress,imgURL,comments,likes,profession} = req.body;
-        let exist;
-        console.log(req.body);
-        try {
-            exist = await Trainer.findOne({email})
-            
-        } catch (error) {
-            console.log(error.message);
-        }
-        if(exist){
-            return res.status(404).json({message: "Trainer already exists! Login instead"});
-        }
-        const hashedPW = bcrypt.hashSync(password,salt)
-        const trainer = new Trainer({
-            lastName ,
-            firstName,
-            adress,
-            email,
-            password:hashedPW,
-            courses,
-            imgURL,
-            profession,
-            comments,
-            likes
-        })
-       try {
-            trainer.save() 
-            if(req.file){
-                const result = await cloudinary.uploader.upload(req.file.path, {
-                    public_id: `profile_picture_${trainer._id}`,
-                    folder: `localtrainer/avatar/trainer/${trainer._id}`
-                })
-    
-                trainer.imgURL = result.secure_url;
-    
-            }
-    
-            await trainer.save();
-       } catch (error) { 
-        console.log(error.message);
-       }
-       return res.status(200).json({trainer,message: "trainer saved successfully"}); 
-    };
+  const {
+    courses,
+    email,
+    firstName,
+    lastName,
+    password,
+    adress,
+    imgURL,
+    comments,
+    likes,
+    profession,
+  } = req.body;
+  let exist;
+  console.log(req.body);
+  try {
+    exist = await Trainer.findOne({ email });
+  } catch (error) {
+    console.log(error.message);
+  }
+  if (exist) {
+    return res
+      .status(404)
+      .json({ message: "Trainer already exists! Login instead" });
+  }
+  const hashedPW = bcrypt.hashSync(password, salt);
+  const trainer = new Trainer({
+    lastName,
+    firstName,
+    adress,
+    email,
+    password: hashedPW,
+    courses,
+    imgURL,
+    profession,
+    comments,
+    likes,
+  });
+  try {
+    trainer.save();
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `profile_picture_${trainer._id}`,
+        folder: `localtrainer/avatar/trainer/${trainer._id}`,
+      });
 
-    export const loginTrainer = async (req, res, next) => {
-        const { mail, password } = req.body;
-      
-        try {
-          const trainer = await Trainer.findOne({ mail });
-      
-          if (!trainer) {
-            return res.status(404).json({ message: 'Trainer not found! Register instead' });
-          }
-      
-          const isPasswordCorrect = bcrypt.compareSync(password, trainer.password);
-      
-          if (!isPasswordCorrect) {
-            return res.status(400).json({ message: 'Wrong password' });
-          }
-      
-          const token = jwt.sign( trainer.toJSON(), secret, { expiresIn: '1h' });
-          res.cookie("LocalTrainer", token + trainer,{
-            withCredentials: true,
-            httpOnly: true,
-            expiresIn: '1h'
-          })
-      
-          return res.status(200).json({ trainer, message: 'Trainer logged in' });
-        } catch (error) {
-          console.log(error.message);
-          return res.status(500).json({ message: 'Server error' });
-        }
-      };
+      trainer.imgURL = result.secure_url;
+    }
 
-      export const updateTrainer = async (req,res,next) =>{
-        const id = req.params.id;
-        const {courses,likes,comments,adress,profession} = req.body;
-        let trainer;
-        let imgURL;
-        
-        try {
-            if(req.file){
-                const result = await cloudinary.uploader.upload(req.file.path, {
-                    public_id: `profile_picture_${id}`,
-                    folder: `localtrainer/avatar/trainer/${id}`
-                })
-    
-                imgURL = result.secure_url;
-    
-            }
-            trainer = await Trainer.findByIdAndUpdate({_id:id},{
-                courses,
-                likes,
-                comments,
-                adress,
-                profession,
-                imgURL
-            })
-            
-            if(!trainer){
-                return res.status(500).json({message:"Not able to update trainer"})
-            }
-            return res.status(200).json({trainer,message:"trainer updated"})
-        } catch (error) {
-            console.log(error.message);
-        }
-      };
+    await trainer.save();
+  } catch (error) {
+    console.log(error.message);
+  }
+  return res
+    .status(200)
+    .json({ trainer, message: "trainer saved successfully" });
+};
+
+export const loginTrainer = async (req, res, next) => {
+  const { mail, password } = req.body;
+
+  try {
+    const trainer = await Trainer.findOne({ mail });
+
+    if (!trainer) {
+      return res
+        .status(404)
+        .json({ message: "Trainer not found! Register instead" });
+    }
+
+    const isPasswordCorrect = bcrypt.compareSync(password, trainer.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Wrong password" });
+    }
+
+    const token = jwt.sign(trainer.toJSON(), secret, { expiresIn: "1h" });
+    res.cookie("LocalTrainer", token + trainer, {
+      withCredentials: true,
+      httpOnly: true,
+      expiresIn: "1h",
+    });
+
+    return res.status(200).json({ trainer, message: "Trainer logged in" });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const updateTrainer = async (req, res, next) => {
+  const id = req.params.id;
+  const { courses, likes, comments, adress, profession } = req.body;
+  let trainer;
+  let imgURL;
+
+  try {
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `profile_picture_${id}`,
+        folder: `localtrainer/avatar/trainer/${id}`,
+      });
+
+      imgURL = result.secure_url;
+    }
+    trainer = await Trainer.findByIdAndUpdate(
+      { _id: id },
+      {
+        courses,
+        likes,
+        comments,
+        adress,
+        profession,
+        imgURL,
+      }
+    );
+
+    if (!trainer) {
+      return res.status(500).json({ message: "Not able to update trainer" });
+    }
+    return res.status(200).json({ trainer, message: "trainer updated" });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 export const getAllTrainers = async (req, res, next) => {
   let trainers;

@@ -7,7 +7,7 @@ export default function CommentForm({ data, setCounter }) {
   const { user } = useContext(AuthContext);
   const [comment, setComment] = useState("");
 
-  const url = "http://localhost:5002";
+  const url = process.env.REACT_APP_SERVER_URL;
   const { putData } = useFetch(`${url}/trainer/update/${data._id}`, "PUT");
 
   function handleSubmit(e) {
