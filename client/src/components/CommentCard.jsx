@@ -8,7 +8,7 @@ export default function CommentCard({ data }) {
         <Card sx={{ width: 300, maxWidth: 300 }}>
           <Avatar
             alt={`picture of ${data.firstName}`}
-            src={data.imageURL}
+            src={data.imgURL}
           ></Avatar>
           <CardContent>
             <Typography variant="body1">{data.text}</Typography>

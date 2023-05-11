@@ -21,7 +21,7 @@ export default function PersonCard({ data }) {
         <CardMedia
           component="img"
           height="140"
-          image={data.imageURL}
+          image={data.imgURL}
           alt={`picture of ${data.firstName}`}
         />
         <CardContent>

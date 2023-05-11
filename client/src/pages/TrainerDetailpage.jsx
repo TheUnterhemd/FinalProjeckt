@@ -40,7 +40,7 @@ export default function TrainerDetailpage() {
           >
             <Avatar
               alt={`picture of ${data.firstName}`}
-              src={data.imageURL}
+              src={data.imgURL}
               sx={{
                 width: 200,
                 height: 200,

@@ -16,6 +16,7 @@ export default function CommentForm({ data, setCounter }) {
     data.comments.unshift({
       userid: user._id,
       username: user.firstName,
+      imgURL: user.imgURL,
       text: comment,
     });
     console.log("data.comments in commentForm", data.comments);
