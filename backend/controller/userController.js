@@ -47,11 +47,7 @@ export const registerUser = async (req, res) => {
                 public_id: `profile_picture_${newUser._id}`,
                 folder: `localtrainer/avatar/user/${newUser._id}`
             })
-
-            newUser.imgURL = result.secure_url;
-
-    await newUser.save();
-
+            newUser.imgURL = result.secure_url;}
 
         await newUser.save();
 
