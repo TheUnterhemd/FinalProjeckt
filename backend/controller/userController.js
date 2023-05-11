@@ -25,70 +25,67 @@ cloudinary.config({
 //user functions
 //register
 export const registerUser = async (req, res) => {
-  const { firstName, lastName, email, password, imgURL } = req.body;
-  console.log(req.body);
 
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hash = bcrypt.hashSync(password, salt);
+    const {firstName, lastName, email, password, imgURL} = req.body;
 
-  const newUser = new User({
-    firstName,
-    lastName,
-    email,
-    password: hash,
-    imgURL,
-  });
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(password, salt);
 
-  try {
+    const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        password: hash,
+        imgURL
+    })
+
+    try{
+        await newUser.save();
+
+        if(req.file){
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                public_id: `profile_picture_${newUser._id}`,
+                folder: `localtrainer/avatar/user/${newUser._id}`
+            })
+
+            newUser.imgURL = result.secure_url;
+
     await newUser.save();
 
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        public_id: `profile_picture_${newUser._id}`,
-        folder: `localtrainer/avatar/user/${newUser._id}`,
-      });
 
-      newUser.imgURL = result.secure_url;
+        await newUser.save();
+
+        res.status(201).json({user: newUser._id, email: newUser.email, imgURL: newUser.imgURL});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: "Server error"});
     }
-
-    await newUser.save();
-
-    res.status(201).json(newUser);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Server error" });
-  }
-};
+}
 
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  console.log("email", email);
-  const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ msg: "User does not exist. " });
-  console.log("user", user);
-  const passAuth = bcrypt.compareSync(password, user.password);
-  console.log("passAuth", passAuth);
-  if (passAuth) {
-    jwt.sign(
-      {
-        id: user._id,
-      },
-      jwtSecret,
-      { expiresIn: "1h" },
-      (err, token) => {
-        if (err) throw err;
-        res.cookie("token", token);
-        res.send("logged in successfully");
-      }
-    );
-  } else {
-    res.status(400).json("wrong credentials");
-  }
-};
+    const {email, password} = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({msg: "User does not exist. "});
+
+    const passAuth = bcrypt.compareSync(password, user.password);
+    if(passAuth){
+        jwt.sign({
+            id: user._id,
+        }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
+            if (err) throw err;
+            res.cookie("LocalTrainer",{user:newUser._id} + token);
+        })
+    }else {
+        res.status(400).json("wrong credentials");
+    }
+}
 
 export const logoutUser = async (req, res) => {
-  res.cookie("token", "").json("logged out");
-};
+    res.clarCookie("LocalTrainer").json("logged out");
+}
+
+
 
 export const updateUser = async (req, res) => {
   const id = req.params.id;
@@ -115,21 +112,14 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const getAllUsers = async (req, res) => {
-  try {
-    const result = await User.find();
-    res.send(result);
-  } catch (error) {
-    res.send(error);
-  }
-};
 
 export const getUser = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const result = await User.findById(id);
-    res.send(result);
-  } catch (error) {
-    res.send(error);
-  }
-};
+    const id = req.params.id;
+    try {
+        const user = await User.findById(id);
+        res.send({user: user._id, email: user.email, imgURL: user.imgURL});
+    } catch (error) {
+        res.send(error);
+    }
+}
+
