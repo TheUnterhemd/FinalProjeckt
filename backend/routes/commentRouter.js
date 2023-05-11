@@ -7,8 +7,7 @@ commentRouter.post("/add",addComment)
 
 commentRouter.put("/update/:id",updateComment)
 
-commentRouter.get("/",getAllComments)
-commentRouter.get("/:id", getComment)
+commentRouter.get("/:id",getAllComments)
 
 commentRouter.delete("/delete/:id", deleteComment)
 
