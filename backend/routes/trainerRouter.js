@@ -7,11 +7,12 @@ import {
   updateTrainer,
 } from "../controller/trainerController.js";
 import { upload } from "../controller/cloudinaryController.js";
+import {validator} from "../middleware/validation.js"
 
 const trainerRouter = express.Router();
 
 trainerRouter.post("/register", upload.single("imageURL"), addTrainer);
-trainerRouter.post("/login", loginTrainer);
+trainerRouter.post("/login",validator, loginTrainer);
 
 trainerRouter.put("/update/:id", upload.single("imageURL"), updateTrainer);
 

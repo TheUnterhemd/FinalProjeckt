@@ -1,7 +1,7 @@
 //imports
 import express from 'express';
 import { upload } from '../controller/cloudinaryController.js';
-import { registerUser, loginUser, logoutUser, updateUser, getAllUsers, getUser } from '../controller/userController.js';
+import { registerUser, loginUser, logoutUser, updateUser, getUser } from '../controller/userController.js';
 
 //set up router
 const userRouter = express.Router();
