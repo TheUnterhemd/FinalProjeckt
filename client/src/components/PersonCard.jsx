@@ -13,7 +13,7 @@ export default function PersonCard({ data }) {
   const navigate = useNavigate();
   function clickHandler(e) {
     e.preventDefault();
-    navigate(`/trainers/${data._id}`);
+    navigate(`/trainer/${data._id}`);
   }
   return (
     <Card sx={{ width: 250, maxWidth: 250 }} onClick={(e) => clickHandler(e)}>
@@ -28,8 +28,12 @@ export default function PersonCard({ data }) {
           <Typography gutterBottom variant="h5" component="div">
             {data.firstName} {data.lastName}
           </Typography>
-          <Typography variant="h6">Profession: {data.profession}</Typography>
-          <Typography variant="body1">{data.likes.length} likes</Typography>
+          {data.profession && (
+            <Typography variant="h6">Profession: {data.profession}</Typography>
+          )}
+          {data.likes && (
+            <Typography variant="body1">{data.likes.length} likes</Typography>
+          )}
         </CardContent>
       </CardActionArea>
     </Card>
