@@ -4,9 +4,9 @@ import { upload } from '../controller/cloudinaryController.js';
 
 const courseRouter = express.Router();
 
-courseRouter.post("/add",upload.single("imageURL"),addCourse)
+courseRouter.post("/add",upload.single("imgURL"),addCourse)
 
-courseRouter.put("/update/:id",upload.single("imageURL"),updateCourse)
+courseRouter.put("/update/:id",upload.single("imgURL"),updateCourse)
 
 courseRouter.get("/",getAllCourses)
 courseRouter.get("/:id", getCourse)

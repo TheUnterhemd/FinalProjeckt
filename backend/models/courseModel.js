@@ -40,7 +40,7 @@ const courseSchema = new Schema({
     end:{
         type: String,
     },
-    imageURL:{
+    imgURL:{
         type: String,
     }
     ,
