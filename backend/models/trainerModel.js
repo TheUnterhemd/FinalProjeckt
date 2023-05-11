@@ -20,7 +20,7 @@ const trainerSchema = new Schema({
         type: String,
         required: true,
     },
-    imageURL:{
+    imgURL:{
         type: String,
     },
     password:{

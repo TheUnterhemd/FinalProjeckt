@@ -22,7 +22,7 @@ cloudinary.config({
 
 export const addCourse = async (req,res,next) => {
 
-    const{title,description,location,type,maxStudents,currentStudents,price,duration,start,end,imageURL,trainer} = req.body;
+    const{title,description,location,type,maxStudents,currentStudents,price,duration,start,end,imgURL,trainer} = req.body;
     
     const course = new Course({
         title,
@@ -35,7 +35,7 @@ export const addCourse = async (req,res,next) => {
         duration,
         start,
         end,
-        imageURL,
+        imgURL,
         trainer
     })
 
@@ -48,7 +48,7 @@ export const addCourse = async (req,res,next) => {
                 folder: `localtrainer/picture/course/${course._id}`
             })
 
-            course.imageURL = result.secure_url;
+            course.imgURL = result.secure_url;
 
         }
         await course.save()
@@ -62,7 +62,7 @@ export const updateCourse = async (req,res,next) =>{
     const id = req.params.id;
     const {title, description,price,location,maxStudents,type,start,end,duration} = req.body;
     let course;
-    let imageURL;
+    let imgURL;
     
     try {
         if(req.file){
@@ -84,7 +84,7 @@ export const updateCourse = async (req,res,next) =>{
             start,
             end,
             duration,
-            imageURL
+            imgURL
         })
         
         if(!course){

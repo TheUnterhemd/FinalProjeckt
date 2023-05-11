@@ -26,7 +26,7 @@ cloudinary.config({
 //FUNCTIONS
 
 export const addTrainer = async (req, res) => {
-    const {courses,email,firstName,lastName, password,adress,imageURL,comments,likes,profession} = req.body;
+    const {courses,email,firstName,lastName, password,adress,imgURL,comments,likes,profession} = req.body;
         let exist;
         console.log(req.body);
         try {
@@ -46,7 +46,7 @@ export const addTrainer = async (req, res) => {
             email,
             password:hashedPW,
             courses,
-            imageURL,
+            imgURL,
             profession,
             comments,
             likes
@@ -59,7 +59,7 @@ export const addTrainer = async (req, res) => {
                     folder: `localtrainer/avatar/trainer/${trainer._id}`
                 })
     
-                trainer.imageURL = result.secure_url;
+                trainer.imgURL = result.secure_url;
     
             }
     
@@ -104,7 +104,7 @@ export const addTrainer = async (req, res) => {
         const id = req.params.id;
         const {courses,likes,comments,adress,profession} = req.body;
         let trainer;
-        let imageURL;
+        let imgURL;
         
         try {
             if(req.file){
@@ -113,7 +113,7 @@ export const addTrainer = async (req, res) => {
                     folder: `localtrainer/avatar/trainer/${id}`
                 })
     
-                imageURL = result.secure_url;
+                imgURL = result.secure_url;
     
             }
             trainer = await Trainer.findByIdAndUpdate({_id:id},{
@@ -122,7 +122,7 @@ export const addTrainer = async (req, res) => {
                 comments,
                 adress,
                 profession,
-                imageURL
+                imgURL
             })
             
             if(!trainer){
