@@ -111,15 +111,6 @@ export const updateUser = async (req, res) => {
     }
 }
 
-export const getAllUsers = async (req, res) => {
-    try {
-        const result = await User.find()
-        res.send(result);
-    } catch (error) {
-        res.send(error);
-    }
-}
-
 export const getUser = async (req, res) => {
     const id = req.params.id;
     try {
