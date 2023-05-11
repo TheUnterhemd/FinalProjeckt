@@ -98,7 +98,7 @@ export const addTrainer = async (req, res) => {
       };
 
       export const logoutTrainer = async (req, res) => {
-        res.clearCookie("LocalTrainer").json("logged out");
+        res.clearCookie("LocalTrainer").json({message:"logged out"});
     }
 
       export const updateTrainer = async (req,res,next) =>{
@@ -128,7 +128,7 @@ export const addTrainer = async (req, res) => {
             if(!trainer){
                 return res.status(500).json({message:"Not able to update trainer"})
             }
-            return res.status(200).json({trainer,message:"trainer updated"})
+            return res.status(200).json({message:"trainer updated"})
         } catch (error) {
             console.log(error.message);
         }
@@ -159,5 +159,5 @@ export const getTrainer = async (req, res, next) => {
   if (!trainer) {
     return res.status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json(trainer);
+  return res.status(200).json({trainer: trainer._id, email: trainer.email, imgURL: trainer.imgURL});
 };
