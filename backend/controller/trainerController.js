@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 
+//CONFIGS
+dotenv.config();
+
 //ENVIROMENTALS
 const secret = process.env.JWT_SECRET;
 const salt = Number(process.env.SALT_ROUNDS);
@@ -12,8 +15,6 @@ const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-//CONFIGS
-dotenv.config();
 
 cloudinary.config({
   cloud_name: cloudName,
@@ -24,6 +25,8 @@ cloudinary.config({
 //FUNCTIONS
 
 export const addTrainer = async (req, res) => {
+
+
     const {courses,email,firstName,lastName, password,adress,imgURL,comments,likes,profession} = req.body;
         let exist;
         console.log(req.body);
@@ -45,12 +48,10 @@ export const addTrainer = async (req, res) => {
             password:hashedPW,
             courses,
             imgURL,
-            profession,
-            comments,
-            likes
+            profession
         })
        try {
-            trainer.save() 
+           await trainer.save() 
             if(req.file){
                 const result = await cloudinary.uploader.upload(req.file.path, {
                     public_id: `profile_picture_${trainer._id}`,
@@ -65,14 +66,14 @@ export const addTrainer = async (req, res) => {
        } catch (error) { 
         console.log(error.message);
        }
-       return res.status(200).json({trainer,message: "trainer saved successfully"}); 
+       return res.status(200).json({trainer: trainer._id,message: "trainer saved successfully"}); 
     };
 
     export const loginTrainer = async (req, res, next) => {
-        const { mail, password } = req.body;
+        const { email, password } = req.body;
       
         try {
-          const trainer = await Trainer.findOne({ mail });
+          const trainer = await Trainer.findOne({ email });
       
           if (!trainer) {
             return res.status(404).json({ message: 'Trainer not found! Register instead' });
@@ -85,24 +86,29 @@ export const addTrainer = async (req, res) => {
           }
       
           const token = jwt.sign( trainer.toJSON(), secret, { expiresIn: '1h' });
-          res.cookie("LocalTrainer", token + trainer,{
+          res.cookie("LocalTrainer", token +{ trainer:trainer._id},{
             withCredentials: true,
             httpOnly: true,
             expiresIn: '1h'
           })
       
-          return res.status(200).json({ trainer, message: 'Trainer logged in' });
+          return res.status(200).json({ trainer: trainer._id, message: 'Trainer logged in' });
         } catch (error) {
           console.log(error.message);
           return res.status(500).json({ message: 'Server error' });
         }
       };
 
+      export const logoutTrainer = async (req, res) => {
+        res.clearCookie("LocalTrainer").json({message:"logged out"});
+    }
+
       export const updateTrainer = async (req,res,next) =>{
         const id = req.params.id;
-        const {courses,likes,comments,adress,profession} = req.body;
+        const {courses,adress,profession} = req.body;
         let trainer;
         let imgURL;
+
         
         try {
             if(req.file){
@@ -116,8 +122,6 @@ export const addTrainer = async (req, res) => {
             }
             trainer = await Trainer.findByIdAndUpdate({_id:id},{
                 courses,
-                likes,
-                comments,
                 adress,
                 profession,
                 imgURL
@@ -126,11 +130,12 @@ export const addTrainer = async (req, res) => {
             if(!trainer){
                 return res.status(500).json({message:"Not able to update trainer"})
             }
-            return res.status(200).json({trainer,message:"trainer updated"})
+            return res.status(200).json({message:"trainer updated"})
         } catch (error) {
             console.log(error.message);
         }
       };
+
 
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
@@ -157,5 +162,5 @@ export const getTrainer = async (req, res, next) => {
   if (!trainer) {
     return res.status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json(trainer);
+  return res.status(200).json({trainer: trainer._id, email: trainer.email, imgURL: trainer.imgURL, courses: trainer.courses});
 };

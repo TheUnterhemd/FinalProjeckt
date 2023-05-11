@@ -33,12 +33,6 @@ const trainerSchema = new Schema({
     },
     courses:{
         type: Array,
-    },
-    comments:{
-        type: Array,
-    },
-    likes:{
-        type: Array,
     }
 })
 

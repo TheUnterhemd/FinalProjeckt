@@ -1,11 +1,10 @@
 //imports
 /* import express from 'express'; */
-import dotenv from 'dotenv';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { v2 as cloudinary } from 'cloudinary';
-import User from '../models/userModel.js';
-
+import dotenv from "dotenv";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { v2 as cloudinary } from "cloudinary";
+import User from "../models/userModel.js";
 
 //config
 dotenv.config();
@@ -18,16 +17,16 @@ const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
 cloudinary.config({
-    cloud_name: cloudName,
-    api_key: apiKey,
-    api_secret: apiSecret
-})
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
+});
 
 //user functions
 //register
 export const registerUser = async (req, res) => {
+
     const {firstName, lastName, email, password, imgURL} = req.body;
-    console.log(req.body);
 
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
@@ -51,11 +50,12 @@ export const registerUser = async (req, res) => {
 
             newUser.imgURL = result.secure_url;
 
-        }
+    await newUser.save();
+
 
         await newUser.save();
 
-        res.status(201).json(newUser);
+        res.status(201).json({user: newUser._id, email: newUser.email, imgURL: newUser.imgURL});
     }catch(err){
         console.log(err);
         res.status(500).json({error: "Server error"});
@@ -74,7 +74,7 @@ export const loginUser = async (req, res) => {
             id: user._id,
         }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
             if (err) throw err;
-            res.cookie("token", token);
+            res.cookie("LocalTrainer",{user:newUser._id} + token);
         })
     }else {
         res.status(400).json("wrong credentials");
@@ -82,50 +82,44 @@ export const loginUser = async (req, res) => {
 }
 
 export const logoutUser = async (req, res) => {
-    res.cookie("token", "").json("logged out");
+    res.clarCookie("LocalTrainer").json("logged out");
 }
+
 
 
 export const updateUser = async (req, res) => {
-    const id = req.params.id;
-    const filter = {_id: id};
+  const id = req.params.id;
+  const filter = { _id: id };
 
-    const updates = req.body;
-    console.log(updates);
+  const updates = req.body;
+  console.log(updates);
 
-    try {
-        if(req.file){
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                public_id: `profile_picture_${id}`,
-                folder: `localtrainer/avatar/user/${id}`
-            })
+  try {
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `profile_picture_${id}`,
+        folder: `localtrainer/avatar/user/${id}`,
+      });
 
-            updates.imgURL = result.secure_url;
-        }
-
-        const result = await User.findOneAndUpdate(filter, updates, {new: true})
-
-        res.send(result);
-    } catch (error) {
-        res.send(error);
+      updates.imgURL = result.secure_url;
     }
-}
 
-export const getAllUsers = async (req, res) => {
-    try {
-        const result = await User.find()
-        res.send(result);
-    } catch (error) {
-        res.send(error);
-    }
-}
+    const result = await User.findOneAndUpdate(filter, updates, { new: true });
+
+    res.send(result);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
 
 export const getUser = async (req, res) => {
     const id = req.params.id;
     try {
-        const result = await User.findById(id);
-        res.send(result);
+        const user = await User.findById(id);
+        res.send({user: user._id, email: user.email, imgURL: user.imgURL});
     } catch (error) {
         res.send(error);
     }
 }
+

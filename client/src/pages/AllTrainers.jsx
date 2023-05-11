@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import PersonCard from "../components/PersonCard";
 import { Container, Grid, Typography } from "@mui/material";
+import { v4 as uuid } from "uuid";
 // @desc displays all trainers available
 
 export default function AllTrainers() {
-  const url = "http://localhost:5002";
+  const url = process.env.REACT_APP_SERVER_URL;
   const { data } = useFetch(`${url}/trainer/`);
   useEffect(() => {
     console.log("All Trainers", data);
@@ -18,7 +19,7 @@ export default function AllTrainers() {
       <Grid container spacing={2}>
         {data &&
           data.map((trainer) => (
-            <Grid item>
+            <Grid item key={uuid()}>
               <PersonCard data={trainer} />
             </Grid>
           ))}
