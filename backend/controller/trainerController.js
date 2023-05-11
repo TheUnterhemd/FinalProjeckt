@@ -159,5 +159,5 @@ export const getTrainer = async (req, res, next) => {
   if (!trainer) {
     return res.status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json({trainer: trainer._id, email: trainer.email, imgURL: trainer.imgURL});
+  return res.status(200).json({trainer: trainer._id, email: trainer.email, imgURL: trainer.imgURL, courses: trainer.courses});
 };
