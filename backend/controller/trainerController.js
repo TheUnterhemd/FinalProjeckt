@@ -46,9 +46,7 @@ export const addTrainer = async (req, res) => {
             password:hashedPW,
             courses,
             imgURL,
-            profession,
-            comments,
-            likes
+            profession
         })
        try {
            await trainer.save() 
@@ -66,7 +64,7 @@ export const addTrainer = async (req, res) => {
        } catch (error) { 
         console.log(error.message);
        }
-       return res.status(200).json({trainer,message: "trainer saved successfully"}); 
+       return res.status(200).json({trainer: trainer._id,message: "trainer saved successfully"}); 
     };
 
     export const loginTrainer = async (req, res, next) => {
@@ -86,22 +84,26 @@ export const addTrainer = async (req, res) => {
           }
       
           const token = jwt.sign( trainer.toJSON(), secret, { expiresIn: '1h' });
-          res.cookie("LocalTrainer", token + trainer,{
+          res.cookie("LocalTrainer", token +{ trainer:trainer._id},{
             withCredentials: true,
             httpOnly: true,
             expiresIn: '1h'
           })
       
-          return res.status(200).json({ trainer, message: 'Trainer logged in' });
+          return res.status(200).json({ trainer: trainer._id, message: 'Trainer logged in' });
         } catch (error) {
           console.log(error.message);
           return res.status(500).json({ message: 'Server error' });
         }
       };
 
+      export const logoutTrainer = async (req, res) => {
+        res.clearCookie("LocalTrainer").json("logged out");
+    }
+
       export const updateTrainer = async (req,res,next) =>{
         const id = req.params.id;
-        const {courses,likes,comments,adress,profession} = req.body;
+        const {courses,adress,profession} = req.body;
         let trainer;
         let imgURL;
 
@@ -118,8 +120,6 @@ export const addTrainer = async (req, res) => {
             }
             trainer = await Trainer.findByIdAndUpdate({_id:id},{
                 courses,
-                likes,
-                comments,
                 adress,
                 profession,
                 imgURL
