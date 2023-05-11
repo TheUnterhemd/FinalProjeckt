@@ -25,6 +25,15 @@ export const useFetch = (url, method = "GET") => {
       body: JSON.stringify(patchData),
     });
   };
+  const putData = (putData) => {
+    setOptions({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(putData),
+    });
+  };
 
   const deleteData = (deleteData) => {
     setOptions({
@@ -75,15 +84,17 @@ export const useFetch = (url, method = "GET") => {
     if (method === "PATCH" && options) {
       fetchData(options);
     }
+    if (method === "PUT" && options) {
+      fetchData(options);
+    }
     if (method === "DELETE" && options) {
       fetchData(options);
     }
-    
 
     return () => {
       controller.abort();
     };
   }, [url, method, options]);
 
-  return { data, isPending, error, postData, patchData, deleteData };
+  return { data, isPending, error, postData, patchData, putData, deleteData };
 };

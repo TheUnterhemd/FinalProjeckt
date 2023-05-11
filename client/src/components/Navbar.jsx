@@ -1,10 +1,9 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,14 +36,23 @@ function App() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             <img src="/logo.jpg" alt="logo" width="30" height="30" /> My App
           </Typography>
-          <Button color="inherit" onClick={handleLoginClick}>Login</Button>
-          <Button color="inherit" onClick={handleRegisterClick}>Register</Button>
+          <Button color="inherit" onClick={handleLoginClick}>
+            Login
+          </Button>
+          <Button color="inherit" onClick={handleRegisterClick}>
+            Register
+          </Button>
         </Toolbar>
       </AppBar>
       {showLogin && <Login />}
@@ -54,4 +62,3 @@ function App() {
 }
 
 export default App;
-
