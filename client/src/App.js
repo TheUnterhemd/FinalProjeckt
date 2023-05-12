@@ -10,6 +10,7 @@ import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
+import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
 function App() {
   const { user, dispatch } = useContext(AuthContext);
 
@@ -80,6 +81,7 @@ function App() {
           <Route path="/trainer/:id" element={<TrainerDetailpage />} />
           <Route path="/course" element={<AllCourses />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
+          <Route path="/course/create" element={<CourseCreationForm />} />
         </Routes>
       </BrowserRouter>
     </div>
