@@ -9,7 +9,7 @@ import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
-
+import Navbar from "./components/Navbar";
 function App() {
   const { user, dispatch } = useContext(AuthContext);
 
@@ -69,7 +69,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar/>
+        <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
