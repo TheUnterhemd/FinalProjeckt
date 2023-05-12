@@ -12,7 +12,7 @@ import { upload } from "../controller/cloudinaryController.js";
 
 const trainerRouter = express.Router();
 
-trainerRouter.post("/register", upload.single("imageURL"), addTrainer);
+trainerRouter.post("/register", upload.single("imgURL"), addTrainer);
 trainerRouter.post("/login", loginTrainer);
 trainerRouter.post("/logout", logoutTrainer); 
 

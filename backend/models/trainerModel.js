@@ -13,7 +13,7 @@ const trainerSchema = new Schema({
         required: true,
     },
     adress:{
-        type: Object,
+        type: Array,
         //required: true,
     },
     profession:{
