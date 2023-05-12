@@ -27,7 +27,7 @@ cloudinary.config({
 export const addTrainer = async (req, res) => {
 
 
-    const {courses,email,firstName,lastName, password,adress,imgURL,comments,likes,profession} = req.body;
+    const {courses,email,firstName,lastName, password,adress,imgURL,profession} = req.body;
         let exist;
         console.log(req.body);
         try {
@@ -66,14 +66,22 @@ export const addTrainer = async (req, res) => {
        } catch (error) { 
         console.log(error.message);
        }
-       return res.status(200).json({trainer: trainer._id,message: "trainer saved successfully"}); 
+       return res.status(200).json({_id:trainer._id,
+        firstname: trainer.firstName,
+        lastName: trainer.lastName,
+        adress: trainer.adress,
+        profession:trainer.profession,
+        imgURL: trainer.imgURL,
+        email: trainer.email,
+        courses: trainer.courses,
+        message: "trainer saved successfully"}); 
     };
 
     export const loginTrainer = async (req, res, next) => {
         const { email, password } = req.body;
       
         try {
-          const trainer = await Trainer.findOne({ email });
+          const trainer = await Trainer.findOne({ email }).populate('courses');
       
           if (!trainer) {
             return res.status(404).json({ message: 'Trainer not found! Register instead' });
@@ -92,7 +100,17 @@ export const addTrainer = async (req, res) => {
             expiresIn: '1h'
           })
       
-          return res.status(200).json({ trainer: trainer._id, message: 'Trainer logged in' });
+          return res.status(200).json({
+            _id:trainer._id,
+            firstname: trainer.firstName,
+            lastName: trainer.lastName,
+            adress: trainer.adress,
+            profession:trainer.profession,
+            imgURL: trainer.imgURL,
+            email: trainer.email,
+            courses: trainer.courses,
+            message: 'Trainer logged in' });
+
         } catch (error) {
           console.log(error.message);
           return res.status(500).json({ message: 'Server error' });
@@ -140,7 +158,7 @@ export const addTrainer = async (req, res) => {
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
   try {
-    trainers = await Trainer.find();
+    trainers = await Trainer.find().select('-password').populate('courses');
     console.log(trainers);
   } catch (error) {
     console.log(error.message);
@@ -155,12 +173,12 @@ export const getTrainer = async (req, res, next) => {
   let trainer;
   const id = req.params.id;
   try {
-    trainer = await Trainer.findOne({ _id: id }).populate("courses");
+    trainer = await Trainer.findOne({ _id: id }).select('-password').populate("courses");
   } catch (error) {
     console.log(error.message);
   }
   if (!trainer) {
     return res.status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json({trainer: trainer._id, email: trainer.email, imgURL: trainer.imgURL, courses: trainer.courses});
+  return res.status(200).json(trainer);
 };

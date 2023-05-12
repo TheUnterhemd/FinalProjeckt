@@ -27,6 +27,7 @@ cloudinary.config({
 export const registerUser = async (req, res) => {
 
     const {firstName, lastName, email, password, imgURL} = req.body;
+    console.log(req.file);
 
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
@@ -61,7 +62,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     const {email, password} = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('bookedCourses').populate('solvedCourses').populate('comments');
     if (!user) return res.status(400).json({msg: "User does not exist. "});
 
     const passAuth = bcrypt.compareSync(password, user.password);
@@ -71,7 +72,19 @@ export const loginUser = async (req, res) => {
         }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
             if (err) throw err;
 
-            res.cookie("LocalTrainer",{user:newUser._id} + token).json("User logged in.");
+            res.cookie("LocalTrainer",{user:newUser._id} + token).json({
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                address: user.address,
+                email: user.email,
+                imgURL: user.imgURL,
+                interests: user.interests,
+                bookedCourses: user.bookedCourses,
+                solvedCourses: user.solvedCourses,
+                comments: user.comments,
+                message: "user logged in"
+            });
         })
     }else {
         res.status(400).json("wrong credentials");
@@ -113,8 +126,8 @@ export const updateUser = async (req, res) => {
 export const getUser = async (req, res) => {
     const id = req.params.id;
     try {
-        const user = await User.findById(id);
-        res.send({user: user._id, email: user.email, imgURL: user.imgURL});
+        const user = await User.findById(id).select('-password').populate('bookedCourses').populate('solvedCourses').populate('comments');
+        res.send(user);
     } catch (error) {
         res.send(error);
     }

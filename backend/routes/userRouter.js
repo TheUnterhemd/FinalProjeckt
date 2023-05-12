@@ -11,6 +11,6 @@ userRouter.post("/register", upload.single("imgURL"), registerUser)
 .post("/login", loginUser)
 .post("/logout", logoutUser)
 .put("/update/:id", upload.single("imgURL"), updateUser)
-.post("/:id", getUser);
+.get("/:id", getUser);
 
 export default userRouter;

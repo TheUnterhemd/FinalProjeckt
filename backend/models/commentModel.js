@@ -9,14 +9,8 @@ const commentSchema = new Schema({
         type: String,
         required: true,
     },
-    trainerId:{
-        type: String,
-        required : true,
-    },
-    userId:{
-        type: String,
-        required : true,
-    }
+    trainerId:{ type: Schema.Types.ObjectId, ref: 'Trainer' },
+    userId:{ type: Schema.Types.ObjectId, ref: 'User' }
     
 })
 
