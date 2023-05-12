@@ -13,16 +13,20 @@ export default function TrainerDetailpage() {
   const theme = useTheme();
   const { id } = useParams();
   // "counter" gibt es nur um die kommentarspalte realtime upzudaten
-  const [counter, setCounter] = useState("");
+  const [counter, setCounter] = useState(0);
+  const [commentList, setCommentList] = useState([]);
   const url = process.env.REACT_APP_SERVER_URL;
   const { data: trainer } = useFetch(`${url}/trainer/${id}`);
   const { data: comments } = useFetch(`${url}/comment/${id}`);
 
   useEffect(() => {
-    setCounter(comments?.length);
+    if (comments) {
+      setCounter(comments?.length);
+      setCommentList(comments);
+    }
+
     // console.log("comments in trainerdetailpage", comments);
-    // console.log("trainer in trainerdetailpage", trainer);
-    console.log("added a comment");
+    console.log("trainer in trainerdetailpage", trainer);
   }, [trainer, comments]);
 
   function handleLike(e) {
@@ -84,7 +88,7 @@ export default function TrainerDetailpage() {
               Courses offered
             </Typography>
             {trainer.courses.length > 0 ? (
-              <SmallCards trainer={trainer.courses} />
+              <SmallCards data={trainer.courses} />
             ) : (
               "Currrently no courses offered."
             )}
@@ -94,12 +98,17 @@ export default function TrainerDetailpage() {
             <CommentForm
               data={trainer}
               setCounter={setCounter}
-              comments={comments}
+              setCommentList={setCommentList}
             />
             <Box>
-              {comments?.length > 0
-                ? comments.map((comment) => (
-                    <CommentCard data={comment} key={uuid()} />
+              {commentList?.length > 0
+                ? commentList.map((comment) => (
+                    <CommentCard
+                      data={comment}
+                      key={uuid()}
+                      setCommentList={setCommentList}
+                      setCounter={setCounter}
+                    />
                   ))
                 : "Be the first to comment!"}
             </Box>

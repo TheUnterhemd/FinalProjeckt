@@ -1,9 +1,8 @@
 import { Button, Box, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { useFetch } from "../hooks/useFetch";
 import { AuthContext } from "../context/AuthContext";
 
-export default function CommentForm({ data, setCounter, comments }) {
+export default function CommentForm({ data, setCounter, setCommentList }) {
   const { user } = useContext(AuthContext);
   const [comment, setComment] = useState("");
 
@@ -23,7 +22,12 @@ export default function CommentForm({ data, setCounter, comments }) {
         throw new Error(result.statusText);
       }
       const json = await result.json();
-      comments.push(json.comment);
+
+      setCommentList((prevCommentList) => {
+        const temp = prevCommentList;
+        temp.push(json.comment);
+        return temp;
+      });
     } catch (err) {
       console.log("error", err);
     }
