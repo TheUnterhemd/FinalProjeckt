@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { Avatar, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SmallCards from "../components/SmallCards";
 import CommentCard from "../components/CommentCard";
 import CommentForm from "../components/CommentForm";
 import Favorite from "@mui/icons-material/Favorite";
+import { v4 as uuid } from "uuid";
 
 export default function TrainerDetailpage() {
   const theme = useTheme();
@@ -14,12 +15,14 @@ export default function TrainerDetailpage() {
   // "counter" gibt es nur um die kommentarspalte realtime upzudaten
   const [counter, setCounter] = useState("");
   const url = process.env.REACT_APP_SERVER_URL;
-  const { data } = useFetch(`${url}/trainer/${id}`);
+  const { data: trainer } = useFetch(`${url}/trainer/${id}`);
+  const { data: comments } = useFetch(`${url}/comment/${id}`);
 
   useEffect(() => {
-    setCounter(data?.comments.length);
-    console.log("data in detailpage", data);
-  }, [data]);
+    setCounter(comments?.length);
+    console.log("comments in trainerdetailpage", comments);
+    console.log("trainer in trainerdetailpage", trainer);
+  }, [trainer, comments]);
 
   function handleLike(e) {
     e.preventDefault();
@@ -27,7 +30,7 @@ export default function TrainerDetailpage() {
   }
   return (
     <div>
-      {data && (
+      {trainer && (
         <Grid container spacing={2} sx={{ mt: "2rem" }}>
           <Grid
             item
@@ -35,23 +38,24 @@ export default function TrainerDetailpage() {
             sm={4}
             display="flex"
             justifyContent="center"
-            alignItems="center"
+            alignItems="start"
             sx={{
               [theme.breakpoints.up("md")]: {
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
+                justifyContent: "center",
+                alignItems: "flex-start",
               },
             }}
           >
             <Avatar
-              alt={`picture of ${data.firstName}`}
-              src={data.imgURL}
+              alt={`picture of ${trainer.firstName}`}
+              src={trainer.imgURL}
               sx={{
                 width: 200,
                 height: 200,
                 transition: "all 0.2s",
                 [theme.breakpoints.up("md")]: {
                   height: "100%",
+                  maxHeight: 600,
                   width: "100%",
                   borderRadius: "0 50% 50% 0%/0% 60% 25% 0%",
                 },
@@ -68,28 +72,36 @@ export default function TrainerDetailpage() {
             justifyContent="center"
           >
             <Typography variant="h4" gutterBottom>
-              {data.firstName} {data.lastName}{" "}
+              {trainer.firstName} {trainer.lastName}{" "}
               <Favorite color="error" onClick={(e) => handleLike(e)} />
             </Typography>
             <Typography variant="h6">Profession</Typography>
             <Typography variant="body2" gutterBottom>
-              {data.profession}
+              {trainer.profession}
             </Typography>
             <Typography variant="h6" gutterBottom>
               Courses offered
             </Typography>
-            {data.courses.length > 0 ? (
-              <SmallCards data={data.courses} />
+            {trainer.courses.length > 0 ? (
+              <SmallCards trainer={trainer.courses} />
             ) : (
               "Currrently no courses offered."
             )}
             <Typography variant="h6" gutterBottom>
               {counter} Comments
             </Typography>
-            {/* <CommentForm data={data} setCounter={setCounter} /> */}
-            {data.comments.length > 0
-              ? data.comments.map((comment) => <CommentCard data={comment} />)
-              : "Be the first to comment!"}
+            <CommentForm
+              data={trainer}
+              setCounter={setCounter}
+              comments={comments}
+            />
+            <Box>
+              {comments?.length > 0
+                ? comments.map((comment) => (
+                    <CommentCard data={comment} key={uuid()} />
+                  ))
+                : "Be the first to comment!"}
+            </Box>
           </Grid>
         </Grid>
       )}

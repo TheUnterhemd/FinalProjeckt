@@ -3,36 +3,35 @@ import React, { useContext, useState } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { AuthContext } from "../context/AuthContext";
 
-export default function CommentForm({ data, setCounter }) {
+export default function CommentForm({ data, setCounter, comments }) {
   const { user } = useContext(AuthContext);
   const [comment, setComment] = useState("");
 
   const url = process.env.REACT_APP_SERVER_URL;
-  const { putData } = useFetch(`${url}/trainer/update/${data._id}`, "PUT");
 
-  function handleSubmit(e) {
+  /** submits comment to database, updates comment array on TrainerDetailpage and increases commentCounter */
+  async function handleCommentSubmit(e) {
     e.preventDefault();
-
-    data.comments.unshift({
-      userid: user._id,
-      username: user.firstName,
-      imgURL: user.imgURL,
-      text: comment,
-    });
-    console.log("data.comments in commentForm", data.comments);
-    const update = {
-      courses: data.courses,
-      likes: data.likes,
-      comments: data.comments,
-      adress: data.adress,
-      profession: data.profession,
-    };
+    const update = { body: comment, trainerId: data._id, userId: user._id };
+    try {
+      const result = await fetch(`${url}/comment/add/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(update),
+      });
+      if (!result.ok) {
+        throw new Error(result.statusText);
+      }
+      const json = await result.json();
+      comments.push(json.comment);
+    } catch (err) {
+      console.log("error", err);
+    }
     setCounter((prevCounter) => prevCounter + 1);
-    putData(update);
     setComment("");
   }
   return (
-    <Box component="form" onSubmit={(e) => handleSubmit(e)}>
+    <Box component="form" onSubmit={(e) => handleCommentSubmit(e)}>
       <TextField
         required
         aria-required

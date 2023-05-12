@@ -29,11 +29,11 @@ export default function CourseDetailPage() {
             sm={4}
             display="flex"
             justifyContent="center"
-            alignItems="center"
+            alignItems="start"
             sx={{
               [theme.breakpoints.up("md")]: {
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
+                justifyContent: "center",
+                alignItems: "flex-start",
               },
             }}
           >
@@ -46,6 +46,7 @@ export default function CourseDetailPage() {
                 transition: "all 0.2s",
                 [theme.breakpoints.up("md")]: {
                   height: "100%",
+                  maxHeight: 600,
                   width: "100%",
                   borderRadius: "0 50% 50% 0%/0% 60% 25% 0%",
                 },
