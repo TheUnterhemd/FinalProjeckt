@@ -20,8 +20,9 @@ export default function TrainerDetailpage() {
 
   useEffect(() => {
     setCounter(comments?.length);
-    console.log("comments in trainerdetailpage", comments);
-    console.log("trainer in trainerdetailpage", trainer);
+    // console.log("comments in trainerdetailpage", comments);
+    // console.log("trainer in trainerdetailpage", trainer);
+    console.log("added a comment");
   }, [trainer, comments]);
 
   function handleLike(e) {

@@ -4,13 +4,12 @@ import Startseite from "./pages/Startseite";
 import UserDetailpage from "./pages/UserDetailpage";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
-import Navbar from './components/Navbar';
+import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
-import Navbar from "./components/Navbar";
 function App() {
   const { user, dispatch } = useContext(AuthContext);
 
