@@ -155,7 +155,7 @@ export const getTrainer = async (req, res, next) => {
   let trainer;
   const id = req.params.id;
   try {
-    trainer = await Trainer.findOne({ _id: id });
+    trainer = await Trainer.findOne({ _id: id }).populate("courses");
   } catch (error) {
     console.log(error.message);
   }

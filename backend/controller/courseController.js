@@ -135,7 +135,7 @@ export const getCourse = async (req, res, next) => {
   let course;
   const id = req.params.id;
   try {
-    course = await Course.findOne({ _id: id });
+    course = await Course.findOne({ _id: id }).populate('trainer').populate('currentStudents');
     console.log(course);
   } catch (error) {
     console.log(error.message);

@@ -31,9 +31,7 @@ const trainerSchema = new Schema({
         type: String,
         required: true,
     },
-    courses:{
-        type: Array,
-    }
+    courses: [{ type: Schema.Types.ObjectId, ref: 'Course' }]
 })
 
 export default mongoose.model('Trainer', trainerSchema);

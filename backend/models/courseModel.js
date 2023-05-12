@@ -23,10 +23,7 @@ const courseSchema = new Schema({
     maxStudents:{
         type: String,
     },
-    currentStudents:{
-        type: Array,
-        
-    },
+    currentStudents:[{ type: Schema.Types.ObjectId, ref: 'User' }],
     price:{
         type: String,
         
@@ -44,9 +41,7 @@ const courseSchema = new Schema({
         type: String,
     }
     ,
-    trainer:{
-        type: Object,
-    }
+    trainer:{ type: Schema.Types.ObjectId, ref: 'Trainer' }
 })
 
 export default mongoose.model('Course', courseSchema);
