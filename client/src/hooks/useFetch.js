@@ -35,7 +35,7 @@ export const useFetch = (url, method = "GET") => {
     });
   };
 
-  const deleteData = (deleteData) => {
+  const deleteData = () => {
     setOptions({
       method: "DELETE",
       headers: {

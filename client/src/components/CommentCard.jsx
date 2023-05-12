@@ -2,18 +2,31 @@ import { Avatar, Box, Card, CardContent, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useFetch } from "../hooks/useFetch";
 
-export default function CommentCard({ data }) {
+export default function CommentCard({ data, setCommentList, setCounter }) {
   const { user } = useContext(AuthContext);
-  function handleCommentDeletion(e) {
+  const url = `${process.env.REACT_APP_SERVER_URL}/comment/delete/${data._id}`;
+
+  /** deletes comment from database and from current comments array */
+  async function handleCommentDeletion(e) {
     e.preventDefault();
-    console.log("this will delete the comment in the future");
     console.log(data);
+    await fetch(url, { method: "DELETE" });
+    setCommentList((prevCommentList) => {
+      const result = prevCommentList;
+      result.splice(
+        result.findIndex((comment) => comment._id === data._id),
+        1
+      );
+      return result;
+    });
+    setCounter((prevCounter) => prevCounter - 1);
   }
   return (
     <>
       {data && (
-        <Card sx={{ width: 300, maxWidth: 300, padding: 1 }}>
+        <Card sx={{ width: 300, maxWidth: 300, padding: 1, mt: 1 }}>
           <Box display="flex" justifyContent="space-between">
             <Avatar
               alt={`picture of ${data.userId}`}

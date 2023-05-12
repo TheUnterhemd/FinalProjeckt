@@ -1,20 +1,19 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { Avatar, Button, Chip, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 export default function CourseDetailPage() {
   const theme = useTheme();
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const url = process.env.REACT_APP_SERVER_URL;
   const { data } = useFetch(`${url}/course/${id}`);
 
   useEffect(() => {
     console.log("data in CourseDetailPage", data);
-  }, [data]);
-  /** starts booking process for a course */
+  }); /** starts booking process for a course */
   function startBooking(e) {
     e.preventDefault();
     console.log("does nothing at the moment");
@@ -63,7 +62,7 @@ export default function CourseDetailPage() {
             justifyContent="center"
           >
             <Typography variant="h4" gutterBottom>
-              {data.title} <Chip label={`${data.price}€`} />
+              {data.title} <Chip label={`${data.price} €`} />
             </Typography>
             <Typography variant="body2" gutterBottom>
               {data.description}
@@ -75,13 +74,28 @@ export default function CourseDetailPage() {
             </Typography>
             <Typography variant="body1">Duration {data.duration}</Typography>
             <Typography variant="h6" gutterBottom>
+              Trainer
+            </Typography>
+            <Chip
+              avatar={
+                <Avatar
+                  src={data.trainer.imgURL}
+                  alt={`Avatar for ${data.trainer.firstName}`}
+                />
+              }
+              label={data.trainer.firstName}
+              onClick={() => navigate(`/trainer/${data.trainer._id}`)}
+            ></Chip>
+            <Typography variant="h6" gutterBottom>
               Participants
             </Typography>
-            {data.currentStudents.length > 0
-              ? data.currentStudents.map((student) => (
-                  <Avatar src={student.imgURL} alt={student.firstName} />
-                ))
-              : "Be the first to participate!"}
+            <Box display="flex" gap={1}>
+              {data.currentStudents.length > 0
+                ? data.currentStudents.map((student) => (
+                    <Avatar src={student.imgURL} alt={student.firstName} />
+                  ))
+                : "Be the first to participate!"}
+            </Box>
             <Button
               variant="outlined"
               sx={{ mt: 1 }}

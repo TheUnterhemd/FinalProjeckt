@@ -55,13 +55,14 @@ export const getAllComments = async (req, res, next) => {
   } else if (userComments.length > 0) {
     return res.status(200).json(userComments);
   } else {
-    return res.status(404).json({ message: "No comments found" });
+    // Micha: habe die Res geändert, damit können wir easy im Frontend weitermachen
+    return res.status(200).json([]);
   }
 };
 
 export const deleteComment = async (req, res, next) => {
   const id = req.params.id;
-
+  console.log("deletion fired");
   try {
     const deletedComment = await Comment.findByIdAndDelete(id);
 
