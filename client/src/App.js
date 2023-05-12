@@ -4,13 +4,13 @@ import Startseite from "./pages/Startseite";
 import UserDetailpage from "./pages/UserDetailpage";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
-import Navbar from './components/Navbar';
+import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
-
+import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
 function App() {
   const { user, dispatch } = useContext(AuthContext);
 
@@ -70,7 +70,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar/>
+        <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
@@ -81,6 +81,7 @@ function App() {
           <Route path="/trainer/:id" element={<TrainerDetailpage />} />
           <Route path="/course" element={<AllCourses />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
+          <Route path="/course/create" element={<CourseCreationForm />} />
         </Routes>
       </BrowserRouter>
     </div>

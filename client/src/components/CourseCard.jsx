@@ -11,9 +11,10 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-// @desc used to display a person (Trainer / User) in an overview page
+// @desc used to display a Course in an overview page
 export default function CourseCard({ data }) {
   const navigate = useNavigate();
+  /**navigates to detailpage of course */
   function clickHandler(e) {
     e.preventDefault();
     navigate(`/course/${data._id}`);
