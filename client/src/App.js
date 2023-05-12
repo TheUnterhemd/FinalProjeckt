@@ -4,6 +4,7 @@ import Startseite from "./pages/Startseite";
 import UserDetailpage from "./pages/UserDetailpage";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
+import Navbar from './components/Navbar';
 import LandingPage from "./pages/LandingPage";
 import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
