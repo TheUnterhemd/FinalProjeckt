@@ -12,10 +12,22 @@ export default function CourseCreationForm() {
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [duration, setduration] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [imgURL, setImgURL] = useState("");
 
   function handleCourseSubmit(e) {
     e.preventDefault();
     console.log("this will submit a new course");
+  }
+
+  function handleFileChange(e) {
+    e.preventDefault();
+    console.log(
+      "e.target.files when changing file in courseCreation",
+      e.target.files
+    );
+    setImgURL(e.target.files[0]);
   }
   return (
     <Container
@@ -43,6 +55,8 @@ export default function CourseCreationForm() {
           id="title"
           placeholder="Course title"
           variant="filled"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <TextField
           required
@@ -55,6 +69,8 @@ export default function CourseCreationForm() {
           id="description"
           placeholder="Course description"
           variant="filled"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <TextField
           required
@@ -65,6 +81,8 @@ export default function CourseCreationForm() {
           id="location"
           placeholder="Course location"
           variant="filled"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
         />
         <TextField
           type="number"
@@ -77,6 +95,8 @@ export default function CourseCreationForm() {
           id="duration"
           placeholder="Course duration"
           variant="filled"
+          value={duration}
+          onChange={(e) => setDuration(e.target.value)}
         />
         <TextField
           required
@@ -89,6 +109,8 @@ export default function CourseCreationForm() {
           placeholder="Course date"
           variant="filled"
           focused
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
         />
         <TextField
           required
@@ -101,6 +123,8 @@ export default function CourseCreationForm() {
           placeholder="Course start"
           variant="filled"
           focused
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
         />
         <TextField
           required
@@ -114,6 +138,7 @@ export default function CourseCreationForm() {
           placeholder="Course picture"
           variant="filled"
           focused
+          onChange={(e) => handleFileChange(e)}
         />
         <Button
           type="submit"

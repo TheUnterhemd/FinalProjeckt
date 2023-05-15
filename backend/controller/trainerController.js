@@ -169,7 +169,10 @@ export const getTrainer = async (req, res, next) => {
   let trainer;
   const id = req.params.id;
   try {
-    trainer = await Trainer.findOne({ _id: id }).populate("courses");
+    trainer = await Trainer.findOne({ _id: id })
+      .select("-password")
+      .select("-email")
+      .populate("courses");
   } catch (error) {
     console.log(error.message);
   }
