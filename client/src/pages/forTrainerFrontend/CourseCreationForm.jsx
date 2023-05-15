@@ -11,7 +11,7 @@ export default function CourseCreationForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
-  const [duration, setduration] = useState("");
+  const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [imgURL, setImgURL] = useState("");

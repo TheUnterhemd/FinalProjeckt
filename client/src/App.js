@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import AllTrainers from "./pages/AllTrainers";
 import AllCourses from "./pages/AllCourses";
+import Test from "./pages/Test";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
