@@ -145,7 +145,9 @@ export const updateTrainer = async (req, res, next) => {
     if (!trainer) {
       return res.status(500).json({ message: "Not able to update trainer" });
     }
-    return res.status(200).json({ message: "trainer updated" });
+    return res
+      .status(200)
+      .json({ trainer: trainer, message: "trainer updated" });
   } catch (error) {
     console.log(error.message);
   }
@@ -154,13 +156,15 @@ export const updateTrainer = async (req, res, next) => {
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
   try {
-    trainers = await Trainer.find().select('-password').populate({
-      path: 'courses',
-      populate: {
-        path: 'currentStudents',
-        select: 'firstName lastName imgURL'
-      }
-    });
+    trainers = await Trainer.find()
+      .select("-password")
+      .populate({
+        path: "courses",
+        populate: {
+          path: "currentStudents",
+          select: "firstName lastName imgURL",
+        },
+      });
   } catch (error) {
     console.log(error.message);
   }
@@ -174,18 +178,20 @@ export const getTrainer = async (req, res, next) => {
   let trainer;
   const id = req.params.id;
   try {
-    trainer = await Trainer.findOne({ _id: id }).select('-password').populate({
-      path: 'courses',
-      populate: {
-        path: 'currentStudents',
-        select: 'firstName lastName imgURL'
-      }
-    });
+    trainer = await Trainer.findOne({ _id: id })
+      .select("-password")
+      .populate({
+        path: "courses",
+        populate: {
+          path: "currentStudents",
+          select: "firstName lastName imgURL",
+        },
+      });
   } catch (error) {
     console.log(error.message);
   }
   if (!trainer) {
     return res.status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json({trainer});
+  return res.status(200).json({ trainer });
 };
