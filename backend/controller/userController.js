@@ -114,7 +114,7 @@ export const updateUser = async (req, res) => {
       updates.imgURL = result.secure_url;
     }
 
-    const result = await User.findOneAndUpdate(filter, updates, { new: true });
+    const result = await User.findOneAndUpdate(filter, updates, { new: true }).select('-passwort');
 
     res.send(result);
   } catch (error) {
