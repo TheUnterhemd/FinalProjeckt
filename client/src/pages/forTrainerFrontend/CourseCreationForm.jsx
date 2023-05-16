@@ -63,6 +63,7 @@ export default function CourseCreationForm({ course }) {
 
   async function updateTrainer(json) {
     try {
+      console.log("running updateTrainer");
       const temp = trainer.courses.map((course) => course._id);
       temp.push(json.course._id);
       const result = await fetch(
@@ -81,7 +82,8 @@ export default function CourseCreationForm({ course }) {
   }
   /** sends formdata to backend  */
   async function postdata(formdata) {
-    console.log("trainer", defaultTrainer.trainer);
+    console.log("running postdata");
+
     try {
       const result = await fetch(url, { method: method, body: formdata });
       const json = await result.json();
@@ -96,6 +98,7 @@ export default function CourseCreationForm({ course }) {
   /** calculates the duration from start to end, submits the entered data as formdata/multipart */
   function handleCourseSubmit(e) {
     e.preventDefault();
+    console.log("handling submit");
 
     const datestart = new Date(date);
     const dateend = new Date(end);
@@ -117,7 +120,6 @@ export default function CourseCreationForm({ course }) {
     if (currStud) {
       formdata.append("currentStudents", currStud);
     }
-
     postdata(formdata);
   }
   /** checks filesize from Input and sets the ImgURL state to the file */
