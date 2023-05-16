@@ -1,24 +1,49 @@
 import React, { useContext, useState } from "react";
 import { Box, Button, Container, TextField } from "@mui/material";
-import { useFetch } from "../../hooks/useFetch";
 import { AuthContext } from "../../context/AuthContext";
 
-// to Do: add missings states for the field, submit function, value={state} zu jedem Input(Textfield)
+// to Do: submit function
 export default function CourseCreationForm() {
   const url = `${process.env.REACT_APP_SERVER_URL}/course/add`;
-  const { postdata } = useFetch(url, "POST");
   const { user } = useContext(AuthContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
-  const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [end, setEnd] = useState("");
   const [imgURL, setImgURL] = useState("");
+  const [maxStud, setMaxStud] = useState("");
+  const [price, setPrice] = useState(0);
+  const [ctype, setCtype] = useState("");
 
+  async function postdata(formdata) {
+    try {
+      const result = await fetch(url, { method: "POST", body: formdata });
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   function handleCourseSubmit(e) {
     e.preventDefault();
-    console.log("this will submit a new course");
+
+    const datestart = new Date(date);
+    const dateend = new Date(end);
+    const duration = (dateend - datestart) / (1000 * 60 * 60);
+    const formdata = new FormData();
+    formdata.append("title", title);
+    formdata.append("description", description);
+    formdata.append("location", location);
+    formdata.append("maxStudents", maxStud);
+    formdata.append("type", ctype);
+    formdata.append("price", price);
+    formdata.append("duration", duration);
+    formdata.append("start", date);
+    formdata.append("end", end);
+    formdata.append("imgURL", imgURL);
+    formdata.append("trainer", user._id);
+
+    postdata(formdata);
   }
 
   function handleFileChange(e) {
@@ -75,6 +100,20 @@ export default function CourseCreationForm() {
         <TextField
           required
           aria-required
+          label="type"
+          fullWidth
+          multiline
+          rows="4"
+          name="type"
+          id="type"
+          placeholder="Course type"
+          variant="filled"
+          value={ctype}
+          onChange={(e) => setCtype(e.target.value)}
+        />
+        <TextField
+          required
+          aria-required
           label="location"
           fullWidth
           name="location"
@@ -84,29 +123,16 @@ export default function CourseCreationForm() {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
-        <TextField
-          type="number"
-          inputProps={{ step: "0.5" }}
-          required
-          aria-required
-          label="duration in hours"
-          fullWidth
-          name="duration"
-          id="duration"
-          placeholder="Course duration"
-          variant="filled"
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-        />
+
         <TextField
           required
-          type="date"
+          type="datetime-local"
           aria-required
-          label="date"
+          label="start"
           fullWidth
-          name="date"
-          id="date"
-          placeholder="Course date"
+          name="start"
+          id="start"
+          placeholder="Course startdate and time"
           variant="filled"
           focused
           value={date}
@@ -114,17 +140,17 @@ export default function CourseCreationForm() {
         />
         <TextField
           required
-          type="time"
+          type="datetime-local"
           aria-required
-          label="start"
+          label="end"
           fullWidth
-          name="start"
-          id="start"
-          placeholder="Course start"
+          name="end"
+          id="end"
+          placeholder="Course enddate and time"
           variant="filled"
           focused
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
+          value={end}
+          onChange={(e) => setEnd(e.target.value)}
         />
         <TextField
           required
@@ -139,6 +165,32 @@ export default function CourseCreationForm() {
           variant="filled"
           focused
           onChange={(e) => handleFileChange(e)}
+        />
+        <TextField
+          type="number"
+          required
+          aria-required
+          label="max number of students"
+          fullWidth
+          name="maxStudents"
+          id="maxStudents"
+          placeholder="How many people do you want to participate max?"
+          variant="filled"
+          value={maxStud}
+          onChange={(e) => setMaxStud(e.target.value)}
+        />
+        <TextField
+          type="number"
+          required
+          aria-required
+          label="Price in Euro"
+          fullWidth
+          name="price"
+          id="price"
+          placeholder="What is the price for the course? (in Euro) "
+          variant="filled"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
         />
         <Button
           type="submit"
