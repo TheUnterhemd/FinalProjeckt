@@ -35,9 +35,8 @@ export default function CourseCard({ data }) {
           sx={{ padding: "10px", gap: "10px" }}
         >
           <Avatar
-            alt={`picture of ${
-              data.trainer?.firstName || "fakenameforTesting"
-            }`}
+            alt={`picture of ${data.trainer?.firstName || "fakenameforTesting"
+              }`}
             src={
               data.trainer?.imgURL || "https://picsum.photos/200/300?random=2"
             }

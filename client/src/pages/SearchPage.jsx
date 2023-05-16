@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import { useFetch } from '../hooks/useFetch';
 import { Box, Container, Typography } from '@mui/material';
 import SearchList from '../components/Search/SearchList';
-import Searchbar from '../components/Search/Searchbar';
 
 const SearchPage = () => {
     // const { searchType } = useContext(SearchContext)
@@ -19,9 +18,8 @@ const SearchPage = () => {
     const { data, isPending, error } = useFetch(searchURL);
 
     return (
-        <Container maxWidth="md">
-            <Searchbar />
-            <Box sx={{ height: '100vh' }}>
+        <Container maxWidth="lg">
+            <Box sx={{ height: '100vh', display: "flex" }}>
                 {error && <Typography variant='body1'>{error}</Typography>}
                 {isPending && <Typography variant='body1'>Loading...</Typography>}
                 {data && <SearchList searchData={data} />}

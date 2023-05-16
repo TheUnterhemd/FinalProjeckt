@@ -3,7 +3,6 @@ import Course from "../models/courseModel.js";
 
 export async function search(req, res, next) {
   const query = req.query.q;
-  console.log(query);
   try {
     const trainer = await Trainer.find({
       firstName: { $regex: `(?i)${query}` },
@@ -15,7 +14,7 @@ export async function search(req, res, next) {
       ],
     });
 
-    res.json({ trainer: trainer, courses: courses });
+    res.json({trainer, courses});
   } catch (err) {
     console.log(err);
   }
