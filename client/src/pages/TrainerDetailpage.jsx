@@ -16,6 +16,7 @@ export default function TrainerDetailpage() {
   const [counter, setCounter] = useState(0);
   const [commentList, setCommentList] = useState([]);
   const url = process.env.REACT_APP_SERVER_URL;
+  console.log(url);
   const { data: trainer } = useFetch(`${url}/trainer/${id}`);
   const { data: comments } = useFetch(`${url}/comment/${id}`);
 
