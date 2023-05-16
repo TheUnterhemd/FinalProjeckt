@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { Avatar, Box, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import SmallCards from "../components/SmallCards";
+import CourseShowcase from "../components/CourseShowcase";
 import CommentCard from "../components/CommentCard";
 import CommentForm from "../components/CommentForm";
 import Favorite from "@mui/icons-material/Favorite";
@@ -87,9 +87,9 @@ export default function TrainerDetailpage() {
             <Typography variant="h6" gutterBottom>
               Courses offered
             </Typography>
-            {trainer.courses.length > 0 ? (
-              <SmallCards data={trainer.courses} />
-            ) : (
+            {trainer.courses.length > 0 ? trainer.courses.map((course) => (
+              <CourseShowcase key={course._id} data={course} />
+            )) : (
               "Currrently no courses offered."
             )}
             <Typography variant="h6" gutterBottom>
@@ -103,13 +103,13 @@ export default function TrainerDetailpage() {
             <Box>
               {commentList?.length > 0
                 ? commentList.map((comment) => (
-                    <CommentCard
-                      data={comment}
-                      key={uuid()}
-                      setCommentList={setCommentList}
-                      setCounter={setCounter}
-                    />
-                  ))
+                  <CommentCard
+                    data={comment}
+                    key={uuid()}
+                    setCommentList={setCommentList}
+                    setCounter={setCounter}
+                  />
+                ))
                 : "Be the first to comment!"}
             </Box>
           </Grid>

@@ -35,7 +35,6 @@ const Searchbar = () => {
       <Box
         component='form'
         onSubmit={handleSearch}
-        sx={{ width: "100%" }}
       >
         <TextField
           margin="normal"
@@ -45,7 +44,6 @@ const Searchbar = () => {
           label="Search"
           name="search"
           onChange={(e) => setSearch(e.target.value)}
-          focused
         />
       </Box>
       {/* </Box> */}

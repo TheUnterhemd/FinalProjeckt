@@ -1,18 +1,25 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import PersonCard from '../PersonCard';
+import CourseCard from '../CourseCard';
 
 
 const SearchList = ({ searchData }) => {
 
-    if (searchData.length === 0) {
+    if (searchData.trainer.length === 0 && searchData.courses.length === 0) {
         return <Typography variant='body1'>No data to load...</Typography>;
     }
 
     return (
         <>
-            {searchData?.map((searchData) => (
-                <PersonCard data={searchData} />
+            {searchData.trainer.length > 0 ? searchData?.trainer.map((searchData) => (
+                <Box m={1}>
+                    <PersonCard data={searchData} />
+                </Box>
+            )) : searchData?.courses.map((searchData) => (
+                <Box m={1}>
+                    <CourseCard data={searchData} />
+                </Box>
             ))}
         </>
     )

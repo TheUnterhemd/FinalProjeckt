@@ -16,7 +16,7 @@ export default function PersonCard({ data }) {
     navigate(`/trainer/${data._id}`);
   }
   return (
-    <Card sx={{ width: 250, maxWidth: 250 }} onClick={(e) => clickHandler(e)}>
+    <Card sx={{ width: 250, maxWidth: 250 }} key={data._id} onClick={(e) => clickHandler(e)}>
       <CardActionArea>
         <CardMedia
           component="img"
