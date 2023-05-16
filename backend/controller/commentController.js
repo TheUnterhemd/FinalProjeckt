@@ -43,8 +43,8 @@ export const getAllComments = async (req, res, next) => {
   let userComments;
 
   try {
-    trainerComments = await Comment.find({ trainerId: id });
-    userComments = await Comment.find({ userId: id });
+    trainerComments = await Comment.find({ trainerId: id }).populate('userId', 'firstName lastName imgURL').populate('trainerId', 'firstName lastName imgURL');
+    userComments = await Comment.find({ userId: id }).populate('userId', 'firstName lastName imgURL').populate('trainerId', 'firstName lastName imgURL');
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ message: "Server error" });

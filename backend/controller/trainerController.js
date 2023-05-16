@@ -154,8 +154,13 @@ export const updateTrainer = async (req, res, next) => {
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
   try {
-    trainers = await Trainer.find();
-    console.log(trainers);
+    trainers = await Trainer.find().select('-password').populate({
+      path: 'courses',
+      populate: {
+        path: 'currentStudents',
+        select: 'firstName lastName imgURL'
+      }
+    });
   } catch (error) {
     console.log(error.message);
   }
@@ -169,24 +174,18 @@ export const getTrainer = async (req, res, next) => {
   let trainer;
   const id = req.params.id;
   try {
-    trainer = await Trainer.findOne({ _id: id })
-      .select("-password")
-      .select("-email")
-      .populate("courses");
+    trainer = await Trainer.findOne({ _id: id }).select('-password').populate({
+      path: 'courses',
+      populate: {
+        path: 'currentStudents',
+        select: 'firstName lastName imgURL'
+      }
+    });
   } catch (error) {
     console.log(error.message);
   }
   if (!trainer) {
     return res.status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json({
-    _id: trainer._id,
-    firstName: trainer.firstName,
-    lastName: trainer.lastName,
-    profession: trainer.profession,
-    imgURL: trainer.imgURL,
-    email: trainer.email,
-    imgURL: trainer.imgURL,
-    courses: trainer.courses,
-  });
+  return res.status(200).json({trainer});
 };
