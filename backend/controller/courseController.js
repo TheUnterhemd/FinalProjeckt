@@ -120,7 +120,7 @@ export const updateCourse = async (req, res, next) => {
 export const getAllCourses = async (req, res, next) => {
   let courses;
   try {
-    courses = await Course.find();
+    courses = await Course.find().populate('trainer', 'firstName lastName imgURL').populate('currentStudent', 'firstName lastName imgURL');
     console.log(courses);
   } catch (error) {
     console.log(error.message);
@@ -135,7 +135,7 @@ export const getCourse = async (req, res, next) => {
   let course;
   const id = req.params.id;
   try {
-    course = await Course.findOne({ _id: id }).populate('trainer').populate('currentStudents');
+    course = await Course.findOne({ _id: id }).populate('trainer', 'firstName lastName imgURL').populate('currentStudent', 'firstName lastName imgURL');
     console.log(course);
   } catch (error) {
     console.log(error.message);
