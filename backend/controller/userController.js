@@ -133,3 +133,12 @@ export const getUser = async (req, res) => {
     }
 }
 
+export const getUserByName = async (req, res) => {
+    const userName = req.query.q;
+    try {
+        const result = await User.findByName(userName);
+        res.send(result);
+    } catch (error) {
+        res.send(error);
+    }
+}

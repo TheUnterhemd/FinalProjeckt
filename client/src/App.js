@@ -11,6 +11,8 @@ import AllCourses from "./pages/AllCourses";
 import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
+import SearchPage from "./pages/SearchPage";
+
 function App() {
   const { user, dispatch } = useContext(AuthContext);
 
@@ -19,10 +21,14 @@ function App() {
     dispatch({
       type: "LOGIN",
       payload: {
-        _id: "fakeidfortestingpurposes",
-        firstName: "Micha",
-        lastName: "Dings",
-        imgURL: "https://picsum.photos/200",
+        _id: "645e4828670eaab12beded5e",
+        firstName: "Tom",
+        lastName: "Hunter",
+        email: "test1234@gmail.com",
+        password:
+          "$2b$12$SOP.a5kDWZWitgRJVgHuKeHShQi5WLSppJcJgUVNXRU67QFe8Tr2q",
+        imgURL:
+          "https://res.cloudinary.com/dhdugvhj3/image/upload/v1683900457/localtrainer/avatar/user/645e4828670eaab12beded5e/profile_picture_645e4828670eaab12beded5e.jpg",
         interests: ["Surfing", "Climbing", "Chilling"],
         bookedCourses: [
           {
@@ -58,15 +64,11 @@ function App() {
             picture: "https://picsum.photos/300",
           },
         ],
-        comments: [
-          {
-            author: "toni",
-            text: "great having Micha around!Could work a little more on his buttcheecks though.",
-          },
-        ],
+        comments: [],
       },
     });
   }, []);
+  
   return (
     <div className="App">
       <BrowserRouter>
@@ -82,6 +84,7 @@ function App() {
           <Route path="/course" element={<AllCourses />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
           <Route path="/course/create" element={<CourseCreationForm />} />
+          <Route path="/search" element={<SearchPage />}/>
         </Routes>
       </BrowserRouter>
     </div>

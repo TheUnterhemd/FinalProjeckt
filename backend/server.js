@@ -6,6 +6,7 @@ import trainerRouter from "./routes/trainerRouter.js";
 import userRouter from "./routes/userRouter.js";
 import courseRouter from "./routes/courseRouter.js";
 import commentRouter from "./routes/commentRouter.js";
+import searchRouter from "./routes/searchRouter.js";
 
 dotenv.config();
 const app = express();
@@ -21,7 +22,8 @@ mongoose.connect(
 app.use("/trainer", trainerRouter);
 app.use("/user", userRouter);
 app.use("/course", courseRouter);
-app.use("/comment",commentRouter);
+app.use("/comment", commentRouter);
+app.use("/search", searchRouter);
 
 app.listen(process.env.PORT, () => {
   console.log("Lauschangriff auf Port:" + process.env.PORT);
