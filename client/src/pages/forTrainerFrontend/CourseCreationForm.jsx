@@ -1,4 +1,7 @@
-// ToDo: Trainer muss auch geupdated werden, wenn der Course kreiert wird. beim Delete sollte das auch beim Trainer gelöscht werden.
+// ToDo:
+// Anzeige von Teilnehmenden, wenn es denn schon welche gibt.
+// vor Deploy: setTrainer entfernen und Context für Trainer einbinden.
+// beim Delete sollte das der course auch beim Trainer gelöscht werden.
 
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -37,7 +40,7 @@ export default function CourseCreationForm({ course }) {
   const today = new Date();
   const url = `${process.env.REACT_APP_SERVER_URL}/course/${endpoint}`;
 
-  // loads course data, if provided. turns form into course update form
+  // loads course data, if provided. turns form into course update form AND SETS DEFAULT TRAINER FOR TESTING
   useEffect(() => {
     if (course) {
       setTitle(course.title);
@@ -56,8 +59,26 @@ export default function CourseCreationForm({ course }) {
     if (defaultTrainer) {
       setTrainer(defaultTrainer.trainer);
     }
-  }, [defaultTrainer]);
+  }, [defaultTrainer, course]);
 
+  async function updateTrainer(json) {
+    try {
+      const temp = trainer.courses.map((course) => course._id);
+      temp.push(json.course._id);
+      const result = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/trainer/update/${trainer._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ courses: temp }),
+        }
+      );
+      const resTrainer = await result.json();
+      setTrainer(resTrainer.trainer);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   /** sends formdata to backend  */
   async function postdata(formdata) {
     console.log("trainer", defaultTrainer.trainer);
@@ -65,9 +86,7 @@ export default function CourseCreationForm({ course }) {
       const result = await fetch(url, { method: method, body: formdata });
       const json = await result.json();
       if (method === "POST") {
-        console.log("trainer.courses before", trainer.courses);
-        trainer.courses.push(json.course._id);
-        console.log("trainer.courses after", trainer.courses);
+        updateTrainer(json);
       }
       console.log(json.course);
     } catch (err) {
