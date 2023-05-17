@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { Avatar, Box, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import SmallCards from "../components/SmallCards";
+import CourseShowcase from "../components/CourseShowcase";
 import CommentCard from "../components/CommentCard";
 import CommentForm from "../components/CommentForm";
 import Favorite from "@mui/icons-material/Favorite";
@@ -16,6 +16,7 @@ export default function TrainerDetailpage() {
   const [counter, setCounter] = useState(0);
   const [commentList, setCommentList] = useState([]);
   const url = process.env.REACT_APP_SERVER_URL;
+  console.log(url);
   const { data: trainer } = useFetch(`${url}/trainer/${id}`);
   const { data: comments } = useFetch(`${url}/comment/${id}`);
 
@@ -87,11 +88,11 @@ export default function TrainerDetailpage() {
             <Typography variant="h6" gutterBottom>
               Courses offered
             </Typography>
-            {trainer.courses.length > 0 ? (
-              <SmallCards data={trainer.courses} />
-            ) : (
-              "Currrently no courses offered."
-            )}
+            {trainer.courses && trainer.courses.length > 0
+              ? trainer.courses.map((course) => (
+                  <CourseShowcase key={course._id} data={course} />
+                ))
+              : "Currrently no courses offered."}
             <Typography variant="h6" gutterBottom>
               {counter} Comments
             </Typography>
