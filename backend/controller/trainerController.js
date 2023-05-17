@@ -111,6 +111,7 @@ export const loginTrainer = async (req, res, next) => {
               profession: trainer.profession,
               address: trainer.adress,
               imgURL: trainer.imgURL,
+              token,
               message: "Trainer logged in" });
   } catch (error) {
     console.log(error.message);

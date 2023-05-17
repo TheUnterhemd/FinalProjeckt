@@ -20,7 +20,7 @@ trainerRouter.post("/logout", logoutTrainer);
 
 trainerRouter.put("/update/:id", upload.single("imageURL"), updateTrainer);
 
-trainerRouter.get("/", getAllTrainers);
+trainerRouter.get("/",validator, getAllTrainers);
 trainerRouter.get("/:id", getTrainer);
 
 export default trainerRouter;
