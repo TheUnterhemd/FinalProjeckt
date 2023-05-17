@@ -88,11 +88,11 @@ export default function TrainerDetailpage() {
             <Typography variant="h6" gutterBottom>
               Courses offered
             </Typography>
-            {trainer.courses.length > 0 ? trainer.courses.map((course) => (
-              <CourseShowcase key={course._id} data={course} />
-            )) : (
-              "Currrently no courses offered."
-            )}
+            {trainer.courses && trainer.courses.length > 0
+              ? trainer.courses.map((course) => (
+                  <CourseShowcase key={course._id} data={course} />
+                ))
+              : "Currrently no courses offered."}
             <Typography variant="h6" gutterBottom>
               {counter} Comments
             </Typography>
@@ -104,13 +104,13 @@ export default function TrainerDetailpage() {
             <Box>
               {commentList?.length > 0
                 ? commentList.map((comment) => (
-                  <CommentCard
-                    data={comment}
-                    key={uuid()}
-                    setCommentList={setCommentList}
-                    setCounter={setCounter}
-                  />
-                ))
+                    <CommentCard
+                      data={comment}
+                      key={uuid()}
+                      setCommentList={setCommentList}
+                      setCounter={setCounter}
+                    />
+                  ))
                 : "Be the first to comment!"}
             </Box>
           </Grid>
