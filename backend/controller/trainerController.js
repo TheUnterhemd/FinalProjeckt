@@ -193,5 +193,5 @@ export const getTrainer = async (req, res, next) => {
   if (!trainer) {
     return res.status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json({ trainer });
+  return res.status(200).json(trainer);
 };
