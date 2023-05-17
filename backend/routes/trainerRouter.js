@@ -8,6 +8,7 @@ import {
   logoutTrainer
 } from "../controller/trainerController.js";
 import { upload } from "../controller/cloudinaryController.js";
+import { validator } from "../validation/validator.js";
 
 
 const trainerRouter = express.Router();

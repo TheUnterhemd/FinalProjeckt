@@ -98,7 +98,7 @@ export const loginTrainer = async (req, res, next) => {
     }
 
     const token = jwt.sign(trainer.toJSON(), secret, { expiresIn: "1h" });
-    res.cookie("LocalTrainer", token + { trainer: trainer._id }, {
+    res.cookie("LocalTrainer", token, {
       withCredentials: true,
       httpOnly: true,
       expiresIn: "1h",
@@ -106,7 +106,12 @@ export const loginTrainer = async (req, res, next) => {
 
     return res
       .status(200)
-      .json({ trainer: trainer._id, message: "Trainer logged in" });
+      .json({ trainer: trainer._id,
+              courses:trainer.courses,
+              profession: trainer.profession,
+              address: trainer.adress,
+              imgURL: trainer.imgURL,
+              message: "Trainer logged in" });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ message: "Server error" });
