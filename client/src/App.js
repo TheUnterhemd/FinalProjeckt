@@ -1,4 +1,5 @@
 import "./App.css";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Startseite from "./pages/Startseite";
 import UserDetailpage from "./pages/UserDetailpage";
@@ -12,6 +13,7 @@ import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
 import SearchPage from "./pages/SearchPage";
+import MapTest from "./pages/MapTest";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
@@ -68,7 +70,7 @@ function App() {
       },
     });
   }, []);
-  
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -84,7 +86,8 @@ function App() {
           <Route path="/course" element={<AllCourses />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
           <Route path="/course/create" element={<CourseCreationForm />} />
-          <Route path="/search" element={<SearchPage />}/>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/maps" element={<MapTest />} />
         </Routes>
       </BrowserRouter>
     </div>

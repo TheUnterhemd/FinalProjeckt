@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 
 export default function CourseDetailPage() {
   const theme = useTheme();
+  const [edit, setEdit] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const url = process.env.REACT_APP_SERVER_URL;
@@ -13,14 +16,19 @@ export default function CourseDetailPage() {
 
   useEffect(() => {
     console.log("data in CourseDetailPage", data);
-  }); /** starts booking process for a course */
+  });
+  /** starts booking process for a course */
   function startBooking(e) {
     e.preventDefault();
     console.log("does nothing at the moment");
   }
+
+  // REMOVE WHEN TRAINER FRONTEND IS ESTABLISHED, along with edit state and code for editform
+  /** triggers edit state to hide course Info but display it in a form*/
+
   return (
     <div>
-      {data && (
+      {!edit && data && (
         <Grid container spacing={2} sx={{ mt: "2rem" }}>
           <Grid
             item
@@ -106,6 +114,12 @@ export default function CourseDetailPage() {
           </Grid>
         </Grid>
       )}
+      <Chip
+        label={!edit ? "Edit Course" : "Show Course"}
+        sx={{ mt: 3 }}
+        onClick={() => setEdit(!edit)}
+      ></Chip>
+      {edit && data && <CourseCreationForm course={data} />}
     </div>
   );
 }
