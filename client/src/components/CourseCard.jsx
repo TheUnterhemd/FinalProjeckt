@@ -47,17 +47,31 @@ export default function CourseCard({ data }) {
           </Typography>
         </Box>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {data.title}
-          </Typography>
-          <Typography variant="body1">Location: {data.location}</Typography>
-          <Typography variant="body1">
-            Starts: {data.start.split("_").join(" ")}
-          </Typography>
-          <Typography variant="body1">
-            Ends: {data.end.split("_").join(" ")}
-          </Typography>
-          <Chip label={`${data.price} €`} />
+          <Box sx={{
+            overflow: 'hidden',
+            maxWidth: '15rem',
+          }}>
+            <Typography gutterBottom variant="h5" component="div"
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}>
+              {data.title}
+            </Typography>
+            <Typography variant="body1" sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}>Location: {data.location}</Typography>
+            <Typography variant="body1">
+              Starts: {data.start.split("_").join(" ")}
+            </Typography>
+            <Typography variant="body1">
+              Ends: {data.end.split("_").join(" ")}
+            </Typography>
+            <Chip label={`${data.price} €`} />
+          </Box>
         </CardContent>
       </CardActionArea>
     </Card>

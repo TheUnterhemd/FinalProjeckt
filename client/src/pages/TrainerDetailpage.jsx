@@ -42,7 +42,7 @@ export default function TrainerDetailpage() {
           <Grid
             item
             xs={12}
-            sm={4}
+            sm={3.7}
             display="flex"
             justifyContent="center"
             alignItems="start"
@@ -91,15 +91,15 @@ export default function TrainerDetailpage() {
             </Typography>
             {trainer.courses && trainer.courses.length > 0
               ? (
-                <Grid container spacing={2} sx={{ width: "60%" }}>
+                <Grid container spacing={2} sx={{ width: "60%" }} display="flex" justifyContent="center" alignItems="center">
                   {showAllCourses ? trainer.courses.map((course) => (
-                    <Grid item md={12} lg={6} xl={4} key={course._id}>
+                    <Grid item md={12} lg={6} xl={4} key={course._id} display="flex" justifyContent="center" alignItems="center">
                       <CourseShowcase data={course} />
                     </Grid>
                   )) : (
                     <>
                       {trainer.courses.slice(0, 3).map((course) => (
-                        <Grid item md={12} lg={6} xl={4} key={course._id}>
+                        <Grid item md={12} lg={6} xl={4} key={course._id} display="flex" justifyContent="center" alignItems="center">
                           <CourseShowcase data={course} />
                         </Grid>
                       ))}
