@@ -1,10 +1,12 @@
 //import { useContext } from 'react'
 // import { SearchContext } from '../context/SearchContext';
+
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useFetch } from '../hooks/useFetch';
 import { Box, Button, Container, Typography, Slider, TextField } from '@mui/material';
 import SearchList from '../components/Search/SearchList';
+import MapTest from "./MapTest";
 
 const SearchPage = () => {
     // const { searchType } = useContext(SearchContext)
@@ -57,6 +59,8 @@ const SearchPage = () => {
                         onChange={(e) => setPrice(e.target.value)} />
                 </Box>
             }
+            
+            {data && <MapTest markerOptions={data.courses} />}
 
             <Box sx={{ height: '100vh', display: "flex", flexWrap: "wrap" }}>
                 {error && <Typography variant='body1'>{error}</Typography>}
