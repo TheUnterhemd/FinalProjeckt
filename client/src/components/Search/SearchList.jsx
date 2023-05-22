@@ -11,17 +11,24 @@ const SearchList = ({ searchData }) => {
     }
 
     return (
-        <>
-            {searchData.trainer.length > 0 ? searchData?.trainer.map((searchData) => (
-                <Box m={1}>
-                    <PersonCard data={searchData} />
-                </Box>
-            )) : searchData?.courses.map((searchData) => (
-                <Box m={1}>
-                    <CourseCard data={searchData} />
-                </Box>
-            ))}
-        </>
+        <Box display="flex" flexDirection="column" >
+            <Typography variant='h5'>Trainer:</Typography>
+            <Box display="flex">
+                {searchData.trainer.length > 0 && searchData?.trainer.map((searchData) => (
+                    <Box m={1}>
+                        <PersonCard data={searchData} />
+                    </Box>
+                ))}
+            </Box>
+            <Typography variant='h5'>Courses:</Typography>
+            <Box display="flex" flexWrap="wrap">
+                {searchData.courses.length > 0 && searchData?.courses.map((searchData) => (
+                    <Box m={1}>
+                        <CourseCard data={searchData} />
+                    </Box>
+                ))}
+            </Box>
+        </Box >
     )
 }
 
