@@ -15,6 +15,7 @@ export default function TrainerDetailpage() {
   // "counter" gibt es nur um die kommentarspalte realtime upzudaten
   const [counter, setCounter] = useState(0);
   const [commentList, setCommentList] = useState([]);
+  const [showAllCourses, setShowAllCourses] = useState(false);
   const url = process.env.REACT_APP_SERVER_URL;
   console.log(url);
   const { data: trainer } = useFetch(`${url}/trainer/${id}`);
@@ -89,9 +90,30 @@ export default function TrainerDetailpage() {
               Courses offered
             </Typography>
             {trainer.courses && trainer.courses.length > 0
-              ? trainer.courses.map((course) => (
-                  <CourseShowcase key={course._id} data={course} />
-                ))
+              ? (
+                <Grid container spacing={2} sx={{ width: "60%" }}>
+                  {showAllCourses ? trainer.courses.map((course) => (
+                    <Grid item md={12} lg={6} xl={4} key={course._id}>
+                      <CourseShowcase data={course} />
+                    </Grid>
+                  )) : (
+                    <>
+                      {trainer.courses.slice(0, 3).map((course) => (
+                        <Grid item md={12} lg={6} xl={4} key={course._id}>
+                          <CourseShowcase data={course} />
+                        </Grid>
+                      ))}
+                      {trainer.courses.length > 3 && (
+                        <Typography variant="body2"
+                          sx={{ cursor: "pointer", color: theme.palette.primary.main }}
+                          onClick={() => setShowAllCourses(true)}>
+                          Show more...
+                        </Typography>
+                      )}
+                    </>
+                  )}
+                </Grid>
+              )
               : "Currrently no courses offered."}
             <Typography variant="h6" gutterBottom>
               {counter} Comments
@@ -104,13 +126,13 @@ export default function TrainerDetailpage() {
             <Box>
               {commentList?.length > 0
                 ? commentList.map((comment) => (
-                    <CommentCard
-                      data={comment}
-                      key={uuid()}
-                      setCommentList={setCommentList}
-                      setCounter={setCounter}
-                    />
-                  ))
+                  <CommentCard
+                    data={comment}
+                    key={uuid()}
+                    setCommentList={setCommentList}
+                    setCounter={setCounter}
+                  />
+                ))
                 : "Be the first to comment!"}
             </Box>
           </Grid>

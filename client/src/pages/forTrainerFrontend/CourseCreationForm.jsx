@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
 import { useFetch } from "../../hooks/useFetch";
+import MapTest from "../MapTest";
 
 export default function CourseCreationForm({ course }) {
   // const { user } = useContext(AuthContext);
@@ -49,7 +50,7 @@ export default function CourseCreationForm({ course }) {
       setDate(course.start);
       setEnd(course.end);
       setImgURL(course.imgURL);
-      setMaxStud(course.Students);
+      setMaxStud(course.maxStudents);
       setCurrStud(course.currentStudents);
       setPrice(course.price);
       setCtype(course.type);
@@ -60,7 +61,7 @@ export default function CourseCreationForm({ course }) {
       setTrainer(defaultTrainer.trainer);
     }
   }, [defaultTrainer, course]);
-
+  /**handles the update of the trainer to post the new course array on database */
   async function updateTrainer(json) {
     try {
       console.log("running updateTrainer");
@@ -131,14 +132,10 @@ export default function CourseCreationForm({ course }) {
     } else {
       setError("");
       setImgURL(e.target.files[0]);
+      console.log("locatoin on courseCreatoin", location);
     }
   }
 
-  //function for testing only
-  function displaydata() {
-    console.log("today", today.toISOString().substring(0, 16));
-    console.log("date", date);
-  }
   return (
     <Container
       sx={{
@@ -148,7 +145,6 @@ export default function CourseCreationForm({ course }) {
         padding: 2,
       }}
     >
-      <Button onClick={(e) => displaydata(e)}>Display</Button>
       <Box
         component="form"
         display="flex"
@@ -205,6 +201,7 @@ export default function CourseCreationForm({ course }) {
           aria-required
           label="location"
           fullWidth
+          disabled
           name="location"
           id="location"
           placeholder="Course location"
@@ -212,7 +209,9 @@ export default function CourseCreationForm({ course }) {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
-
+        <Box>
+          <MapTest markerOptions={{ draggable: true, setLocation, location }} />
+        </Box>
         <TextField
           required
           inputProps={{
