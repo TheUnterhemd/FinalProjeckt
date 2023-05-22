@@ -58,7 +58,11 @@ export default function CourseCreationForm({ course }) {
       setMethod("PUT");
     }
     if (defaultTrainer) {
-      setTrainer(defaultTrainer.trainer);
+      setTrainer(defaultTrainer);
+      console.log(
+        "defaulttrainer set in CourseCreationForm:62",
+        defaultTrainer
+      );
     }
   }, [defaultTrainer, course]);
   /**handles the update of the trainer to post the new course array on database */
@@ -132,7 +136,7 @@ export default function CourseCreationForm({ course }) {
     } else {
       setError("");
       setImgURL(e.target.files[0]);
-      console.log("locatoin on courseCreatoin", location);
+      console.log("location on courseCreation", location);
     }
   }
 
