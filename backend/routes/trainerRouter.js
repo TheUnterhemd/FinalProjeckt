@@ -8,7 +8,7 @@ import {
   logoutTrainer
 } from "../controller/trainerController.js";
 import { upload } from "../controller/cloudinaryController.js";
-import { validator } from "../validation/validator.js";
+import { trainerValidator } from "../validation/validator.js";
 
 
 const trainerRouter = express.Router();
@@ -18,9 +18,9 @@ trainerRouter.post("/login", loginTrainer);
 trainerRouter.post("/logout", logoutTrainer); 
 
 
-trainerRouter.put("/update/:id", upload.single("imageURL"), updateTrainer);
+trainerRouter.put("/update/:id",trainerValidator, upload.single("imageURL"), updateTrainer);
 
-trainerRouter.get("/",validator, getAllTrainers);
+trainerRouter.get("/",getAllTrainers);
 trainerRouter.get("/:id", getTrainer);
 
 export default trainerRouter;

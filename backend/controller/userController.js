@@ -67,13 +67,11 @@ export const loginUser = async (req, res) => {
 
     const passAuth = bcrypt.compareSync(password, user.password);
     if(passAuth){
-        jwt.sign({
-            id: user._id,
-        }, jwtSecret, {expiresIn: "1h"}, (err, token) => {
-            if (err) throw err;
 
-            res.cookie("LocalTrainer",{user:newUser._id} + token).json({
-                _id: user._id,
+        const tokenPayload ={
+            trainer: false,
+            data:{
+                id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 address: user.address,
@@ -82,10 +80,21 @@ export const loginUser = async (req, res) => {
                 interests: user.interests,
                 bookedCourses: user.bookedCourses,
                 solvedCourses: user.solvedCourses,
-                comments: user.comments,
-                message: "user logged in"
-            });
-        })
+                comments: user.comments,}
+                  
+          }
+          const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
+          res.cookie("LocalTrainer", token, {
+            withCredentials: true,
+            httpOnly: true,
+            expiresIn: "1h",
+          });
+      
+          return res
+            .status(200)
+            .json({ token,
+                    message: "User logged in" });
+       
     }else {
         res.status(400).json("wrong credentials");
     }

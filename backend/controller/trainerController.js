@@ -37,7 +37,6 @@ export const addTrainer = async (req, res) => {
     profession,
   } = req.body;
   let exist;
-  console.log(req.body);
   try {
     exist = await Trainer.findOne({ email });
   } catch (error) {
@@ -96,22 +95,20 @@ export const loginTrainer = async (req, res, next) => {
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Wrong password" });
     }
+    const tokenPayload ={
+      trainer: true,
+      data: trainer._id,
+            courses:trainer.courses,
+            profession: trainer.profession,
+            address: trainer.adress,
+            imgURL: trainer.imgURL,
+    }
 
-    const token = jwt.sign(trainer.toJSON(), secret, { expiresIn: "1h" });
-    res.cookie("LocalTrainer", token, {
-      withCredentials: true,
-      httpOnly: true,
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
 
     return res
       .status(200)
-      .json({ trainer: trainer._id,
-              courses:trainer.courses,
-              profession: trainer.profession,
-              address: trainer.adress,
-              imgURL: trainer.imgURL,
-              token,
+      .json({ token,
               message: "Trainer logged in" });
   } catch (error) {
     console.log(error.message);

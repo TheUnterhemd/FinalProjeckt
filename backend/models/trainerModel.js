@@ -31,6 +31,10 @@ const trainerSchema = new Schema({
         type: String,
         required: true,
     },
+    trainer: {
+        type: Boolean,
+        default: true,
+    },
     courses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
 })
