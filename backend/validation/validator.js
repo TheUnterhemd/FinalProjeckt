@@ -4,18 +4,38 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
-export const validator = (req, res, next) => {
+export const trainerValidator = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    console.log(req.headers);
-    console.log(token, "token");
-    console.log(authHeader, "header");
-
+  
     if (token == null) return res.sendStatus(401);
+  
+    jwt.verify(token, process.env.JWT_SECRET, (err, trainer) => {
+      if (err) return res.sendStatus(403);
+  
+      if (trainer.trainer) {
+        req.trainer = trainer;
+        next();
+      } else {
+        res.sendStatus(403);
+      }
+    });
+  };
 
+  export const userValidator = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+  
+    if (token == null) return res.sendStatus(401);
+  
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403)
+      if (err) return res.sendStatus(403);
+  
+      if (!user.trainer) {
         req.user = user;
         next();
-    })
-};
+      } else {
+        res.sendStatus(403);
+      }
+    });
+  };

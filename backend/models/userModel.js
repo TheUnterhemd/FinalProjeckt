@@ -13,6 +13,7 @@ const Schema = mongoose.Schema;
     bookedCourses:[{ type: Schema.Types.ObjectId, ref: 'Course' }],
     solvedCourses:[{ type: Schema.Types.ObjectId, ref: 'Course' }],
     comments:[{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    trainer: {type: Boolean,default: false},
  })
 
 
