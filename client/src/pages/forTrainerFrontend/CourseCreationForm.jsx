@@ -59,10 +59,6 @@ export default function CourseCreationForm({ course }) {
     }
     if (defaultTrainer) {
       setTrainer(defaultTrainer);
-      console.log(
-        "defaulttrainer set in CourseCreationForm:62",
-        defaultTrainer
-      );
     }
   }, [defaultTrainer, course]);
   /**handles the update of the trainer to post the new course array on database */

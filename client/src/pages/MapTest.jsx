@@ -24,6 +24,7 @@ export default function MapTest({ markerOptions }) {
         />
         <LocationMarker markerOptions={markerOptions} />
         {data &&
+          Array.isArray(data) &&
           data.map((course) => (
             <Marker
               position={{
