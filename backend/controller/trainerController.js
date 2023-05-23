@@ -73,16 +73,32 @@ export const addTrainer = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-  return res
-    .status(200)
-    .json({ trainer: trainer._id, message: "trainer saved successfully" });
+  return res.status(200).json({
+    user: {
+      token,
+      _id: trainer._id,
+      lastName: trainer.lastName,
+      firstName: trainer.firstName,
+      imgURL: trainer.imgURL,
+      profession: trainer.profession,
+      courses: trainer.courses,
+      isTrainer: true,
+    },
+    message: "trainer saved successfully",
+  });
 };
 
 export const loginTrainer = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const trainer = await Trainer.findOne({ email });
+    const trainer = await Trainer.findOne({ email }).populate({
+      path: "courses",
+      populate: {
+        path: "currentStudents",
+        select: "firstName lastName imgURL",
+      },
+    });
 
     if (!trainer) {
       return res
@@ -95,21 +111,30 @@ export const loginTrainer = async (req, res, next) => {
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Wrong password" });
     }
-    const tokenPayload ={
+    const tokenPayload = {
       trainer: true,
       data: trainer._id,
-            courses:trainer.courses,
-            profession: trainer.profession,
-            address: trainer.adress,
-            imgURL: trainer.imgURL,
-    }
+      courses: trainer.courses,
+      profession: trainer.profession,
+      address: trainer.adress,
+      imgURL: trainer.imgURL,
+    };
 
     const token = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
 
-    return res
-      .status(200)
-      .json({ token,
-              message: "Trainer logged in" });
+    return res.status(200).json({
+      user: {
+        token,
+        _id: trainer._id,
+        lastName: trainer.lastName,
+        firstName: trainer.firstName,
+        imgURL: trainer.imgURL,
+        profession: trainer.profession,
+        courses: trainer.courses,
+        isTrainer: true,
+      },
+      message: "Trainer logged in",
+    });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ message: "Server error" });

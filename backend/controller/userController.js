@@ -25,86 +25,122 @@ cloudinary.config({
 //user functions
 //register
 export const registerUser = async (req, res) => {
+  const { firstName, lastName, email, password, imgURL } = req.body;
+  console.log(req.file);
 
-    const {firstName, lastName, email, password, imgURL} = req.body;
-    console.log(req.file);
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hash = bcrypt.hashSync(password, salt);
 
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hash = bcrypt.hashSync(password, salt);
+  const newUser = new User({
+    firstName,
+    lastName,
+    email,
+    password: hash,
+    imgURL,
+  });
 
-    const newUser = new User({
-        firstName,
-        lastName,
-        email,
-        password: hash,
-        imgURL
-    })
+  try {
+    await newUser.save();
 
-    try{
-        await newUser.save();
-
-        if(req.file){
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                public_id: `profile_picture_${newUser._id}`,
-                folder: `localtrainer/avatar/user/${newUser._id}`
-            })
-            newUser.imgURL = result.secure_url;}
-
-        await newUser.save();
-
-        res.status(201).json({user: newUser._id, email: newUser.email, imgURL: newUser.imgURL});
-    }catch(err){
-        console.log(err);
-        res.status(500).json({error: "Server error"});
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `profile_picture_${newUser._id}`,
+        folder: `localtrainer/avatar/user/${newUser._id}`,
+      });
+      newUser.imgURL = result.secure_url;
     }
-}
+
+    await newUser.save();
+    const tokenPayload = {
+      trainer: false,
+      data: {
+        id: newUser._id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        address: newUser.address,
+        email: newUser.email,
+        imgURL: newUser.imgURL,
+        interests: newUser.interests,
+        bookedCourses: newUser.bookedCourses,
+        solvedCourses: newUser.solvedCourses,
+        comments: newUser.comments,
+      },
+    };
+    const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
+    res.status(201).json({
+      user: {
+        token,
+        _id: newUser._id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        interests: newUser.interests,
+        imgURL: newUser.imgURL,
+      },
+      message: "User saved",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 export const loginUser = async (req, res) => {
-    const {email, password} = req.body;
+  const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).populate('bookedCourses').populate('solvedCourses').populate('comments');
-    if (!user) return res.status(400).json({msg: "User does not exist. "});
+  const user = await User.findOne({ email })
+    .populate("bookedCourses")
+    .populate("solvedCourses")
+    .populate("comments");
+  if (!user) return res.status(400).json({ msg: "User does not exist. " });
 
-    const passAuth = bcrypt.compareSync(password, user.password);
-    if(passAuth){
+  const passAuth = bcrypt.compareSync(password, user.password);
+  if (passAuth) {
+    const tokenPayload = {
+      trainer: false,
+      data: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        address: user.address,
+        email: user.email,
+        imgURL: user.imgURL,
+        interests: user.interests,
+        bookedCourses: user.bookedCourses,
+        solvedCourses: user.solvedCourses,
+        comments: user.comments,
+      },
+    };
+    const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
+    res.cookie("LocalTrainer", token, {
+      withCredentials: true,
+      httpOnly: true,
+      expiresIn: "1h",
+    });
 
-        const tokenPayload ={
-            trainer: false,
-            data:{
-                id: user._id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                address: user.address,
-                email: user.email,
-                imgURL: user.imgURL,
-                interests: user.interests,
-                bookedCourses: user.bookedCourses,
-                solvedCourses: user.solvedCourses,
-                comments: user.comments,}
-                  
-          }
-          const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
-          res.cookie("LocalTrainer", token, {
-            withCredentials: true,
-            httpOnly: true,
-            expiresIn: "1h",
-          });
-      
-          return res
-            .status(200)
-            .json({ token,
-                    message: "User logged in" });
-       
-    }else {
-        res.status(400).json("wrong credentials");
-    }
-}
+    return res.status(200).json({
+      user: {
+        token,
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        imgURL: user.imgURL,
+        interests: user.interests,
+        bookedCourses: user.bookedCourses,
+        solvedCourses: user.solvedCourses,
+        comments: user.comments,
+        isTrainer: false,
+      },
+      message: "User logged in",
+    });
+  } else {
+    res.status(400).json("wrong credentials");
+  }
+};
 
 export const logoutUser = async (req, res) => {
-    res.clearCookie("LocalTrainer").json("logged out");
-}
-
-
+  res.clearCookie("LocalTrainer").json("logged out");
+};
 
 export const updateUser = async (req, res) => {
   const id = req.params.id;
@@ -123,7 +159,9 @@ export const updateUser = async (req, res) => {
       updates.imgURL = result.secure_url;
     }
 
-    const result = await User.findOneAndUpdate(filter, updates, { new: true }).select('-passwort');
+    const result = await User.findOneAndUpdate(filter, updates, {
+      new: true,
+    }).select("-passwort");
 
     res.send(result);
   } catch (error) {
@@ -131,23 +169,26 @@ export const updateUser = async (req, res) => {
   }
 };
 
-
 export const getUser = async (req, res) => {
-    const id = req.params.id;
-    try {
-        const user = await User.findById(id).select('-password').populate('bookedCourses').populate('solvedCourses').populate('comments');
-        res.send(user);
-    } catch (error) {
-        res.send(error);
-    }
-}
+  const id = req.params.id;
+  try {
+    const user = await User.findById(id)
+      .select("-password")
+      .populate("bookedCourses")
+      .populate("solvedCourses")
+      .populate("comments");
+    res.send(user);
+  } catch (error) {
+    res.send(error);
+  }
+};
 
 export const getUserByName = async (req, res) => {
-    const userName = req.query.q;
-    try {
-        const result = await User.findByName(userName);
-        res.send(result);
-    } catch (error) {
-        res.send(error);
-    }
-}
+  const userName = req.query.q;
+  try {
+    const result = await User.findByName(userName);
+    res.send(result);
+  } catch (error) {
+    res.send(error);
+  }
+};

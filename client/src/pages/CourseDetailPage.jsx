@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
+import { AuthContext } from "../context/AuthContext";
 
 export default function CourseDetailPage() {
+  const { user } = useContext(AuthContext);
   const theme = useTheme();
   const [edit, setEdit] = useState(false);
 
@@ -16,7 +18,8 @@ export default function CourseDetailPage() {
 
   useEffect(() => {
     console.log("data in CourseDetailPage", data);
-  });
+    console.log("user in courseDetailpage", user);
+  }, []);
   /** starts booking process for a course */
   function startBooking(e) {
     e.preventDefault();
@@ -24,7 +27,6 @@ export default function CourseDetailPage() {
   }
 
   // REMOVE WHEN TRAINER FRONTEND IS ESTABLISHED, along with edit state and code for editform
-  /** triggers edit state to hide course Info but display it in a form*/
 
   return (
     <div>
@@ -114,11 +116,13 @@ export default function CourseDetailPage() {
           </Grid>
         </Grid>
       )}
-      <Chip
-        label={!edit ? "Edit Course" : "Show Course"}
-        sx={{ mt: 3 }}
-        onClick={() => setEdit(!edit)}
-      ></Chip>
+      {user && user.isTrainer && (
+        <Chip
+          label={!edit ? "Edit Course" : "Show Course"}
+          sx={{ mt: 3 }}
+          onClick={() => setEdit(!edit)}
+        ></Chip>
+      )}
       {edit && data && <CourseCreationForm course={data} />}
     </div>
   );

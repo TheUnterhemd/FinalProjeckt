@@ -17,59 +17,59 @@ import MapTest from "./pages/MapTest";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
-
+  console.log("user on App.js", user);
   // useEffect ist nur für einen Testuser aktuell da.
-  useEffect(() => {
-    dispatch({
-      type: "LOGIN",
-      payload: {
-        _id: "645e4828670eaab12beded5e",
-        firstName: "Tom",
-        lastName: "Hunter",
-        email: "test1234@gmail.com",
-        password:
-          "$2b$12$SOP.a5kDWZWitgRJVgHuKeHShQi5WLSppJcJgUVNXRU67QFe8Tr2q",
-        imgURL:
-          "https://res.cloudinary.com/dhdugvhj3/image/upload/v1683900457/localtrainer/avatar/user/645e4828670eaab12beded5e/profile_picture_645e4828670eaab12beded5e.jpg",
-        interests: ["Surfing", "Climbing", "Chilling"],
-        bookedCourses: [
-          {
-            title: "Rückenfit",
-            trainer: "Kim",
-            picture: "https://picsum.photos/200",
-          },
-          {
-            title: "Rückenfit",
-            trainer: "Kim",
-            picture: "https://picsum.photos/250",
-          },
-          {
-            title: "Rückenfit",
-            trainer: "Kim",
-            picture: "https://picsum.photos/300",
-          },
-        ],
-        solvedCourses: [
-          {
-            title: "Rückenfit",
-            trainer: "Toni",
-            picture: "https://picsum.photos/200",
-          },
-          {
-            title: "Rückenfit",
-            trainer: "Toni",
-            picture: "https://picsum.photos/250",
-          },
-          {
-            title: "Bauch Beine Po",
-            trainer: "Toni",
-            picture: "https://picsum.photos/300",
-          },
-        ],
-        comments: [],
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: "LOGIN",
+  //     payload: {
+  //       _id: "645e4828670eaab12beded5e",
+  //       firstName: "Tom",
+  //       lastName: "Hunter",
+  //       email: "test1234@gmail.com",
+  //       password:
+  //         "$2b$12$SOP.a5kDWZWitgRJVgHuKeHShQi5WLSppJcJgUVNXRU67QFe8Tr2q",
+  //       imgURL:
+  //         "https://res.cloudinary.com/dhdugvhj3/image/upload/v1683900457/localtrainer/avatar/user/645e4828670eaab12beded5e/profile_picture_645e4828670eaab12beded5e.jpg",
+  //       interests: ["Surfing", "Climbing", "Chilling"],
+  //       bookedCourses: [
+  //         {
+  //           title: "Rückenfit",
+  //           trainer: "Kim",
+  //           picture: "https://picsum.photos/200",
+  //         },
+  //         {
+  //           title: "Rückenfit",
+  //           trainer: "Kim",
+  //           picture: "https://picsum.photos/250",
+  //         },
+  //         {
+  //           title: "Rückenfit",
+  //           trainer: "Kim",
+  //           picture: "https://picsum.photos/300",
+  //         },
+  //       ],
+  //       solvedCourses: [
+  //         {
+  //           title: "Rückenfit",
+  //           trainer: "Toni",
+  //           picture: "https://picsum.photos/200",
+  //         },
+  //         {
+  //           title: "Rückenfit",
+  //           trainer: "Toni",
+  //           picture: "https://picsum.photos/250",
+  //         },
+  //         {
+  //           title: "Bauch Beine Po",
+  //           trainer: "Toni",
+  //           picture: "https://picsum.photos/300",
+  //         },
+  //       ],
+  //       comments: [],
+  //     },
+  //   });
+  // }, []);
 
   return (
     <div className="App">
@@ -85,9 +85,11 @@ function App() {
           <Route path="/trainer/:id" element={<TrainerDetailpage />} />
           <Route path="/course" element={<AllCourses />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
-          <Route path="/course/create" element={<CourseCreationForm />} />
+
           <Route path="/search" element={<SearchPage />} />
           <Route path="/maps" element={<MapTest />} />
+          {/* Routes for Trainers only */}
+          <Route path="/course/create" element={<CourseCreationForm />} />
         </Routes>
       </BrowserRouter>
     </div>

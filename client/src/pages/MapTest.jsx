@@ -4,7 +4,7 @@ import { Container } from "@mui/material";
 import { LocationMarker } from "../components/map/LocationMarker";
 import { useNavigate } from "react-router-dom";
 import { MapSearchField } from "../components/map/MapSearchField";
-
+import { v4 as uuid } from "uuid";
 export default function MapTest({ markerOptions }) {
   const data = markerOptions;
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ export default function MapTest({ markerOptions }) {
           Array.isArray(data) &&
           data.map((course) => (
             <Marker
+              key={uuid()}
               position={{
                 lat: course.location.split(",")[0],
                 lng: course.location.split(",")[1],

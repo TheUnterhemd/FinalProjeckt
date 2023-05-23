@@ -21,7 +21,6 @@ export function LocationMarker({ markerOptions }) {
       dragend() {
         const marker = markerRef.current;
         if (marker != null) {
-          console.log(marker.getLatLng().lng);
           setPosition(marker.getLatLng());
           setLocation([marker.getLatLng().lat, marker.getLatLng().lng]);
         }

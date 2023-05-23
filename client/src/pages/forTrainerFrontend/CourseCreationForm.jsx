@@ -13,17 +13,11 @@ import {
   Typography,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
-import { useFetch } from "../../hooks/useFetch";
 import MapTest from "../MapTest";
+import { useNavigate } from "react-router-dom";
 
 export default function CourseCreationForm({ course }) {
-  // const { user } = useContext(AuthContext);
-
-  // to get a default trainer
-  const id = "645e3d2cb9b348b3386b51d6";
-  const { data: defaultTrainer } = useFetch(
-    `http://localhost:5002/trainer/${id}`
-  );
+  const { user, dispatch } = useContext(AuthContext);
   const [trainer, setTrainer] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -38,6 +32,8 @@ export default function CourseCreationForm({ course }) {
   const [currStud, setCurrStud] = useState("");
   const [endpoint, setEndpoint] = useState("add");
   const [method, setMethod] = useState("POST");
+
+  const navigate = useNavigate();
   const today = new Date();
   const url = `${process.env.REACT_APP_SERVER_URL}/course/${endpoint}`;
 
@@ -57,25 +53,29 @@ export default function CourseCreationForm({ course }) {
       setEndpoint(`update/${course._id}`);
       setMethod("PUT");
     }
-    if (defaultTrainer) {
-      setTrainer(defaultTrainer);
+    if (user) {
+      setTrainer(user);
     }
-  }, [defaultTrainer, course]);
+  }, [user, course]);
+
   /**handles the update of the trainer to post the new course array on database */
   async function updateTrainer(json) {
     try {
-      console.log("running updateTrainer");
-      const temp = trainer.courses.map((course) => course._id);
+      const temp = trainer.courses.map((course) => course._id) || [];
       temp.push(json.course._id);
       const result = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/trainer/update/${trainer._id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${user.token}`,
+          },
           body: JSON.stringify({ courses: temp }),
         }
       );
       const resTrainer = await result.json();
+      dispatch({ type: "LOGIN", payload: resTrainer.trainer });
       setTrainer(resTrainer.trainer);
     } catch (err) {
       console.log(err);
@@ -83,15 +83,18 @@ export default function CourseCreationForm({ course }) {
   }
   /** sends formdata to backend  */
   async function postdata(formdata) {
-    console.log("running postdata");
-
     try {
-      const result = await fetch(url, { method: method, body: formdata });
+      const result = await fetch(url, {
+        method: method,
+        headers: { authorization: `Bearer ${user.token}` },
+        body: formdata,
+      });
       const json = await result.json();
+
       if (method === "POST") {
         updateTrainer(json);
       }
-      console.log(json.course);
+      navigate(`/course/${json.course._id}`);
     } catch (err) {
       console.log(err);
     }
@@ -99,7 +102,6 @@ export default function CourseCreationForm({ course }) {
   /** calculates the duration from start to end, submits the entered data as formdata/multipart */
   function handleCourseSubmit(e) {
     e.preventDefault();
-    console.log("handling submit");
 
     const datestart = new Date(date);
     const dateend = new Date(end);
@@ -132,7 +134,6 @@ export default function CourseCreationForm({ course }) {
     } else {
       setError("");
       setImgURL(e.target.files[0]);
-      console.log("location on courseCreation", location);
     }
   }
 
