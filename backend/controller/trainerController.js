@@ -9,6 +9,7 @@ import { v2 as cloudinary } from "cloudinary";
 dotenv.config();
 
 //ENVIROMENTALS
+const refreshSecret = process.env.JWT_REFRESH_SECRET;
 const secret = process.env.JWT_SECRET;
 const salt = Number(process.env.SALT_ROUNDS);
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -74,6 +75,16 @@ export const addTrainer = async (req, res) => {
     console.log(error.message);
   }
   return res.status(200).json({
+    user: {
+      token,
+      _id: trainer._id,
+      lastName: trainer.lastName,
+      firstName: trainer.firstName,
+      imgURL: trainer.imgURL,
+      profession: trainer.profession,
+      courses: trainer.courses,
+      isTrainer: true,
+    },
     message: "trainer saved successfully",
   });
 };
@@ -110,11 +121,15 @@ export const loginTrainer = async (req, res, next) => {
       imgURL: trainer.imgURL,
     };
 
-    const token = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
+    const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
+    const refreshToken = jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d"});
+
+    res.cookie("LocalTrainer", refreshToken, { maxAge: 86400000, httpOnly: true });
 
     return res.status(200).json({
       user: {
-        token,
+        accessToken,
+        refreshToken,
         _id: trainer._id,
         lastName: trainer.lastName,
         firstName: trainer.firstName,
