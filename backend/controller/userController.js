@@ -10,6 +10,7 @@ import User from "../models/userModel.js";
 dotenv.config();
 
 //environmentals
+const refreshSecret = process.env.JWT_REFRESH_SECRET;
 const saltRounds = Number(process.env.SALT_ROUNDS);
 const jwtSecret = process.env.JWT_SECRET;
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -87,16 +88,20 @@ export const loginUser = async (req, res) => {
         comments: user.comments,
       },
     };
-    const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
-    res.cookie("LocalTrainer", token, {
-      withCredentials: true,
+    const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
+    const refreshToken = jwt.sign(tokenPayload, refreshSecret, {
+      expiresIn: "1d",
+    });
+
+    res.cookie("LocalTrainer", refreshToken, {
+      maxAge: 86400000,
       httpOnly: true,
-      expiresIn: "1h",
     });
 
     return res.status(200).json({
       user: {
-        token,
+        accessToken,
+        refreshToken,
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
