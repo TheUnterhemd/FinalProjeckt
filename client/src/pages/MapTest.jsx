@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Container } from "@mui/material";
-import { LocationMarker } from "../components/map/LocationMarker";
+// import { LocationMarker } from "../components/map/LocationMarker";
 import { useNavigate } from "react-router-dom";
 import { MapSearchField } from "../components/map/MapSearchField";
 import { v4 as uuid } from "uuid";
+import "./MapTest.scss";
 export default function MapTest({ markerOptions }) {
   const data = markerOptions;
   const navigate = useNavigate();
@@ -17,12 +18,12 @@ export default function MapTest({ markerOptions }) {
         scrollWheelZoom={true}
         style={{ minHeight: "500px" }}
       >
-        <MapSearchField />
+        <MapSearchField markerOptions={markerOptions} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <LocationMarker markerOptions={markerOptions} />
+        {/* <LocationMarker markerOptions={markerOptions} /> */}
         {data &&
           Array.isArray(data) &&
           data.map((course) => (

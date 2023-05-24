@@ -200,12 +200,11 @@ export default function CourseCreationForm({ course }) {
         <TextField
           required
           aria-required
-          label="location"
+          label="location - click on the map where you want to meet"
           fullWidth
           disabled
           name="location"
           id="location"
-          placeholder="Course location"
           variant="filled"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
