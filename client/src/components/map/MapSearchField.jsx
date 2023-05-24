@@ -15,10 +15,12 @@ export const MapSearchField = ({ markerOptions }) => {
   });
 
   // shows Maker on click, sets Location in create Course field
+
   const map = useMapEvent("click", (e) => {
-    console.log(e);
-    setPosition(e.latlng);
-    setLocation([e.latlng.lat, e.latlng.lng]);
+    if (setLocation) {
+      setPosition(e.latlng);
+      setLocation([e.latlng.lat, e.latlng.lng]);
+    }
   });
   useEffect(() => {
     map.addControl(searchControl);
