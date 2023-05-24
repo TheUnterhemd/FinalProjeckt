@@ -51,32 +51,8 @@ export const registerUser = async (req, res) => {
     }
 
     await newUser.save();
-    const tokenPayload = {
-      trainer: false,
-      data: {
-        id: newUser._id,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        address: newUser.address,
-        email: newUser.email,
-        imgURL: newUser.imgURL,
-        interests: newUser.interests,
-        bookedCourses: newUser.bookedCourses,
-        solvedCourses: newUser.solvedCourses,
-        comments: newUser.comments,
-      },
-    };
-    const token = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
+
     res.status(201).json({
-      user: {
-        token,
-        _id: newUser._id,
-        email: newUser.email,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        interests: newUser.interests,
-        imgURL: newUser.imgURL,
-      },
       message: "User saved",
     });
   } catch (err) {

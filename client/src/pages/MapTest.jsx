@@ -23,7 +23,6 @@ export default function MapTest({ markerOptions }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* <LocationMarker markerOptions={markerOptions} /> */}
         {data &&
           Array.isArray(data) &&
           data.map((course) => (
