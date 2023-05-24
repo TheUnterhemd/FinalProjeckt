@@ -2,19 +2,25 @@ import Trainer from "../models/trainerModel.js";
 import Course from "../models/courseModel.js";
 
 export async function search(req, res, next) {
-  const query = req.query.q.trim();
+  const query = req.query.q.trim()
+
   let trainer;
   let courses;
+
+  const trainerQuery = {
+    firstName: { $regex: `(?i)${query}` },
+  };
+
+  const courseQuery = {
+    $or: [
+      { title: { $regex: `(?i)${query}` } },
+      { description: { $regex: `(?i)${query}` } },
+    ],
+  };
+
   try {
-    trainer = await Trainer.find({
-      firstName: { $regex: `(?i)${query}` },
-    });
-    courses = await Course.find({
-      $or: [
-        { title: { $regex: `(?i)${query}` } },
-        { descripton: { $regex: `(?i)${query}` } },
-      ],
-    });
+    trainer = await Trainer.find(trainerQuery).select('-password');
+    courses = await Course.find(courseQuery);
 
     res.json({ trainer, courses });
   } catch (err) {
