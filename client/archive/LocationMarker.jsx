@@ -1,6 +1,6 @@
+//
 import React, { useMemo, useRef, useState } from "react";
 import { Marker, Popup, useMapEvents } from "react-leaflet";
-// import "leaflet/dist/leaflet.css";
 
 export function LocationMarker({ markerOptions }) {
   const { draggable, setLocation } = markerOptions;
@@ -21,7 +21,6 @@ export function LocationMarker({ markerOptions }) {
       dragend() {
         const marker = markerRef.current;
         if (marker != null) {
-          console.log(marker.getLatLng().lng);
           setPosition(marker.getLatLng());
           setLocation([marker.getLatLng().lat, marker.getLatLng().lng]);
         }

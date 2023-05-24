@@ -15,7 +15,10 @@ export default function CommentForm({ data, setCounter, setCommentList }) {
     try {
       const result = await fetch(`${url}/comment/add/`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          authorization: `Bearer ${user.token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(update),
       });
       if (!result.ok) {

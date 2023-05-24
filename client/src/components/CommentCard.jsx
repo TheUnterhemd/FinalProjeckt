@@ -12,7 +12,10 @@ export default function CommentCard({ data, setCommentList, setCounter }) {
   async function handleCommentDeletion(e) {
     e.preventDefault();
     console.log(data);
-    await fetch(url, { method: "DELETE" });
+    await fetch(url, {
+      method: "DELETE",
+      headers: { authorization: `Bearer ${user.token}` },
+    });
     setCommentList((prevCommentList) => {
       const result = prevCommentList;
       result.splice(
@@ -32,7 +35,7 @@ export default function CommentCard({ data, setCommentList, setCounter }) {
               alt={`picture of ${data.userId}`}
               src={data.imgURL}
             ></Avatar>
-            {user._id === data.userId && (
+            {user && user._id === data.userId && (
               <DeleteIcon
                 onClick={(e) => handleCommentDeletion(e)}
                 sx={{ cursor: "pointer" }}
