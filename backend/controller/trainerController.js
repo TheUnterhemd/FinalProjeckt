@@ -74,16 +74,7 @@ export const addTrainer = async (req, res) => {
     console.log(error.message);
   }
   return res.status(200).json({
-    user: {
-      token,
-      _id: trainer._id,
-      lastName: trainer.lastName,
-      firstName: trainer.firstName,
-      imgURL: trainer.imgURL,
-      profession: trainer.profession,
-      courses: trainer.courses,
-      isTrainer: true,
-    },
+
     message: "trainer saved successfully",
   });
 };

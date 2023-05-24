@@ -56,7 +56,7 @@ const Register = ({ setLogin, close }) => {
 
       const data = await response.json();
       console.log("data in register", data);
-      dispatch({ type: "LOGIN", payload: data.user });
+      /* dispatch({ type: "LOGIN", payload: data.user }); */
     } catch (error) {
       console.log(error);
     } finally {

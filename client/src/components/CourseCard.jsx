@@ -20,6 +20,20 @@ export default function CourseCard({ data }) {
     navigate(`/course/${data._id}`);
   }
 
+  //formattedDates
+  const startDate = new Date(data.start);
+  const startDay = String(startDate.getDate()).padStart(2, '0');
+  const startMonth = String(startDate.getMonth() + 1).padStart(2, '0');
+  const startYear = startDate.getFullYear();
+  const formattedStartDate = `${startDay}.${startMonth}.${startYear}`;
+
+  const endDate = new Date(data.end);
+  const endDay = String(endDate.getDate()).padStart(2, '0');
+  const endMonth = String(endDate.getMonth() + 1).padStart(2, '0');
+  const endYear = endDate.getFullYear();
+  const formattedEndDate = `${endDay}.${endMonth}.${endYear}`;
+
+
   return (
     <Card sx={{ width: 250, maxWidth: 250 }} onClick={(e) => clickHandler(e)}>
       <CardActionArea>
@@ -65,10 +79,10 @@ export default function CourseCard({ data }) {
               whiteSpace: 'nowrap',
             }}>Location: {data.location}</Typography>
             <Typography variant="body1">
-              Starts: {data.start.split("_").join(" ")}
+              Starts: {formattedStartDate + ` |${data.start.split('T')[1]}`}
             </Typography>
             <Typography variant="body1">
-              Ends: {data.end.split("_").join(" ")}
+              Ends: {formattedEndDate + ` |${data.end.split('T')[1]}`}
             </Typography>
             <Chip label={`${data.price} €`} />
           </Box>
