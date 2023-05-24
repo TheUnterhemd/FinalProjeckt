@@ -86,7 +86,7 @@ export default function CourseCreationForm({ course }) {
     try {
       const result = await fetch(url, {
         method: method,
-        headers: { authorization: `Bearer ${user.token}` },
+        headers: { authorization: `Bearer ${user.accessToken}` },
         body: formdata,
       });
       const json = await result.json();

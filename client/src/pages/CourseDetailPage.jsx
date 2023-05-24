@@ -24,6 +24,7 @@ export default function CourseDetailPage() {
   function startBooking(e) {
     e.preventDefault();
     console.log("does nothing at the moment");
+    console.log(data);
   }
 
   // REMOVE WHEN TRAINER FRONTEND IS ESTABLISHED, along with edit state and code for editform
@@ -116,7 +117,7 @@ export default function CourseDetailPage() {
           </Grid>
         </Grid>
       )}
-      {user && user.isTrainer && (
+      {user && user.isTrainer && data?.trainer._id === user._id && (
         <Chip
           label={!edit ? "Edit Course" : "Show Course"}
           sx={{ mt: 3 }}
