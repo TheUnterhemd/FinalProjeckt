@@ -6,6 +6,8 @@ import { AuthProvider } from "./context/AuthContext";
 import CssBaseline from "@mui/material/CssBaseline";
 import ToggleColorMode from "./context/ThemeContext.js";
 import SearchProvider from "./context/SearchContext";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,9 +15,11 @@ root.render(
     <ToggleColorMode>
       <CssBaseline />
       <SearchProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </LocalizationProvider>
       </SearchProvider>
     </ToggleColorMode>
   </React.StrictMode>
