@@ -200,18 +200,17 @@ export default function CourseCreationForm({ course }) {
         <TextField
           required
           aria-required
-          label="location"
+          label="location - click on the map where you want to meet"
           fullWidth
           disabled
           name="location"
           id="location"
-          placeholder="Course location"
           variant="filled"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
         <Box>
-          <MapTest markerOptions={{ draggable: true, setLocation, location }} />
+          <MapTest markerOptions={{ setLocation, location }} />
         </Box>
         <TextField
           required
@@ -221,7 +220,7 @@ export default function CourseCreationForm({ course }) {
           }}
           type="datetime-local"
           aria-required
-          label="start"
+          label="Startdate, Startingtime"
           fullWidth
           name="start"
           id="start"
@@ -236,7 +235,7 @@ export default function CourseCreationForm({ course }) {
           inputProps={{ min: date }}
           type="datetime-local"
           aria-required
-          label="end"
+          label="Enddate, Endingtime"
           fullWidth
           name="end"
           id="end"

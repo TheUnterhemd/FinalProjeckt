@@ -74,7 +74,6 @@ export const addTrainer = async (req, res) => {
     console.log(error.message);
   }
   return res.status(200).json({
-
     message: "trainer saved successfully",
   });
 };
