@@ -119,6 +119,9 @@ export const loginTrainer = async (req, res, next) => {
     res.cookie("LocalTrainer", refreshToken, {
       maxAge: 86400000,
       httpOnly: true,
+      withCredentials: true,
+      sameSite: "None",
+      secure: false,
     });
 
     return res.status(200).json({

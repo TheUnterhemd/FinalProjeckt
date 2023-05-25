@@ -7,13 +7,27 @@ import userRouter from "./routes/userRouter.js";
 import courseRouter from "./routes/courseRouter.js";
 import commentRouter from "./routes/commentRouter.js";
 import searchRouter from "./routes/searchRouter.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app = express();
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+
+const whitelist = ["http://localhost:3000"];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS issues"));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+app.use(cookieParser());
 
 mongoose.connect(
   `mongodb+srv://${process.env.MDB_USER}:${process.env.MDB_PASS}@${process.env.MDB_CONNECTION}/${process.env.MDB_COLLECTION}${process.env.MDB_QUERYPARAMS}`
