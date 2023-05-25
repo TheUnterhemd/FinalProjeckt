@@ -7,6 +7,7 @@ import { MapSearchField } from "../components/map/MapSearchField";
 import { v4 as uuid } from "uuid";
 import "./MapTest.scss";
 export default function MapTest({ markerOptions }) {
+  // display the courses on the map
   const data = markerOptions;
   const navigate = useNavigate();
 

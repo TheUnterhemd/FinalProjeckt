@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { Marker, useMapEvent } from "react-leaflet";
 
 export const MapSearchField = ({ markerOptions }) => {
+  // necessary to get city out of coordinates
+  const GEOCODE_URL =
+    "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=";
   const { setLocation } = markerOptions;
   const [position, setPosition] = useState("");
   const provider = new OpenStreetMapProvider();
@@ -15,11 +18,11 @@ export const MapSearchField = ({ markerOptions }) => {
   });
 
   // shows Maker on click, sets Location in create Course field
-
   const map = useMapEvent("click", (e) => {
     if (setLocation) {
       setPosition(e.latlng);
       setLocation([e.latlng.lat, e.latlng.lng]);
+      getCity(e.latlng);
     }
   });
   useEffect(() => {
@@ -27,5 +30,10 @@ export const MapSearchField = ({ markerOptions }) => {
     return () => map.removeControl(searchControl);
   }, [map, searchControl]);
 
+  const getCity = async (position) => {
+    const result = await fetch(GEOCODE_URL + `${position.lng},${position.lat}`);
+    const place = await result.json();
+    console.log("place from coordinates", place.address.City);
+  };
   return !position ? null : <Marker position={position}></Marker>;
 };
