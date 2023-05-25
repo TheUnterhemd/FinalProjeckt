@@ -1,16 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useFetch } from '../hooks/useFetch';
-import { Box, Button, Container, Typography, Slider } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Box, Container, Typography } from '@mui/material';
 import SearchList from '../components/Search/SearchList';
-import MapTest from "./MapTest";
-import SortMenu from '../components/SortMenu';
+import FilterMenu from '../components/FilterMenu';
 import { SortContext } from '../context/SortContext';
 
 const SearchPage = () => {
     //setting up filters
-    const [showFilters, setShowFilters] = useState(false);
+
     /* const [location, setLocation] = useState(''); */
     const [price, setPrice] = useState('');
     const [date, setDate] = useState('');
@@ -18,6 +16,8 @@ const SearchPage = () => {
     const { sort } = useContext(SortContext);
 
     const filters = { price, formattedDate, sort };
+
+    const setFilters = { setPrice, setDate };
 
     //format Date for comparison
     useEffect(() => {
@@ -31,10 +31,7 @@ const SearchPage = () => {
         }
     }, [date]);
 
-    //filter toggle
-    const toggleFilter = () => {
-        setShowFilters(!showFilters);
-    }
+
 
     //getting query params for searchURL
     const queryString = useLocation().search;
@@ -47,50 +44,9 @@ const SearchPage = () => {
     const { data, isPending, error } = useFetch(searchURL);
 
 
-    //func for slider value
-    const valueText = (value) => {
-        return `${value}€`;
-    }
-
     return (
         <Container maxWidth="lg" >
-            <Button variant='outlined' onClick={toggleFilter} sx={{ m: 1 }}>
-                {showFilters ? 'Hide Filters' : 'Show Filters'}
-            </Button>
-            <SortMenu />
-            {
-                showFilters &&
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Box sx={{ display: "flex", alignItems: "center", flexDirection: "column", width: "80%" }}>
-
-                        {data && <MapTest markerOptions={data.courses} />}
-                        <Box sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            width: "100%"
-                        }}>
-                            <Typography sx={{ marginRight: 1 }}>Price:</Typography>
-                            <Slider
-                                aria-label="Price"
-                                defaultValue={100}
-                                step={10}
-                                max={500}
-                                sx={{ width: "60%" }}
-                                valueLabelDisplay='auto'
-                                valueLabelFormat={valueText}
-                                onChange={(e) => setPrice(e.target.value)} />
-                            <DatePicker
-                                label="Start Date"
-                                views={['month', 'day']}
-                                sx={{ margin: 1 }}
-                                format='DD/MM/YYYY'
-                                onChange={(newValue) => setDate(newValue)} />
-                        </Box>
-                    </Box>
-                </Box>
-            }
-
+            <FilterMenu setFilter={setFilters} data={data} />
             <Box sx={{ height: '100vh', display: "flex", flexWrap: "wrap" }}>
                 {error && <Typography variant='body1'>{error}</Typography>}
                 {isPending && <Typography variant='body1'>Loading...</Typography>}
