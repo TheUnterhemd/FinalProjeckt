@@ -18,11 +18,13 @@ export const MapSearchField = ({ markerOptions }) => {
   });
 
   // shows Maker on click, sets Location in create Course field
-  const map = useMapEvent("click", (e) => {
+  const map = useMapEvent("click", async (e) => {
     if (setLocation) {
       setPosition(e.latlng);
-      setLocation([e.latlng.lat, e.latlng.lng]);
-      getCity(e.latlng);
+      setLocation({
+        location: `${e.latlng.lat},${e.latlng.lng}`,
+        description: await getCity(e.latlng),
+      });
     }
   });
   useEffect(() => {
@@ -31,9 +33,16 @@ export const MapSearchField = ({ markerOptions }) => {
   }, [map, searchControl]);
 
   const getCity = async (position) => {
-    const result = await fetch(GEOCODE_URL + `${position.lng},${position.lat}`);
-    const place = await result.json();
-    console.log("place from coordinates", place.address.City);
+    try {
+      const result = await fetch(
+        GEOCODE_URL + `${position.lng},${position.lat}`
+      );
+      const place = await result.json();
+      return place.address.City;
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return !position ? null : <Marker position={position}></Marker>;
 };

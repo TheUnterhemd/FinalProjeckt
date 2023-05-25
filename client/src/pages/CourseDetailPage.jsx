@@ -5,6 +5,7 @@ import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 import { AuthContext } from "../context/AuthContext";
+import MapTest from "./MapTest";
 
 export default function CourseDetailPage() {
   const { user } = useContext(AuthContext);
@@ -78,7 +79,12 @@ export default function CourseDetailPage() {
             <Typography variant="body2" gutterBottom>
               {data.description}
             </Typography>
-            <Typography variant="body1">Location: {data.location}</Typography>
+            <Typography variant="body1">
+              Location: {data.location?.description}
+            </Typography>
+            <Box sx={{ width: "300px", height: "200px" }}>
+              <MapTest markerOptions={[data]} />
+            </Box>
             <Typography variant="body1">{data.start.split("_")[0]}</Typography>
             <Typography variant="body1">
               Starts {data.start.split("_")[1]}

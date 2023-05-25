@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Container } from "@mui/material";
 // import { LocationMarker } from "../components/map/LocationMarker";
@@ -7,17 +7,31 @@ import { MapSearchField } from "../components/map/MapSearchField";
 import { v4 as uuid } from "uuid";
 import "./MapTest.scss";
 export default function MapTest({ markerOptions }) {
+  const [centerLat, setCenterLat] = useState(52.505);
+  const [centerLng, setCenterLng] = useState(13.09);
+
   // display the courses on the map
   const data = markerOptions;
+  console.log("data in maptest", data);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (
+      Array.isArray(data) &&
+      data.location &&
+      !data.location.location.startsWith("http")
+    ) {
+      const locale = data.location?.location.split(",");
+      console.log("locale", locale);
+    }
+  }, []);
   return (
     <Container sx={{ my: 1 }} disableGutters={true}>
       <MapContainer
-        center={{ lat: 52.505, lng: 13.09 }}
+        center={{ lat: centerLat, lng: centerLng }}
         zoom={10}
         scrollWheelZoom={true}
-        style={{ minHeight: "500px" }}
+        style={{ minHeight: "200px", maxHeight: "100%" }}
       >
         <MapSearchField markerOptions={markerOptions} />
         <TileLayer
@@ -26,24 +40,30 @@ export default function MapTest({ markerOptions }) {
         />
         {data &&
           Array.isArray(data) &&
-          data.map((course) => (
-            <Marker
-              key={uuid()}
-              position={{
-                lat: course.location.split(",")[0],
-                lng: course.location.split(",")[1],
-              }}
-            >
-              <Popup>
-                <span
-                  onClick={(e) => navigate(`/course/${course._id}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {course.title} | {course.price} €
-                </span>
-              </Popup>
-            </Marker>
-          ))}
+          data.map((course) => {
+            course.location &&
+              course.location.location &&
+              course.location.description && (
+                <>
+                  <Marker
+                    key={uuid()}
+                    position={{
+                      lat: course?.location.location.split(",")[0],
+                      lng: course?.location.location.split(",")[1],
+                    }}
+                  >
+                    <Popup>
+                      <span
+                        onClick={(e) => navigate(`/course/${course._id}`)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {course.title} | {course.price} €
+                      </span>
+                    </Popup>
+                  </Marker>
+                </>
+              );
+          })}
       </MapContainer>
     </Container>
   );

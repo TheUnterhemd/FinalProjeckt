@@ -22,17 +22,16 @@ export default function CourseCard({ data }) {
 
   //formattedDates
   const startDate = new Date(data.start);
-  const startDay = String(startDate.getDate()).padStart(2, '0');
-  const startMonth = String(startDate.getMonth() + 1).padStart(2, '0');
+  const startDay = String(startDate.getDate()).padStart(2, "0");
+  const startMonth = String(startDate.getMonth() + 1).padStart(2, "0");
   const startYear = startDate.getFullYear();
   const formattedStartDate = `${startDay}.${startMonth}.${startYear}`;
 
   const endDate = new Date(data.end);
-  const endDay = String(endDate.getDate()).padStart(2, '0');
-  const endMonth = String(endDate.getMonth() + 1).padStart(2, '0');
+  const endDay = String(endDate.getDate()).padStart(2, "0");
+  const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
   const endYear = endDate.getFullYear();
   const formattedEndDate = `${endDay}.${endMonth}.${endYear}`;
-
 
   return (
     <Card sx={{ width: 250, maxWidth: 250 }} onClick={(e) => clickHandler(e)}>
@@ -49,8 +48,9 @@ export default function CourseCard({ data }) {
           sx={{ padding: "10px", gap: "10px" }}
         >
           <Avatar
-            alt={`picture of ${data.trainer?.firstName || "fakenameforTesting"
-              }`}
+            alt={`picture of ${
+              data.trainer?.firstName || "fakenameforTesting"
+            }`}
             src={
               data.trainer?.imgURL || "https://picsum.photos/200/300?random=2"
             }
@@ -61,28 +61,39 @@ export default function CourseCard({ data }) {
           </Typography>
         </Box>
         <CardContent>
-          <Box sx={{
-            overflow: 'hidden',
-            maxWidth: '15rem',
-          }}>
-            <Typography gutterBottom variant="h5" component="div"
+          <Box
+            sx={{
+              overflow: "hidden",
+              maxWidth: "15rem",
+            }}
+          >
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
               sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}>
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {data.title}
             </Typography>
-            <Typography variant="body1" sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}>Location: {data.location}</Typography>
-            <Typography variant="body1">
-              Starts: {formattedStartDate + ` |${data.start.split('T')[1]}`}
+            <Typography
+              variant="body1"
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Location: {data.location?.description}
             </Typography>
             <Typography variant="body1">
-              Ends: {formattedEndDate + ` |${data.end.split('T')[1]}`}
+              Starts: {formattedStartDate + ` |${data.start.split("T")[1]}`}
+            </Typography>
+            <Typography variant="body1">
+              Ends: {formattedEndDate + ` |${data.end.split("T")[1]}`}
             </Typography>
             <Chip label={`${data.price} €`} />
           </Box>
