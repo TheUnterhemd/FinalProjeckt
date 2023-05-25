@@ -8,6 +8,7 @@ const SearchList = ({ searchData, courseFilter }) => {
         return <Typography variant='body1'>No data to load...</Typography>;
     }
 
+    //filter & conditions
     let filteredCourses = searchData.courses;
     if (courseFilter.price || courseFilter.price === 0) {
         filteredCourses = filteredCourses.filter(

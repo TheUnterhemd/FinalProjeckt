@@ -12,7 +12,7 @@ const FilterMenu = ({ setFilter, data }) => {
         setShowFilters(!showFilters);
     }
 
-    //func for slider value
+    //func for slider (popup)value
     const valueText = (value) => {
         return `${value}€`;
     }
