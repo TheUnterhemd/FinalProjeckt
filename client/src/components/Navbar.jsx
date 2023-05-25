@@ -34,7 +34,14 @@ const Navbar = () => {
   const handleClose = () => setOpen(false);
 
   // handle logout
-  const handleLogout = () => dispatch({ type: "LOGOUT" });
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    fetch(`${process.env.REACT_APP_SERVER_URL}/trainer/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+  };
+
   return (
     <>
       <AppBar position="static">

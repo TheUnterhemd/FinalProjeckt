@@ -8,7 +8,9 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   Container,
+  FormControlLabel,
   TextField,
   Typography,
 } from "@mui/material";
@@ -32,7 +34,7 @@ export default function CourseCreationForm({ course }) {
   const [currStud, setCurrStud] = useState("");
   const [endpoint, setEndpoint] = useState("add");
   const [method, setMethod] = useState("POST");
-
+  const [online, setOnline] = useState(true);
   const navigate = useNavigate();
   const today = new Date();
   const url = `${process.env.REACT_APP_SERVER_URL}/course/${endpoint}`;
@@ -42,7 +44,7 @@ export default function CourseCreationForm({ course }) {
     if (course) {
       setTitle(course.title);
       setDescription(course.description);
-      setLocation(course.location);
+      setLocation(course.location.location);
       setDate(course.start);
       setEnd(course.end);
       setImgURL(course.imgURL);
@@ -136,6 +138,7 @@ export default function CourseCreationForm({ course }) {
       setImgURL(e.target.files[0]);
     }
   }
+  console.log("location on CourseCreatoin", location);
 
   return (
     <Container
@@ -200,18 +203,34 @@ export default function CourseCreationForm({ course }) {
         <TextField
           required
           aria-required
-          label="location - click on the map where you want to meet"
+          label={`location - ${
+            online ? "click on the map where you want to meet" : "insert link"
+          }`}
           fullWidth
-          disabled
+          disabled={online}
           name="location"
           id="location"
           variant="filled"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          value={location.location}
+          onChange={(e) =>
+            setLocation({ location: e.target.value, description: "online" })
+          }
         />
-        <Box>
-          <MapTest markerOptions={{ setLocation, location }} />
-        </Box>
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              inputProps={{ "aria-label": "Course is online" }}
+              onChange={() => setOnline(!online)}
+            />
+          }
+          label="Course is online"
+        />
+        {online && (
+          <Box>
+            <MapTest markerOptions={{ setLocation }} />
+          </Box>
+        )}
         <TextField
           required
           inputProps={{

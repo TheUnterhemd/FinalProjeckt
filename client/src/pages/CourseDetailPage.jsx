@@ -5,6 +5,7 @@ import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 import { AuthContext } from "../context/AuthContext";
+import MapTest from "./MapTest";
 import FormattedDate from "../components/Data Formatting/FormattedDate";
 
 export default function CourseDetailPage() {
@@ -84,7 +85,11 @@ export default function CourseDetailPage() {
             <Typography variant="body2" gutterBottom>
               {data.description}
             </Typography>
-            <Typography variant="body1">Location: {data.location}</Typography>
+
+            <Box sx={{ width: "300px", height: "200px" }}>
+              <MapTest markerOptions={[data]} />
+            </Box>
+            <Typography variant="body1">Location: {data?.location?.description}</Typography>
             <FormattedDate startDate={data?.start} />
             <FormattedDate endDate={data?.end} />
             <Typography variant="body1">Duration: {duration}</Typography>

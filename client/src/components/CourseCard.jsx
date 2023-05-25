@@ -21,7 +21,6 @@ export default function CourseCard({ data }) {
     navigate(`/course/${data._id}`);
   }
 
-
   return (
     <Card sx={{ width: 250, maxWidth: 250 }} onClick={(e) => clickHandler(e)}>
       <CardActionArea>
@@ -37,8 +36,9 @@ export default function CourseCard({ data }) {
           sx={{ padding: "10px", gap: "10px" }}
         >
           <Avatar
-            alt={`picture of ${data.trainer?.firstName || "fakenameforTesting"
-              }`}
+            alt={`picture of ${
+              data.trainer?.firstName || "fakenameforTesting"
+            }`}
             src={
               data.trainer?.imgURL || "https://picsum.photos/200/300?random=2"
             }
@@ -49,23 +49,29 @@ export default function CourseCard({ data }) {
           </Typography>
         </Box>
         <CardContent>
-          <Box sx={{
-            overflow: 'hidden',
-            maxWidth: '15rem',
-          }}>
-            <Typography gutterBottom variant="h5" component="div"
+          <Box
+            sx={{
+              overflow: "hidden",
+              maxWidth: "15rem",
+            }}
+          >
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
               sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}>
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {data.title}
             </Typography>
             <Typography variant="body1" sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
-            }}>Location: {data.location}</Typography>
+            }}>Location: {data?.location?.description}</Typography>
             <FormattedDate startDate={data?.start} />
             <FormattedDate endDate={data?.end} />
             <Chip label={`${data.price} €`} />
