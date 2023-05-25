@@ -5,6 +5,7 @@ import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 import { AuthContext } from "../context/AuthContext";
+import FormattedDate from "../components/Data Formatting/FormattedDate";
 
 export default function CourseDetailPage() {
   const { user } = useContext(AuthContext);
@@ -29,6 +30,11 @@ export default function CourseDetailPage() {
 
   // REMOVE WHEN TRAINER FRONTEND IS ESTABLISHED, along with edit state and code for editform
 
+  //calculate the duration in days & hours
+  const days = Math.floor(data?.duration / 24);
+  const remainingHours = data?.duration % 24;
+  const duration = `${days} days ${remainingHours} hours`;
+
   return (
     <div>
       {!edit && data && (
@@ -36,7 +42,7 @@ export default function CourseDetailPage() {
           <Grid
             item
             xs={12}
-            sm={4}
+            sm={3.7}
             display="flex"
             justifyContent="center"
             alignItems="start"
@@ -79,11 +85,9 @@ export default function CourseDetailPage() {
               {data.description}
             </Typography>
             <Typography variant="body1">Location: {data.location}</Typography>
-            <Typography variant="body1">{data.start.split("_")[0]}</Typography>
-            <Typography variant="body1">
-              Starts {data.start.split("_")[1]}
-            </Typography>
-            <Typography variant="body1">Duration {data.duration}</Typography>
+            <FormattedDate startDate={data?.start} />
+            <FormattedDate endDate={data?.end} />
+            <Typography variant="body1">Duration: {duration}</Typography>
             <Typography variant="h6" gutterBottom>
               Trainer
             </Typography>
@@ -103,8 +107,8 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                    <Avatar src={student.imgURL} alt={student.firstName} />
-                  ))
+                  <Avatar src={student.imgURL} alt={student.firstName} />
+                ))
                 : "Be the first to participate!"}
             </Box>
             <Button
