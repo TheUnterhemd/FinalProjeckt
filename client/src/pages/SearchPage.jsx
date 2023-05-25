@@ -1,25 +1,25 @@
-//import { useContext } from 'react'
-// import { SearchContext } from '../context/SearchContext';
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useFetch } from '../hooks/useFetch';
 import { Box, Button, Container, Typography, Slider } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import SearchList from '../components/Search/SearchList';
 import MapTest from "./MapTest";
+import SortMenu from '../components/SortMenu';
+import { SortContext } from '../context/SortContext';
 
 const SearchPage = () => {
-    // const { searchType } = useContext(SearchContext)
-    //setting up query for search
+    //setting up filters
     const [showFilters, setShowFilters] = useState(false);
     /* const [location, setLocation] = useState(''); */
     const [price, setPrice] = useState('');
     const [date, setDate] = useState('');
     const [formattedDate, setFormattedDate] = useState('');
+    const { sort } = useContext(SortContext);
 
-    const filters = { price, formattedDate };
+    const filters = { price, formattedDate, sort };
 
+    //format Date for comparison
     useEffect(() => {
         if (date) {
             const localDate = new Date(date.$d);
@@ -31,23 +31,23 @@ const SearchPage = () => {
         }
     }, [date]);
 
-
+    //filter toggle
     const toggleFilter = () => {
         setShowFilters(!showFilters);
     }
 
+    //getting query params for searchURL
     const queryString = useLocation().search;
     const queryParams = new URLSearchParams(queryString);
     const query = queryParams.get('q');
 
 
-    /* const searchURL = `http://localhost:5002/${searchType}?q=${query}`; */
     let searchURL = `http://localhost:5002/search/?q=${query}`
 
     const { data, isPending, error } = useFetch(searchURL);
 
 
-
+    //func for slider value
     const valueText = (value) => {
         return `${value}€`;
     }
@@ -57,6 +57,7 @@ const SearchPage = () => {
             <Button variant='outlined' onClick={toggleFilter} sx={{ m: 1 }}>
                 {showFilters ? 'Hide Filters' : 'Show Filters'}
             </Button>
+            <SortMenu />
             {
                 showFilters &&
                 <Box sx={{ display: "flex", justifyContent: "center" }}>

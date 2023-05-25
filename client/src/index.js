@@ -5,7 +5,7 @@ import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
 import CssBaseline from "@mui/material/CssBaseline";
 import ToggleColorMode from "./context/ThemeContext.js";
-import SearchProvider from "./context/SearchContext";
+import SortProvider from "./context/SortContext";
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
@@ -14,13 +14,13 @@ root.render(
   <React.StrictMode>
     <ToggleColorMode>
       <CssBaseline />
-      <SearchProvider>
+      <SortProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <AuthProvider>
             <App />
           </AuthProvider>
         </LocalizationProvider>
-      </SearchProvider>
+      </SortProvider>
     </ToggleColorMode>
   </React.StrictMode>
 );
