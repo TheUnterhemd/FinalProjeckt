@@ -1,8 +1,6 @@
-import React from 'react';
 import { Box, Typography } from '@mui/material';
 import PersonCard from '../PersonCard';
 import CourseCard from '../CourseCard';
-
 
 const SearchList = ({ searchData, courseFilter }) => {
 
@@ -10,6 +8,7 @@ const SearchList = ({ searchData, courseFilter }) => {
         return <Typography variant='body1'>No data to load...</Typography>;
     }
 
+    //filter & conditions
     let filteredCourses = searchData.courses;
     if (courseFilter.price || courseFilter.price === 0) {
         filteredCourses = filteredCourses.filter(
@@ -21,6 +20,24 @@ const SearchList = ({ searchData, courseFilter }) => {
         filteredCourses = filteredCourses.filter(
             (course) => course.start.split('T')[0] === courseFilter.formattedDate
         );
+    }
+
+    if (courseFilter.sort) {
+        switch (courseFilter.sort) {
+            case 'ascPrice':
+                filteredCourses = filteredCourses.sort((a, b) => a.price - b.price);
+                break;
+            case 'descPrice':
+                filteredCourses = filteredCourses.sort((a, b) => b.price - a.price);
+                break;
+            case 'ascDate':
+                filteredCourses = filteredCourses.sort((a, b) => new Date(a.start) - new Date(b.start));
+                break;
+            case 'descDate':
+                filteredCourses = filteredCourses.sort((a, b) => new Date(b.start) - new Date(a.start));
+                break;
+            default:
+        }
     }
 
     return (

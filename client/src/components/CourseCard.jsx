@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import FormattedDate from "./Data Formatting/FormattedDate";
 
 // @desc used to display a Course in an overview page
 export default function CourseCard({ data }) {
@@ -19,19 +20,6 @@ export default function CourseCard({ data }) {
     e.preventDefault();
     navigate(`/course/${data._id}`);
   }
-
-  //formattedDates
-  const startDate = new Date(data.start);
-  const startDay = String(startDate.getDate()).padStart(2, "0");
-  const startMonth = String(startDate.getMonth() + 1).padStart(2, "0");
-  const startYear = startDate.getFullYear();
-  const formattedStartDate = `${startDay}.${startMonth}.${startYear}`;
-
-  const endDate = new Date(data.end);
-  const endDay = String(endDate.getDate()).padStart(2, "0");
-  const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
-  const endYear = endDate.getFullYear();
-  const formattedEndDate = `${endDay}.${endMonth}.${endYear}`;
 
   return (
     <Card sx={{ width: 250, maxWidth: 250 }} onClick={(e) => clickHandler(e)}>
@@ -79,22 +67,13 @@ export default function CourseCard({ data }) {
             >
               {data.title}
             </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Location: {data.location?.description}
-            </Typography>
-            <Typography variant="body1">
-              Starts: {formattedStartDate + ` |${data.start.split("T")[1]}`}
-            </Typography>
-            <Typography variant="body1">
-              Ends: {formattedEndDate + ` |${data.end.split("T")[1]}`}
-            </Typography>
+            <Typography variant="body1" sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}>Location: {data?.location?.description}</Typography>
+            <FormattedDate startDate={data?.start} />
+            <FormattedDate endDate={data?.end} />
             <Chip label={`${data.price} €`} />
           </Box>
         </CardContent>
