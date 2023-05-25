@@ -15,16 +15,16 @@ export default function MapTest({ markerOptions }) {
   console.log("data in maptest", data);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (
-      Array.isArray(data) &&
-      data.location &&
-      !data.location.location.startsWith("http")
-    ) {
-      const locale = data.location?.location.split(",");
-      console.log("locale", locale);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     Array.isArray(data) &&
+  //     data.location &&
+  //     !data.location.location.startsWith("http")
+  //   ) {
+  //     const locale = data.location?.location.split(",");
+  //     console.log("locale", locale);
+  //   }
+  // }, []);
   return (
     <Container sx={{ my: 1 }} disableGutters={true}>
       <MapContainer
@@ -41,28 +41,26 @@ export default function MapTest({ markerOptions }) {
         {data &&
           Array.isArray(data) &&
           data.map((course) => {
-            course.location &&
-              course.location.location &&
-              course.location.description && (
-                <>
-                  <Marker
-                    key={uuid()}
-                    position={{
-                      lat: course?.location.location.split(",")[0],
-                      lng: course?.location.location.split(",")[1],
-                    }}
-                  >
-                    <Popup>
-                      <span
-                        onClick={(e) => navigate(`/course/${course._id}`)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        {course.title} | {course.price} €
-                      </span>
-                    </Popup>
-                  </Marker>
-                </>
+            if (!course.location.location.startsWith("http")) {
+              return (
+                <Marker
+                  key={uuid()}
+                  position={{
+                    lat: course.location.location.split(",")[0],
+                    lng: course.location.location.split(",")[1],
+                  }}
+                >
+                  <Popup>
+                    <span
+                      onClick={(e) => navigate(`/course/${course._id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {course.title} | {course.price} €
+                    </span>
+                  </Popup>
+                </Marker>
               );
+            }
           })}
       </MapContainer>
     </Container>

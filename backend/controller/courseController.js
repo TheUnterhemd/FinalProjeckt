@@ -33,11 +33,11 @@ export const addCourse = async (req, res, next) => {
     imgURL,
     trainer,
   } = req.body;
-
+  console.log("location in add Course", location);
   const course = new Course({
     title,
     description,
-    location,
+    location: JSON.parse(location),
     type,
     maxStudents,
     currentStudents,
@@ -120,7 +120,9 @@ export const updateCourse = async (req, res, next) => {
 export const getAllCourses = async (req, res, next) => {
   let courses;
   try {
-    courses = await Course.find().populate('trainer', 'firstName lastName imgURL').populate('currentStudents', 'firstName lastName imgURL');
+    courses = await Course.find()
+      .populate("trainer", "firstName lastName imgURL")
+      .populate("currentStudents", "firstName lastName imgURL");
     console.log(courses);
   } catch (error) {
     console.log(error.message);
@@ -135,7 +137,9 @@ export const getCourse = async (req, res, next) => {
   let course;
   const id = req.params.id;
   try {
-    course = await Course.findOne({ _id: id }).populate('trainer', 'firstName lastName imgURL').populate('currentStudents', 'firstName lastName imgURL');
+    course = await Course.findOne({ _id: id })
+      .populate("trainer", "firstName lastName imgURL")
+      .populate("currentStudents", "firstName lastName imgURL");
     console.log(course);
   } catch (error) {
     console.log(error.message);

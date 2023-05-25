@@ -44,7 +44,7 @@ export default function CourseCreationForm({ course }) {
     if (course) {
       setTitle(course.title);
       setDescription(course.description);
-      setLocation(course.location.location);
+      setLocation(course.location);
       setDate(course.start);
       setEnd(course.end);
       setImgURL(course.imgURL);
@@ -71,7 +71,7 @@ export default function CourseCreationForm({ course }) {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${user.token}`,
+            authorization: `Bearer ${user.accessToken}`,
           },
           body: JSON.stringify({ courses: temp }),
         }
@@ -113,7 +113,7 @@ export default function CourseCreationForm({ course }) {
 
     formdata.append("title", title);
     formdata.append("description", description);
-    formdata.append("location", location);
+    formdata.append("location", JSON.stringify(location));
     formdata.append("maxStudents", maxStud);
     formdata.append("type", ctype);
     formdata.append("price", price);
@@ -126,6 +126,7 @@ export default function CourseCreationForm({ course }) {
       formdata.append("currentStudents", currStud);
     }
     postdata(formdata);
+    console.log("location on courseSubmit");
   }
   /** checks filesize from Input and sets the ImgURL state to the file */
   function handleFileChange(e) {
@@ -138,7 +139,7 @@ export default function CourseCreationForm({ course }) {
       setImgURL(e.target.files[0]);
     }
   }
-  console.log("location on CourseCreatoin", location);
+  console.log("location on CourseCreation", location);
 
   return (
     <Container
