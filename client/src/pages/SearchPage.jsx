@@ -8,15 +8,14 @@ import { SortContext } from '../context/SortContext';
 
 const SearchPage = () => {
     //setting up filters
-
     /* const [location, setLocation] = useState(''); */
     const [price, setPrice] = useState('');
     const [date, setDate] = useState('');
     const [formattedDate, setFormattedDate] = useState('');
     const { sort } = useContext(SortContext);
 
+    //filter & setFilter Objects for external components
     const filters = { price, formattedDate, sort };
-
     const setFilters = { setPrice, setDate };
 
     //format Date for comparison
@@ -32,17 +31,13 @@ const SearchPage = () => {
     }, [date]);
 
 
-
     //getting query params for searchURL
     const queryString = useLocation().search;
     const queryParams = new URLSearchParams(queryString);
     const query = queryParams.get('q');
-
-
+    //fetching data
     let searchURL = `http://localhost:5002/search/?q=${query}`
-
     const { data, isPending, error } = useFetch(searchURL);
-
 
     return (
         <Container maxWidth="lg" >
