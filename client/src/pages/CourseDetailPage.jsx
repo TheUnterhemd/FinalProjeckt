@@ -1,11 +1,15 @@
+// ToDo:
+// "deactivate" button for trainer who created course
+// booking function
+
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 import { AuthContext } from "../context/AuthContext";
-import MapTest from "./MapTest";
+import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
+import MapTest from "../components/map/Map";
 import FormattedDate from "../components/Data Formatting/FormattedDate";
 
 export default function CourseDetailPage() {
@@ -13,25 +17,23 @@ export default function CourseDetailPage() {
   const theme = useTheme();
   const [edit, setEdit] = useState(false);
 
-  const { id } = useParams();
-  const navigate = useNavigate();
   const url = process.env.REACT_APP_SERVER_URL;
+  const { id } = useParams();
   const { data } = useFetch(`${url}/course/${id}`);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("data in CourseDetailPage", data);
     console.log("user in courseDetailpage", user);
-  }, []);
+  }, [data, user]);
+
   /** starts booking process for a course */
   function startBooking(e) {
     e.preventDefault();
     console.log("does nothing at the moment");
-    console.log(data);
   }
 
-  // REMOVE WHEN TRAINER FRONTEND IS ESTABLISHED, along with edit state and code for editform
-
-  //calculate the duration in days & hours
+  // calculate the duration in days & hours
   const days = Math.floor(data?.duration / 24);
   const remainingHours = data?.duration % 24;
   const duration = `${days} days ${remainingHours} hours`;
@@ -86,12 +88,14 @@ export default function CourseDetailPage() {
               {data.description}
             </Typography>
 
-            <Box sx={{ width: "300px", height: "200px" }}>
+            <Box sx={{ width: "300px", height: "200px", my: 2 }}>
               <MapTest markerOptions={[data]} />
             </Box>
-            <Typography variant="body1">Location: {data?.location?.description}</Typography>
-            <FormattedDate startDate={data?.start} />
-            <FormattedDate endDate={data?.end} />
+            <Typography variant="body1">
+              Location: {data?.location?.description}
+            </Typography>
+            <FormattedDate startDate={data.start} />
+            <FormattedDate endDate={data.end} />
             <Typography variant="body1">Duration: {duration}</Typography>
             <Typography variant="h6" gutterBottom>
               Trainer
@@ -112,17 +116,19 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                  <Avatar src={student.imgURL} alt={student.firstName} />
-                ))
+                    <Avatar src={student.imgURL} alt={student.firstName} />
+                  ))
                 : "Be the first to participate!"}
             </Box>
-            <Button
-              variant="outlined"
-              sx={{ mt: 1 }}
-              onClick={(e) => startBooking(e)}
-            >
-              Book now!
-            </Button>
+            {user && (
+              <Button
+                variant="outlined"
+                sx={{ mt: 1 }}
+                onClick={(e) => startBooking(e)}
+              >
+                Book now!
+              </Button>
+            )}
           </Grid>
         </Grid>
       )}

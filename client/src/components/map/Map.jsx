@@ -1,37 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Container } from "@mui/material";
-// import { LocationMarker } from "../components/map/LocationMarker";
 import { useNavigate } from "react-router-dom";
-import { MapSearchField } from "../components/map/MapSearchField";
+import { MapSearchField } from "./MapSearchField";
 import { v4 as uuid } from "uuid";
-import "./MapTest.scss";
-export default function MapTest({ markerOptions }) {
-  const [centerLat, setCenterLat] = useState(52.505);
-  const [centerLng, setCenterLng] = useState(13.09);
+import "./Map.scss";
 
+export default function Map({ markerOptions }) {
   // display the courses on the map
   const data = markerOptions;
-  console.log("data in maptest", data);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (
-  //     Array.isArray(data) &&
-  //     data.location &&
-  //     !data.location.location.startsWith("http")
-  //   ) {
-  //     const locale = data.location?.location.split(",");
-  //     console.log("locale", locale);
-  //   }
-  // }, []);
   return (
     <Container sx={{ my: 1 }} disableGutters={true}>
       <MapContainer
-        center={{ lat: centerLat, lng: centerLng }}
+        center={
+          data.length === 1
+            ? {
+                lat: data[0].location.location.split(",")[0],
+                lng: data[0].location.location.split(",")[1],
+              }
+            : { lat: 52.505, lng: 13.09 }
+        }
         zoom={10}
         scrollWheelZoom={true}
-        style={{ minHeight: "200px", maxHeight: "100%" }}
+        style={{ minHeight: "200px" }}
       >
         <MapSearchField markerOptions={markerOptions} />
         <TileLayer

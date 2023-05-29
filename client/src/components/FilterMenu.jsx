@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MapTest from "../pages/MapTest";
+import MapTest from "./map/Map";
 import SortMenu from "./SortMenu";
 import { Box, Button, Typography, Slider } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";

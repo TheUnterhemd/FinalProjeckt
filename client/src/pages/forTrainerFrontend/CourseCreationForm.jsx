@@ -1,7 +1,6 @@
 // ToDo:
 // Anzeige von Teilnehmenden, wenn es denn schon welche gibt.
-// vor Deploy: setTrainer entfernen und Context für Trainer einbinden.
-// beim Delete sollte das der course auch beim Trainer gelöscht werden.
+// löschen von einzelnen Teilnehmenden, aktualisieren von currentStudents
 
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -15,12 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext";
-import MapTest from "../MapTest";
+import MapTest from "../../components/map/Map";
 import { useNavigate } from "react-router-dom";
 
 export default function CourseCreationForm({ course }) {
   const { user, dispatch } = useContext(AuthContext);
-  const [trainer, setTrainer] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -39,7 +37,7 @@ export default function CourseCreationForm({ course }) {
   const today = new Date();
   const url = `${process.env.REACT_APP_SERVER_URL}/course/${endpoint}`;
 
-  // loads course data, if provided. turns form into course update form AND SETS DEFAULT TRAINER FOR TESTING
+  // loads course data, if provided
   useEffect(() => {
     if (course) {
       setTitle(course.title);
@@ -55,35 +53,38 @@ export default function CourseCreationForm({ course }) {
       setEndpoint(`update/${course._id}`);
       setMethod("PUT");
     }
-    if (user) {
-      setTrainer(user);
-    }
   }, [user, course]);
 
-  /**handles the update of the trainer to post the new course array on database */
-  async function updateTrainer(json) {
-    try {
-      const temp = trainer.courses.map((course) => course._id) || [];
-      temp.push(json.course._id);
-      const result = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/trainer/update/${trainer._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${user.accessToken}`,
-          },
-          body: JSON.stringify({ courses: temp }),
-        }
-      );
-      const resTrainer = await result.json();
-      dispatch({ type: "LOGIN", payload: resTrainer.trainer });
-      setTrainer(resTrainer.trainer);
-    } catch (err) {
-      console.log(err);
+  /** submits the entered data as formdata/multipart */
+  function handleCourseSubmit(e) {
+    e.preventDefault();
+
+    const formdata = new FormData();
+
+    formdata.append("title", title);
+    formdata.append("description", description);
+    formdata.append("location", JSON.stringify(location));
+    formdata.append("maxStudents", maxStud);
+    formdata.append("type", ctype);
+    formdata.append("price", price);
+    formdata.append("duration", calculateDuration());
+    formdata.append("start", date);
+    formdata.append("end", end);
+    formdata.append("imgURL", imgURL);
+    formdata.append("trainer", user._id);
+    if (currStud) {
+      formdata.append("currentStudents", currStud);
     }
+    postdata(formdata);
   }
-  /** sends formdata to backend  */
+  /** calculates the duration from start to end */
+  function calculateDuration() {
+    const datestart = new Date(date);
+    const dateend = new Date(end);
+    const duration = (dateend - datestart) / (1000 * 60 * 60);
+    return duration;
+  }
+  /** posts formdata to server-url  */
   async function postdata(formdata) {
     try {
       const result = await fetch(url, {
@@ -100,35 +101,31 @@ export default function CourseCreationForm({ course }) {
     } catch (err) {
       console.log(err);
     }
-  }
-  /** calculates the duration from start to end, submits the entered data as formdata/multipart */
-  function handleCourseSubmit(e) {
-    e.preventDefault();
-
-    const datestart = new Date(date);
-    const dateend = new Date(end);
-    const duration = (dateend - datestart) / (1000 * 60 * 60);
-
-    const formdata = new FormData();
-
-    formdata.append("title", title);
-    formdata.append("description", description);
-    formdata.append("location", JSON.stringify(location));
-    formdata.append("maxStudents", maxStud);
-    formdata.append("type", ctype);
-    formdata.append("price", price);
-    formdata.append("duration", duration);
-    formdata.append("start", date);
-    formdata.append("end", end);
-    formdata.append("imgURL", imgURL);
-    formdata.append("trainer", trainer._id);
-    if (currStud) {
-      formdata.append("currentStudents", currStud);
+    /**handles the update of the trainer to post the new course array on database */
+    async function updateTrainer(json) {
+      try {
+        const temp = user.courses.map((course) => course._id) || [];
+        temp.push(json.course._id);
+        const result = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/trainer/update/${user._id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${user.accessToken}`,
+            },
+            body: JSON.stringify({ courses: temp }),
+          }
+        );
+        const resTrainer = await result.json();
+        dispatch({ type: "LOGIN", payload: resTrainer.trainer });
+      } catch (err) {
+        console.log("error in CourseCreationForm:updateTrainer", err);
+      }
     }
-    postdata(formdata);
-    console.log("location on courseSubmit");
   }
-  /** checks filesize from Input and sets the ImgURL state to the file */
+
+  /** checks filesize from Input and sets the ImgURL state to file */
   function handleFileChange(e) {
     e.preventDefault();
     const size = e.target.files[0].size / 1024 ** 2;
@@ -139,7 +136,6 @@ export default function CourseCreationForm({ course }) {
       setImgURL(e.target.files[0]);
     }
   }
-  console.log("location on CourseCreation", location);
 
   return (
     <Container
@@ -202,11 +198,10 @@ export default function CourseCreationForm({ course }) {
           onChange={(e) => setCtype(e.target.value)}
         />
         <TextField
+          focused
           required
           aria-required
-          label={`location - ${
-            online ? "click on the map where you want to meet" : "insert link"
-          }`}
+          label="location"
           fullWidth
           disabled={online}
           name="location"
@@ -216,6 +211,7 @@ export default function CourseCreationForm({ course }) {
           onChange={(e) =>
             setLocation({ location: e.target.value, description: "online" })
           }
+          defaultValue="click on the map where you want to meet or insert link"
         />
 
         <FormControlLabel
