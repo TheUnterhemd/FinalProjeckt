@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
+import Token from "../models/refreshModel.js"
 
 //CONFIGS
 dotenv.config();
@@ -115,6 +116,10 @@ export const loginTrainer = async (req, res, next) => {
     const refreshToken = jwt.sign(tokenPayload, refreshSecret, {
       expiresIn: "1d",
     });
+
+    // Speichere den Refresh Token in der Datenbank
+    const refresh = new Token({ refreshToken, trainer: trainer._id });
+    await refresh.save();
 
     res.cookie("LocalTrainer", refreshToken, {
       maxAge: 86400000,
