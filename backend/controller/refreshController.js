@@ -21,7 +21,8 @@ const generateAccessToken = (user) => {
 
 // Funktion zum Überprüfen des Refresh Tokens und Generieren eines neuen Access Tokens
 export const refresh = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.body;
+  console.log(refreshToken);
 
   if (!refreshToken) {
     return res.status(401).json({ error: 'Ungültiger Refresh Token' });

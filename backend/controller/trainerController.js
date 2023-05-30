@@ -91,6 +91,7 @@ export const loginTrainer = async (req, res, next) => {
         select: "firstName lastName imgURL",
       },
     });
+    console.log(trainer._id);
 
     if (!trainer) {
       return res
@@ -113,10 +114,12 @@ export const loginTrainer = async (req, res, next) => {
     };
 
     const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
-    const refreshToken = jwt.sign(tokenPayload, refreshSecret, {
-      expiresIn: "1d",
-    });
-
+    let refreshToken = await Token.findOne({ trainer: trainer._id });
+    
+    if (!refreshToken) {
+      // Erstelle ein neues Refresh Token
+      refreshToken = jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" });}
+      
     // Speichere den Refresh Token in der Datenbank
     const refresh = new Token({ refreshToken, trainer: trainer._id });
     await refresh.save();
@@ -125,8 +128,8 @@ export const loginTrainer = async (req, res, next) => {
       maxAge: 86400000,
       httpOnly: true,
       withCredentials: true,
-      sameSite: "None",
-      secure: false,
+      //sameSite: "None",
+      //secure: false,
     });
 
     return res.status(200).json({
