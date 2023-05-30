@@ -23,17 +23,21 @@ export default function AllCourses() {
   let filteredCourses = data;
   if (sort) {
     switch (sort) {
-      case 'ascPrice':
+      case "ascPrice":
         filteredCourses = filteredCourses.sort((a, b) => a.price - b.price);
         break;
-      case 'descPrice':
+      case "descPrice":
         filteredCourses = filteredCourses.sort((a, b) => b.price - a.price);
         break;
-      case 'ascDate':
-        filteredCourses = filteredCourses.sort((a, b) => new Date(a.start) - new Date(b.start));
+      case "ascDate":
+        filteredCourses = filteredCourses.sort(
+          (a, b) => new Date(a.start) - new Date(b.start)
+        );
         break;
-      case 'descDate':
-        filteredCourses = filteredCourses.sort((a, b) => new Date(b.start) - new Date(a.start));
+      case "descDate":
+        filteredCourses = filteredCourses.sort(
+          (a, b) => new Date(b.start) - new Date(a.start)
+        );
         break;
       default:
     }
@@ -43,7 +47,7 @@ export default function AllCourses() {
     <Container sx={{ padding: "2rem" }}>
       <Typography variant="h2">Our Courses</Typography>
       <SortMenu />
-      {data && <MapTest markerOptions={data} />}
+      {data && <MapTest markerOptions={{ data }} />}
       <Grid container spacing={2}>
         {data &&
           filteredCourses.map((course) => (
