@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import Trainer from "../models/trainerModel.js";
-import Refresh from "../models/refreshModel.js";
+import Token from "../models/refreshModel.js";
 
 //CONFIGS
 dotenv.config();
@@ -32,7 +32,7 @@ export const refresh = async (req, res) => {
     const decoded = jwt.verify(refreshToken, refreshSecret);
 
     // Suche den Refresh Token in der Datenbank
-    const token = await Refresh.findOne({ refreshToken });
+    const token = await Token.findOne({ refreshToken });
 
     if (!token) {
       return res.status(401).json({ error: 'Ungültiger Refresh Token' });
