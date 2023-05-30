@@ -33,7 +33,7 @@ export const addCourse = async (req, res, next) => {
     imgURL,
     trainer,
   } = req.body;
-  console.log("location in add Course", location);
+
   const course = new Course({
     title,
     description,
@@ -98,7 +98,7 @@ export const updateCourse = async (req, res, next) => {
         title,
         description,
         price,
-        location,
+        location: JSON.parse(location),
         maxStudents,
         type,
         start,

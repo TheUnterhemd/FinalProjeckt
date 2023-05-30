@@ -1,7 +1,8 @@
 // ToDo:
 // "deactivate" button for trainer who created course
 // booking function
-
+// updateCourse needs Authorization or validator needs to be deleted from backend
+// updateCourse + updateUser need errorhandling for newCourse / newUser
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
@@ -13,24 +14,82 @@ import MapTest from "../components/map/Map";
 import FormattedDate from "../components/Data Formatting/FormattedDate";
 
 export default function CourseDetailPage() {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const theme = useTheme();
   const [edit, setEdit] = useState(false);
+  const [data, setData] = useState("");
 
   const url = process.env.REACT_APP_SERVER_URL;
   const { id } = useParams();
-  const { data } = useFetch(`${url}/course/${id}`);
+  const { data: course } = useFetch(`${url}/course/${id}`);
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log("data in CourseDetailPage", data);
     console.log("user in courseDetailpage", user);
-  }, [data, user]);
+    if (course) {
+      setData(course);
+    }
+  }, [course, user]);
 
   /** starts booking process for a course */
-  function startBooking(e) {
+  async function startBooking(e) {
     e.preventDefault();
-    console.log("does nothing at the moment");
+    const newCourse = await updateCurrStudents();
+    console.log("newCourse CourseDetailPage:startBooking", newCourse);
+    setData(newCourse);
+    const newUser = await updateBookedCourses();
+    console.log("newUser CourseDetailPage:startBooking", newUser);
+    // dispatch({type:"LOGIN",payload:newUser})
+  }
+
+  /** this will deactivate the course in the future */
+  async function handleDelete() {
+    try {
+      console.log("this will deactivate the course in the future");
+      // const newCourse = update(`${url}/course/update/${data._id}`, {
+      //   active: false,
+      // });
+      // console.log("newCourse CourseDetailPage:handleDelete", newCourse);
+    } catch (error) {
+      console.log("error CourseDetailPage:handleDelete", error);
+    }
+  }
+  /** updates currentStudents Array and passes that to update-function. Returns updated Course */
+  async function updateCurrStudents() {
+    const temp = data.currentStudents?.map((student) => student._id) || [];
+    temp.push(user._id);
+    return await update(`${url}/course/update/${data._id}`, {
+      currentStudents: temp,
+    });
+  }
+  /** updates bookedCourses Array and passes that to update-function. Returns updated user */
+  async function updateBookedCourses() {
+    const temp = user.bookedCourses?.map((course) => course._id);
+    temp.push(data._id);
+    return await update(`${url}/user/update/${user._id}`, {
+      bookedCourses: temp,
+    });
+  }
+  /** updates database with specific update object at entered url (fUrl)*/
+  async function update(fUrl, update) {
+    try {
+      const result = await fetch(fUrl, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(update),
+      });
+
+      if (!result.ok) {
+        throw new Error(result.statusText);
+      }
+      console.log("result CourseDetailpage:update", result);
+      const json = await result.json();
+      console.log("json CourseDetailPage:update", json);
+      return json;
+    } catch (error) {
+      console.log("CourseDetailPage:update", error);
+    }
   }
 
   // calculate the duration in days & hours
@@ -103,11 +162,11 @@ export default function CourseDetailPage() {
             <Chip
               avatar={
                 <Avatar
-                  src={data.trainer.imgURL}
+                  src={data.trainer?.imgURL}
                   alt={`Avatar for ${data.trainer.firstName}`}
                 />
               }
-              label={data.trainer.firstName}
+              label={data.trainer?.firstName}
               onClick={() => navigate(`/trainer/${data.trainer._id}`)}
             ></Chip>
             <Typography variant="h6" gutterBottom>
@@ -132,14 +191,17 @@ export default function CourseDetailPage() {
           </Grid>
         </Grid>
       )}
-      {user && user.isTrainer && data?.trainer._id === user._id && (
-        <Chip
-          label={!edit ? "Edit Course" : "Show Course"}
-          sx={{ mt: 3 }}
-          onClick={() => setEdit(!edit)}
-        ></Chip>
+      {user && user.isTrainer && data && data?.trainer._id === user._id && (
+        <Box sx={{ mt: 3 }}>
+          <Chip
+            label={!edit ? "Edit Course" : "Show Course"}
+            onClick={() => setEdit(!edit)}
+            sx={{ mr: 1 }}
+          ></Chip>
+          <Chip label="Delete Course" onClick={() => handleDelete()}></Chip>
+        </Box>
       )}
-      {edit && data && <CourseCreationForm course={data} />}
+      {edit && data && user?.isTrainer && <CourseCreationForm course={data} />}
     </div>
   );
 }
