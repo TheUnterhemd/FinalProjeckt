@@ -16,9 +16,11 @@ import {
 import { AuthContext } from "../../context/AuthContext";
 import MapTest from "../../components/map/Map";
 import { useNavigate } from "react-router-dom";
+import { update } from "../../hooks/update";
 
-export default function CourseCreationForm({ course }) {
+export default function CourseCreationForm({ course, setEdit }) {
   const { user, dispatch } = useContext(AuthContext);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -33,9 +35,10 @@ export default function CourseCreationForm({ course }) {
   const [endpoint, setEndpoint] = useState("add");
   const [method, setMethod] = useState("POST");
   const [online, setOnline] = useState(true);
+  const url = `${process.env.REACT_APP_SERVER_URL}/course/${endpoint}`;
+
   const navigate = useNavigate();
   const today = new Date();
-  const url = `${process.env.REACT_APP_SERVER_URL}/course/${endpoint}`;
 
   // loads course data, if provided
   useEffect(() => {
@@ -93,36 +96,36 @@ export default function CourseCreationForm({ course }) {
         headers: { authorization: `Bearer ${user.accessToken}` },
         body: formdata,
       });
+      if (!result.ok) {
+        throw new Error("could not post course");
+      }
       const json = await result.json();
-
+      console.log("json courseCreationForm:postdata", json);
       if (method === "POST") {
         updateTrainer(json);
       }
       navigate(`/course/${json.course._id}`);
+      if (setEdit) setEdit(false);
     } catch (err) {
-      console.log(err);
+      console.log("error while posting:", err);
     }
-    /**handles the update of the trainer to post the new course array on database */
-    async function updateTrainer(json) {
-      try {
-        const temp = user.courses.map((course) => course._id) || [];
-        temp.push(json.course._id);
-        const result = await fetch(
-          `${process.env.REACT_APP_SERVER_URL}/trainer/update/${user._id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              authorization: `Bearer ${user.accessToken}`,
-            },
-            body: JSON.stringify({ courses: temp }),
-          }
-        );
-        const resTrainer = await result.json();
-        dispatch({ type: "LOGIN", payload: resTrainer.trainer });
-      } catch (err) {
-        console.log("error in CourseCreationForm:updateTrainer", err);
-      }
+  }
+  /**handles the update of the trainer to post the new course array on database */
+  async function updateTrainer(json) {
+    try {
+      const temp = user.courses.map((course) => course._id) || [];
+      temp.push(json.course._id);
+      const result = update(
+        `${process.env.REACT_APP_SERVER_URL}/trainer/update/${user._id}`,
+        { courses: temp }
+      );
+
+      console.log("result CourseCreatoinForm:updateTrainer", result);
+      const resTrainer = await result.json();
+      console.log("resTrainer CourseCreationForm:updateTrainer", resTrainer);
+      dispatch({ type: "LOGIN", payload: resTrainer.trainer });
+    } catch (err) {
+      console.log("error in CourseCreationForm:updateTrainer", err);
     }
   }
 
@@ -226,7 +229,7 @@ export default function CourseCreationForm({ course }) {
         />
         {online && (
           <Box>
-            <MapTest markerOptions={{ setLocation }} />
+            <MapTest markerOptions={{ setLocation, data: [course] }} />
           </Box>
         )}
         <TextField
