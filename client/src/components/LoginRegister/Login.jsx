@@ -20,7 +20,7 @@ const Login = ({ setReg, close }) => {
   const [password, setPassword] = useState("");
   // endpoint is used to switch between users and trainers logging in
   const [endpoint, setEndpoint] = useState("user");
-  const { user, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = (e) => {

@@ -72,6 +72,7 @@ export default function CourseCreationForm({ course }) {
     formdata.append("end", end);
     formdata.append("imgURL", imgURL);
     formdata.append("trainer", user._id);
+
     if (currStud) {
       formdata.append("currentStudents", currStud);
     }

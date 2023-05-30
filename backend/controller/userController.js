@@ -88,7 +88,7 @@ export const loginUser = async (req, res) => {
         comments: user.comments,
       },
     };
-    const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
+    const accessToken = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
     const refreshToken = jwt.sign(tokenPayload, refreshSecret, {
       expiresIn: "1d",
     });

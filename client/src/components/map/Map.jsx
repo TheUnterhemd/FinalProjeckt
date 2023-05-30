@@ -15,7 +15,7 @@ export default function Map({ markerOptions }) {
     <Container sx={{ my: 1 }} disableGutters={true}>
       <MapContainer
         center={
-          data.length === 1
+          data.length === 1 && !data[0].location.location.startsWith("http")
             ? {
                 lat: data[0].location.location.split(",")[0],
                 lng: data[0].location.location.split(",")[1],

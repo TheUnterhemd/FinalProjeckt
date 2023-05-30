@@ -36,7 +36,11 @@ export const MapSearchField = ({ markerOptions }) => {
         GEOCODE_URL + `${position.lng},${position.lat}`
       );
       const place = await result.json();
-      return place.address.City;
+      if (place.adress && place.adress.City) {
+        return place.address.City;
+      } else {
+        return "location name unknown, see coordinates";
+      }
     } catch (error) {
       console.log("error in MapSearchField:getCity", error);
     }

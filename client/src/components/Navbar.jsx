@@ -9,7 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { Button, Avatar, Box, IconButton } from "@mui/material/";
 import Logo from "../assets/logo/logo.png";
 import LoginRegModal from "../components/LoginRegister/LoginRegModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Searchbar from "./Search/Searchbar";
 import { AuthContext } from "../context/AuthContext";
 
@@ -23,6 +23,9 @@ const Navbar = () => {
 
   // searchbar visibility & css animation
   const [isSearchbarVisible, setSearchbarVisible] = useState(false);
+
+  // use navigate to navigate to other routes
+  const navigate = useNavigate();
 
   const toggleSearchbar = () => {
     setSearchbarVisible(!isSearchbarVisible);
@@ -40,6 +43,7 @@ const Navbar = () => {
       method: "POST",
       credentials: "include",
     });
+    navigate("/");
   };
 
   return (
@@ -69,9 +73,11 @@ const Navbar = () => {
               <Button component={Link} to="/course">
                 Course
               </Button>
-              <Button component={Link} to="/course/create">
-                Create Course
-              </Button>
+              {user?.isTrainer && (
+                <Button component={Link} to="/course/create">
+                  Create Course
+                </Button>
+              )}
             </Box>
 
             <Box
