@@ -91,7 +91,6 @@ export const loginTrainer = async (req, res, next) => {
         select: "firstName lastName imgURL",
       },
     });
-    console.log(trainer._id);
 
     if (!trainer) {
       return res
@@ -104,6 +103,7 @@ export const loginTrainer = async (req, res, next) => {
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Wrong password" });
     }
+
     const tokenPayload = {
       trainer: true,
       data: trainer._id,
@@ -114,17 +114,15 @@ export const loginTrainer = async (req, res, next) => {
     };
 
     const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
-    let refreshToken = await Token.findOne({ trainer: trainer._id });
-    
-    if (!refreshToken) {
-      // Erstelle ein neues Refresh Token
-      refreshToken = jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" });}
-      
-    // Speichere den Refresh Token in der Datenbank
-    const refresh = new Token({ refreshToken, trainer: trainer._id });
-    await refresh.save();
 
-    res.cookie("LocalTrainer", refreshToken, {
+    // Überprüfe, ob bereits ein Refresh Token für den Trainer in der Datenbank existiert
+    let refreshToken = await Token.findOneAndUpdate(
+      { trainer: trainer._id },
+      { refreshToken: jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" }) },
+      { upsert: true, new: true }
+    ).select("refreshToken");
+
+    res.cookie("LocalTrainer", refreshToken.refreshToken, {
       maxAge: 86400000,
       httpOnly: true,
       withCredentials: true,
@@ -135,7 +133,7 @@ export const loginTrainer = async (req, res, next) => {
     return res.status(200).json({
       user: {
         accessToken,
-        refreshToken,
+        refreshToken: refreshToken.refreshToken,
         _id: trainer._id,
         lastName: trainer.lastName,
         firstName: trainer.firstName,
