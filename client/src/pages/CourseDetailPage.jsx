@@ -36,7 +36,7 @@ export default function CourseDetailPage() {
   // calculate the duration in days & hours
   const days = Math.floor(data?.duration / 24);
   const remainingHours = data?.duration % 24;
-  const duration = `${days} days ${remainingHours} hours`;
+  const duration = days === 0 ? `${remainingHours} hours` : `${days} days ${remainingHours} hours`;
 
   return (
     <div>
@@ -116,8 +116,8 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                    <Avatar src={student.imgURL} alt={student.firstName} />
-                  ))
+                  <Avatar src={student.imgURL} alt={student.firstName} />
+                ))
                 : "Be the first to participate!"}
             </Box>
             {user && (
