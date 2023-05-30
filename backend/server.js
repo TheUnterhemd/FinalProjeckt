@@ -8,6 +8,7 @@ import courseRouter from "./routes/courseRouter.js";
 import commentRouter from "./routes/commentRouter.js";
 import searchRouter from "./routes/searchRouter.js";
 import cookieParser from "cookie-parser";
+import refreshRouter from "./routes/refreshRouter.js";
 
 dotenv.config();
 const app = express();
@@ -38,6 +39,7 @@ app.use("/user", userRouter);
 app.use("/course", courseRouter);
 app.use("/comment", commentRouter);
 app.use("/search", searchRouter);
+app.use("/token", refreshRouter);
 
 app.listen(process.env.PORT, () => {
   console.log("Lauschangriff auf Port:" + process.env.PORT);
