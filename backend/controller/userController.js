@@ -95,8 +95,9 @@ export const loginUser = async (req, res) => {
       { refreshToken: jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" }) },
       { upsert: true, new: true }
     ).select("refreshToken");
+  
 
-    res.cookie("LocalTrainer", refreshToken, {
+    res.cookie("LocalTrainer", refreshToken.refreshToken, {
       maxAge: 86400000,
       httpOnly: true,
       //sameSite: "None",

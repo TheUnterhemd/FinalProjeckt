@@ -121,6 +121,7 @@ export const loginTrainer = async (req, res, next) => {
       { refreshToken: jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" }) },
       { upsert: true, new: true }
     ).select("refreshToken");
+    console.log(refreshToken);
 
     res.cookie("LocalTrainer", refreshToken.refreshToken, {
       maxAge: 86400000,
