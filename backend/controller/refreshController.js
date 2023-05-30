@@ -22,6 +22,7 @@ const generateAccessToken = (user) => {
 // Funktion zum Überprüfen des Refresh Tokens und Generieren eines neuen Access Tokens
 export const refresh = async (req, res) => {
   const refreshToken = req.cookies.LocalTrainer;
+  //console.log(req.cookies);
 
 
   if (!refreshToken) {
@@ -34,6 +35,7 @@ export const refresh = async (req, res) => {
 
     // Suche den Refresh Token in der Datenbank
     const token = await Token.findOne({ refreshToken });
+    //console.log(token + " token gefunden");
 
     if (!token) {
       return res.status(401).json({ error: 'Ungültiger Refresh Token' });
@@ -43,6 +45,7 @@ export const refresh = async (req, res) => {
     let user;
     if (token.trainer) {
       user = await Trainer.findById(token.trainer).select('-password');
+      console.log(user);
     } else if (token.user) {
       user = await User.findById(token.user).select('-password');
     } else {
