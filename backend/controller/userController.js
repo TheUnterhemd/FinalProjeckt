@@ -90,9 +90,12 @@ export const loginUser = async (req, res) => {
       },
     };
     const accessToken = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
-    const refreshToken = jwt.sign(tokenPayload, refreshSecret, {
-      expiresIn: "1d",
-    });
+    let refreshToken = await Token.findOne({ user: user._id });
+    
+    if (!refreshToken) {
+      // Erstelle ein neues Refresh Token
+      refreshToken = jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" });}
+      
     // Speichere den Refresh Token in der Datenbank
     const refresh = new Token({ refreshToken, user: user._id });
     await refresh.save();
@@ -100,6 +103,8 @@ export const loginUser = async (req, res) => {
     res.cookie("LocalTrainer", refreshToken, {
       maxAge: 86400000,
       httpOnly: true,
+      //sameSite: "None",
+      //secure: false,
     });
 
     return res.status(200).json({
