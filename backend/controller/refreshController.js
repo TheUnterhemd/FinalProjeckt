@@ -16,7 +16,7 @@ const salt = Number(process.env.SALT_ROUNDS);
 const generateAccessToken = (user) => {
   // Hier wird der Access Token generiert, abhängig von den Anforderungen deiner Anwendung
   // Beispiel: 
-  return jwt.sign({ userId: user.id }, secret, { expiresIn: '1d' });
+  return jwt.sign({ user }, secret, { expiresIn: '1h' });
 };
 
 // Funktion zum Überprüfen des Refresh Tokens und Generieren eines neuen Access Tokens
@@ -44,10 +44,15 @@ export const refresh = async (req, res) => {
     // Überprüfe, ob der Refresh Token einem Trainer oder Benutzer gehört
     let user;
     if (token.trainer) {
-      user = await Trainer.findById(token.trainer).select('-password');
-      console.log(user);
+      user = await Trainer.findById(token.trainer).select('-password').populate({
+        path: "courses",
+        populate: {
+          path: "currentStudents",
+          select: "firstName lastName imgURL",
+        },
+      });
     } else if (token.user) {
-      user = await User.findById(token.user).select('-password');
+      user = await User.findById(token.user).select('-password').populate("bookedCourses").populate("solvedCourses").populate("comments");;
     } else {
       return res.status(401).json({ error: 'Ungültiger Refresh Token' });
     }
@@ -63,8 +68,10 @@ export const refresh = async (req, res) => {
     // Generiere einen neuen Access Token
     const accessToken = generateAccessToken(user);
 
+    //user.setAccessToken(accessToken);
+
     // Sende den neuen Access Token an den Client
-    res.json({ accessToken });
+    res.json({accessToken: accessToken});
   } catch (err) {
     return res.status(401).json({ error: 'Ungültiger Refresh Token' });
   }

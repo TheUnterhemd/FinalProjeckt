@@ -66,7 +66,7 @@ function UserProfile() {
             </Typography>
 
             {/* displays if user is a trainer */}
-            {user.isTrainer && (
+            {user.trainer && (
               <>
                 <Typography variant="h4">Courses</Typography>
                 {user.courses && user.courses.length > 0 ? (
@@ -131,7 +131,7 @@ function UserProfile() {
             )}
 
             {/* displays if user is not a trainer */}
-            {!user.isTrainer && (
+            {!user.trainer && (
               <>
                 <Typography variant="h6">Interests</Typography>
                 <Typography variant="body2" gutterBottom>

@@ -79,6 +79,7 @@ export const updateCourse = async (req, res, next) => {
     start,
     end,
     duration,
+    active,
   } = req.body;
   let course;
   let imgURL;
@@ -90,7 +91,7 @@ export const updateCourse = async (req, res, next) => {
         folder: `localtrainer/picture/course/${id}`,
       });
 
-      imageURL = result.secure_url;
+      imgURL = result.secure_url;
     }
     course = await Course.findByIdAndUpdate(
       { _id: id },
@@ -105,8 +106,10 @@ export const updateCourse = async (req, res, next) => {
         end,
         duration,
         imgURL,
+        active
       }
-    );
+    ).populate("trainer", "firstName lastName imgURL _id")
+    .populate("currentStudents", "firstName lastName imgURL _id");;
 
     if (!course) {
       return res.status(500).json({ message: "Not able to update course" });
@@ -126,7 +129,7 @@ export const updateCurrentStudent = async (req, res) => {
       { _id: courseId },
       { $push: { currentStudents: userId } },
       { new: true }
-    );
+    ).populate("trainer").populate("currentStudents");
 
     if (!course) {
       return res.status(404).json({ error: 'Kurs nicht gefunden' });

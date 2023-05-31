@@ -100,7 +100,7 @@ const Navbar = () => {
                     <MenuItem component={Link} to="/user">User</MenuItem>
                     <MenuItem component={Link} to="/trainer">Trainer</MenuItem>
                     <MenuItem component={Link} to="/course">Course</MenuItem>
-                    {user?.isTrainer && (
+                    {user?.trainer && (
                       <MenuItem component={Link} to="/course/create">Create Course</MenuItem>
                     )}
                   </Menu>
@@ -116,7 +116,7 @@ const Navbar = () => {
                   <Button component={Link} to="/course">
                     Course
                   </Button>
-                  {user?.isTrainer && (
+                  {user?.trainer && (
                     <Button component={Link} to="/course/create">
                       Create Course
                     </Button>

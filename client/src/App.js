@@ -12,10 +12,38 @@ import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
 import SearchPage from "./pages/SearchPage";
+import jwt_decode from "jwt-decode";
 
 function App() {
-  const { user } = useContext(AuthContext);
-  console.log("app.js fired");
+
+  const { user, dispatch } = useContext(AuthContext);
+  console.log("user on App.js", user);
+
+  const refreshToken = async () => {
+    const url = process.env.REACT_APP_SERVER_URL;
+    
+    try {
+      const response = await fetch(`${url}/token/`, {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({}),
+        credentials: "include",
+      })
+
+      const data = await response.json();
+      const decodedToken = jwt_decode(data.accessToken);
+      dispatch({type: 'LOGIN', payload: decodedToken.user});
+    } catch (error) {
+      /* console.log(error); */
+    }
+  } 
+
+  user ? setInterval(refreshToken, 57*60*1000) : refreshToken()
+
+    
+
+
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -35,7 +63,7 @@ function App() {
           <Route
             path="/course/create"
             element={
-              user && user.isTrainer ? <CourseCreationForm /> : <LandingPage />
+              user && user.trainer ? <CourseCreationForm /> : <LandingPage />
             }
           />
         </Routes>
