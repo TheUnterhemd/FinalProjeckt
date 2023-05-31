@@ -117,6 +117,28 @@ export const updateCourse = async (req, res, next) => {
   }
 };
 
+export const updateCurrentStudent = async (req, res) => {
+  const userId = req.body.user._id;
+  const courseId = req.params.id;
+
+  try {
+    let course = await Course.findOneAndUpdate(
+      { _id: courseId },
+      { $push: { currentStudents: userId } },
+      { new: true }
+    );
+
+    if (!course) {
+      return res.status(404).json({ error: 'Kurs nicht gefunden' });
+    }
+
+    res.status(200).json({ message: 'Benutzer erfolgreich zum Kurs hinzugefügt', course });
+  } catch (error) {
+    res.status(500).json({ error: 'Interner Serverfehler' });
+  }
+};
+
+
 export const getAllCourses = async (req, res, next) => {
   let courses;
   try {
@@ -138,8 +160,8 @@ export const getCourse = async (req, res, next) => {
   const id = req.params.id;
   try {
     course = await Course.findOne({ _id: id })
-      .populate("trainer", "firstName lastName imgURL")
-      .populate("currentStudents", "firstName lastName imgURL");
+      .populate("trainer", "firstName lastName imgURL _id")
+      .populate("currentStudents", "firstName lastName imgURL _id");
     console.log(course);
   } catch (error) {
     console.log(error.message);
