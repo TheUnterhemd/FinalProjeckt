@@ -15,7 +15,7 @@ import SearchPage from "./pages/SearchPage";
 
 function App() {
   const { user } = useContext(AuthContext);
-
+  console.log("app.js fired");
   return (
     <div className="App">
       <BrowserRouter>
