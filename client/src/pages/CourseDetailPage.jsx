@@ -13,7 +13,7 @@ import FormattedDate from "../components/Data Formatting/FormattedDate";
 import { update } from "../hooks/update";
 
 export default function CourseDetailPage() {
-  const { user, dispatch } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const theme = useTheme();
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState("");

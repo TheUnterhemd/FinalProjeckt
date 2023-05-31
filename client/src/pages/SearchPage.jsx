@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useFetch } from '../hooks/useFetch';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, useMediaQuery } from '@mui/material';
 import SearchList from '../components/Search/SearchList';
 import FilterMenu from '../components/FilterMenu';
 import { SortContext } from '../context/SortContext';
+import Searchbar from '../components/Search/Searchbar';
 
 const SearchPage = () => {
     //setting up filters
@@ -30,6 +31,9 @@ const SearchPage = () => {
         }
     }, [date]);
 
+    // Check if it's mobile view
+    const isMobileView = useMediaQuery('(max-width: 600px');
+
 
     //getting query params for searchURL
     const queryString = useLocation().search;
@@ -38,9 +42,13 @@ const SearchPage = () => {
     //fetching data
     let searchURL = `http://localhost:5002/search/?q=${query}`
     const { data, isPending, error } = useFetch(searchURL);
+    console.log(data);
 
     return (
         <Container maxWidth="lg" >
+            {isMobileView && (
+                <Searchbar />
+            )}
             <FilterMenu setFilter={setFilters} data={data} />
             <Box sx={{ height: '100vh', display: "flex", flexWrap: "wrap" }}>
                 {error && <Typography variant='body1'>{error}</Typography>}
