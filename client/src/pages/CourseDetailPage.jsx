@@ -1,6 +1,7 @@
 // ToDo:
 // Bezahlfunktion?
 // update needs Authorization or validator needs to be deleted from backend
+// updateCurrentStudens URL korrigieren und nur die user und course ID übergeben
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
@@ -25,12 +26,10 @@ export default function CourseDetailPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("data in CourseDetailPage", data);
-    console.log("user in courseDetailpage", user);
     if (course) {
       setData(course);
     }
-  }, [course, user]);
+  }, [course]);
 
   /** starts booking process for a course */
   async function startBooking(e) {
