@@ -15,7 +15,6 @@ import SearchPage from "./pages/SearchPage";
 
 function App() {
   const { user } = useContext(AuthContext);
-  console.log("user on App.js", user);
 
   return (
     <div className="App">
