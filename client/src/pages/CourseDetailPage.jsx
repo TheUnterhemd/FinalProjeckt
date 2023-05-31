@@ -1,8 +1,6 @@
 // ToDo:
-// "deactivate" button for trainer who created course
-// booking function
-// updateCourse needs Authorization or validator needs to be deleted from backend
-// updateCourse + updateUser need errorhandling for newCourse / newUser
+// Bezahlfunktion?
+// update needs Authorization or validator needs to be deleted from backend
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
@@ -12,6 +10,7 @@ import { AuthContext } from "../context/AuthContext";
 import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 import MapTest from "../components/map/Map";
 import FormattedDate from "../components/Data Formatting/FormattedDate";
+import { update } from "../hooks/update";
 
 export default function CourseDetailPage() {
   const { user } = useContext(AuthContext);
@@ -20,6 +19,7 @@ export default function CourseDetailPage() {
   const [data, setData] = useState("");
 
   const url = process.env.REACT_APP_SERVER_URL;
+
   const { id } = useParams();
   const { data: course } = useFetch(`${url}/course/${id}`);
   const navigate = useNavigate();
@@ -43,6 +43,30 @@ export default function CourseDetailPage() {
     // dispatch({type:"LOGIN",payload:newUser})
   }
 
+  /** updates currentStudents Array and passes that to update-function. Returns updated Course */
+  async function updateCurrStudents() {
+    const temp = data.currentStudents?.map((student) => student._id) || [];
+    temp.push(user._id);
+    return await update(
+      `${url}/course/update/${data._id}`,
+      {
+        currentStudents: temp,
+      },
+      user.accessToken
+    );
+  }
+  /** updates bookedCourses Array and passes that to update-function. Returns updated user */
+  async function updateBookedCourses() {
+    const temp = user.bookedCourses?.map((course) => course._id);
+    temp.push(data._id);
+    return await update(
+      `${url}/user/update/${user._id}`,
+      {
+        bookedCourses: temp,
+      },
+      user.accessToken
+    );
+  }
   /** this will deactivate the course in the future */
   async function handleDelete() {
     try {
@@ -55,47 +79,13 @@ export default function CourseDetailPage() {
       console.log("error CourseDetailPage:handleDelete", error);
     }
   }
-  /** updates currentStudents Array and passes that to update-function. Returns updated Course */
-  async function updateCurrStudents() {
-    const temp = data.currentStudents?.map((student) => student._id) || [];
-    temp.push(user._id);
-    return await update(`${url}/course/update/${data._id}`, {
-      currentStudents: temp,
-    });
-  }
-  /** updates bookedCourses Array and passes that to update-function. Returns updated user */
-  async function updateBookedCourses() {
-    const temp = user.bookedCourses?.map((course) => course._id);
-    temp.push(data._id);
-    return await update(`${url}/user/update/${user._id}`, {
-      bookedCourses: temp,
-    });
-  }
-  /** updates database with specific update object at entered url (fUrl)*/
-  async function update(fUrl, update) {
-    try {
-      const result = await fetch(fUrl, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(update),
-      });
-
-      if (!result.ok) {
-        throw new Error(result.statusText);
-      }
-      console.log("result CourseDetailpage:update", result);
-      const json = await result.json();
-      console.log("json CourseDetailPage:update", json);
-      return json;
-    } catch (error) {
-      console.log("CourseDetailPage:update", error);
-    }
-  }
-
   // calculate the duration in days & hours
   const days = Math.floor(data?.duration / 24);
   const remainingHours = data?.duration % 24;
-  const duration = days === 0 ? `${remainingHours} hours` : `${days} days ${remainingHours} hours`;
+  const duration =
+    days === 0
+      ? `${remainingHours} hours`
+      : `${days} days ${remainingHours} hours`;
 
   return (
     <div>
@@ -148,7 +138,7 @@ export default function CourseDetailPage() {
             </Typography>
 
             <Box sx={{ width: "300px", height: "200px", my: 2 }}>
-              <MapTest markerOptions={[data]} />
+              <MapTest markerOptions={{ data: [data] }} />
             </Box>
             <Typography variant="body1">
               Location: {data?.location?.description}
@@ -175,8 +165,8 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                  <Avatar src={student.imgURL} alt={student.firstName} />
-                ))
+                    <Avatar src={student.imgURL} alt={student.firstName} />
+                  ))
                 : "Be the first to participate!"}
             </Box>
             {user && (
@@ -201,7 +191,9 @@ export default function CourseDetailPage() {
           <Chip label="Delete Course" onClick={() => handleDelete()}></Chip>
         </Box>
       )}
-      {edit && data && user?.isTrainer && <CourseCreationForm course={data} />}
+      {edit && data && user?.isTrainer && (
+        <CourseCreationForm course={data} setEdit={setEdit} />
+      )}
     </div>
   );
 }

@@ -90,17 +90,14 @@ export const loginUser = async (req, res) => {
       },
     };
     const accessToken = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
-    let refreshToken = await Token.findOne({ user: user._id });
-    
-    if (!refreshToken) {
-      // Erstelle ein neues Refresh Token
-      refreshToken = jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" });}
-      
-    // Speichere den Refresh Token in der Datenbank
-    const refresh = new Token({ refreshToken, user: user._id });
-    await refresh.save();
+    let refreshToken = await Token.findOneAndUpdate(
+      { user: user._id },
+      { refreshToken: jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" }) },
+      { upsert: true, new: true }
+    ).select("refreshToken");
+  
 
-    res.cookie("LocalTrainer", refreshToken, {
+    res.cookie("LocalTrainer", refreshToken.refreshToken, {
       maxAge: 86400000,
       httpOnly: true,
       //sameSite: "None",
