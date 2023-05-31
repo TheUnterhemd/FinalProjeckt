@@ -25,6 +25,10 @@ const courseSchema = new Schema({
     type: String,
     required: true,
   },
+  active:{
+    type: Boolean,
+    default: true,
+  },
   maxStudents: {
     type: String,
   },

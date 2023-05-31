@@ -20,7 +20,10 @@ export async function search(req, res, next) {
 
   try {
     trainer = await Trainer.find(trainerQuery).select('-password');
-    courses = await Course.find(courseQuery);
+    courses = await Course.find(courseQuery).populate({
+      path: "trainer",
+      select:"_id imgURL firstName lastName"
+    });
 
     res.json({ trainer, courses });
   } catch (err) {
