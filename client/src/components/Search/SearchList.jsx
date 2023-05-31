@@ -43,7 +43,7 @@ const SearchList = ({ searchData, courseFilter }) => {
     return (
         <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
             <Typography variant='h5'>Trainer:</Typography>
-            <Box display="flex" flexWrap="wrap">
+            <Box display="flex" flexWrap="wrap" justifyContent="center">
                 {searchData.trainer.length > 0 && searchData?.trainer.map((searchData) => (
                     <Box m={1} key={searchData._id}>
                         <PersonCard data={searchData} />
@@ -51,7 +51,7 @@ const SearchList = ({ searchData, courseFilter }) => {
                 ))}
             </Box>
             <Typography variant='h5'>Courses:</Typography>
-            <Box display="flex" flexWrap="wrap">
+            <Box display="flex" flexWrap="wrap" justifyContent="center">
                 {filteredCourses.length > 0 &&
                     filteredCourses.map((courseData) => (
                         <Box m={1} key={courseData._id}>

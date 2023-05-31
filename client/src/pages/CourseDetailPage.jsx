@@ -14,7 +14,7 @@ import MapTest from "../components/map/Map";
 import FormattedDate from "../components/Data Formatting/FormattedDate";
 
 export default function CourseDetailPage() {
-  const { user, dispatch } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const theme = useTheme();
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState("");

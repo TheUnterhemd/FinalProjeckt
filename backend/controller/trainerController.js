@@ -114,7 +114,7 @@ export const loginTrainer = async (req, res, next) => {
     };
 
     const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
-    let refreshToken = await Token.findOne({ trainer: trainer._id });
+    let refreshToken = await Token.findOne({ trainer: trainer._id }).select('refreshToken');
     
     if (!refreshToken) {
       // Erstelle ein neues Refresh Token
