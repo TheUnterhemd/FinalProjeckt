@@ -20,6 +20,7 @@ const Login = ({ setReg, close }) => {
   const [password, setPassword] = useState("");
   // endpoint is used to switch between users and trainers logging in
   const [endpoint, setEndpoint] = useState("user");
+  const [remember, setRemember] = useState(false);
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -29,13 +30,18 @@ const Login = ({ setReg, close }) => {
   };
 
   const postData = async ({ email, password }) => {
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    }
+
+    if (remember) {
+      options.credentials = "include";
+    }
+
     try {
-      const response = await fetch(`http://localhost:5002/${endpoint}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
-      });
+      const response = await fetch(`http://localhost:5002/${endpoint}/login`, options);
 
       const data = await response.json();
       dispatch({ type: "LOGIN", payload: data.user });
@@ -103,7 +109,7 @@ const Login = ({ setReg, close }) => {
             label="I'm a trainer"
           ></FormControlLabel>
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox value="remember" color="primary" onChange={(e) => setRemember(!remember)} />}
             label="Remember me"
           />
           <Button

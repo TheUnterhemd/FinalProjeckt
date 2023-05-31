@@ -15,8 +15,8 @@ import SearchPage from "./pages/SearchPage";
 import jwt_decode from "jwt-decode";
 
 function App() {
-  const { user } = useContext(AuthContext);
-  /* console.log("user on App.js", user); */
+  const { user, dispatch } = useContext(AuthContext);
+  console.log("user on App.js", user);
 
   const refreshToken = async () => {
     const url = process.env.REACT_APP_SERVER_URL;
@@ -30,14 +30,16 @@ function App() {
       })
 
       const data = await response.json();
-      const decodedToken = jwt_decode(data)
-      console.log(decodedToken);
+      const decodedToken = jwt_decode(data.accessToken);
+      dispatch({type: 'LOGIN', payload: decodedToken.user});
     } catch (error) {
-      console.log(error);
+      /* console.log(error); */
     }
   } 
 
- /*  setInterval(refreshToken, 15*60*1000); */
+  user ? setInterval(refreshToken, 57*60*1000) : refreshToken()
+
+    
 
 
   return (
@@ -59,7 +61,7 @@ function App() {
           <Route
             path="/course/create"
             element={
-              user && user.isTrainer ? <CourseCreationForm /> : <LandingPage />
+              user && user.trainer ? <CourseCreationForm /> : <LandingPage />
             }
           />
         </Routes>
