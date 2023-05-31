@@ -148,7 +148,9 @@ export const updateUser = async (req, res) => {
 
     const result = await User.findOneAndUpdate(filter, updates, {
       new: true,
-    }).select("-passwort");
+    }).select("-passwort").populate("bookedCourses")
+    .populate("solvedCourses")
+    .populate("comments");;
 
     res.send(result);
   } catch (error) {

@@ -9,7 +9,6 @@ import "./Map.scss";
 export default function Map({ markerOptions }) {
   // display the courses on the map
   const { data } = markerOptions;
-  console.log("data on map.jsx", data);
   const navigate = useNavigate();
 
   return (
@@ -17,6 +16,7 @@ export default function Map({ markerOptions }) {
       <MapContainer
         center={
           data &&
+          data[0] &&
           data.length === 1 &&
           !data[0].location.location.startsWith("http")
             ? {
@@ -35,6 +35,7 @@ export default function Map({ markerOptions }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {data &&
+          data[0] &&
           Array.isArray(data) &&
           data.map((course) => {
             if (!course.location.location.startsWith("http")) {

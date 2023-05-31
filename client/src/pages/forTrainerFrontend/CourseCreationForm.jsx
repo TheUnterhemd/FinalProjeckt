@@ -100,7 +100,6 @@ export default function CourseCreationForm({ course, setEdit }) {
         throw new Error("could not post course");
       }
       const json = await result.json();
-      console.log("json courseCreationForm:postdata", json);
       if (method === "POST") {
         updateTrainer(json);
       }
@@ -115,15 +114,12 @@ export default function CourseCreationForm({ course, setEdit }) {
     try {
       const temp = user.courses.map((course) => course._id) || [];
       temp.push(json.course._id);
-      const result = update(
+      const result = await update(
         `${process.env.REACT_APP_SERVER_URL}/trainer/update/${user._id}`,
-        { courses: temp }
+        { courses: temp },
+        user.accessToken
       );
-
-      console.log("result CourseCreatoinForm:updateTrainer", result);
-      const resTrainer = await result.json();
-      console.log("resTrainer CourseCreationForm:updateTrainer", resTrainer);
-      dispatch({ type: "LOGIN", payload: resTrainer.trainer });
+      dispatch({ type: "LOGIN", payload: result.trainer });
     } catch (err) {
       console.log("error in CourseCreationForm:updateTrainer", err);
     }
