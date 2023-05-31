@@ -16,7 +16,7 @@ const salt = Number(process.env.SALT_ROUNDS);
 const generateAccessToken = (user) => {
   // Hier wird der Access Token generiert, abhängig von den Anforderungen deiner Anwendung
   // Beispiel: 
-  return jwt.sign({ user }, secret, { expiresIn: '1d' });
+  return jwt.sign({ user }, secret, { expiresIn: '1h' });
 };
 
 // Funktion zum Überprüfen des Refresh Tokens und Generieren eines neuen Access Tokens
@@ -52,9 +52,7 @@ export const refresh = async (req, res) => {
         },
       });
     } else if (token.user) {
-      user = await User.findById(token.user).select('-password').populate("bookedCourses")
-      .populate("solvedCourses")
-      .populate("comments");;
+      user = await User.findById(token.user).select('-password').populate("bookedCourses").populate("solvedCourses").populate("comments");;
     } else {
       return res.status(401).json({ error: 'Ungültiger Refresh Token' });
     }
