@@ -107,7 +107,6 @@ export const loginUser = async (req, res) => {
     return res.status(200).json({
       user: {
         accessToken,
-        refreshToken,
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -116,7 +115,7 @@ export const loginUser = async (req, res) => {
         bookedCourses: user.bookedCourses,
         solvedCourses: user.solvedCourses,
         comments: user.comments,
-        isTrainer: false,
+        trainer: user.trainer
       },
       message: "User logged in",
     });
@@ -148,7 +147,7 @@ export const updateUser = async (req, res) => {
 
     const result = await User.findOneAndUpdate(filter, updates, {
       new: true,
-    }).select("-passwort").populate("bookedCourses")
+    }).select("-password").populate("bookedCourses")
     .populate("solvedCourses")
     .populate("comments");;
 

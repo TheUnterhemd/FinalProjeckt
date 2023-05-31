@@ -34,8 +34,6 @@ export const addTrainer = async (req, res) => {
     password,
     adress,
     imgURL,
-    comments,
-    likes,
     profession,
   } = req.body;
   let exist;
@@ -121,7 +119,6 @@ export const loginTrainer = async (req, res, next) => {
       { refreshToken: jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" }) },
       { upsert: true, new: true }
     ).select("refreshToken");
-    console.log(refreshToken);
 
     res.cookie("LocalTrainer", refreshToken.refreshToken, {
       maxAge: 86400000,
@@ -134,14 +131,13 @@ export const loginTrainer = async (req, res, next) => {
     return res.status(200).json({
       user: {
         accessToken,
-        refreshToken: refreshToken.refreshToken,
         _id: trainer._id,
         lastName: trainer.lastName,
         firstName: trainer.firstName,
         imgURL: trainer.imgURL,
         profession: trainer.profession,
         courses: trainer.courses,
-        isTrainer: true,
+        trainer: true,
       },
       message: "Trainer logged in",
     });
@@ -178,7 +174,13 @@ export const updateTrainer = async (req, res, next) => {
         profession,
         imgURL,
       }
-    );
+    ).select("-passwort").populate({
+      path: "courses",
+      populate: {
+        path: "currentStudents",
+        select: "firstName lastName imgURL",
+      },
+    });
 
     if (!trainer) {
       return res.status(500).json({ message: "Not able to update trainer" });
