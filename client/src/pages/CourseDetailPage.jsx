@@ -164,8 +164,8 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                    <Avatar src={student.imgURL} alt={student.firstName} />
-                  ))
+                  <Avatar src={student.imgURL} alt={student.firstName} />
+                ))
                 : "Be the first to participate!"}
             </Box>
             {user && (
@@ -180,7 +180,7 @@ export default function CourseDetailPage() {
           </Grid>
         </Grid>
       )}
-      {user && user.isTrainer && data && data?.trainer._id === user._id && (
+      {user && user.trainer && data && data?.trainer._id === user._id && (
         <Box sx={{ mt: 3 }}>
           <Chip
             label={!edit ? "Edit Course" : "Show Course"}
@@ -190,7 +190,7 @@ export default function CourseDetailPage() {
           <Chip label="Delete Course" onClick={() => handleDelete()}></Chip>
         </Box>
       )}
-      {edit && data && user?.isTrainer && (
+      {edit && data && user?.trainer && (
         <CourseCreationForm course={data} setEdit={setEdit} />
       )}
     </div>
