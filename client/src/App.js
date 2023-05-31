@@ -12,10 +12,32 @@ import TrainerDetailpage from "./pages/TrainerDetailpage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
 import SearchPage from "./pages/SearchPage";
+import jwt_decode from "jwt-decode";
 
 function App() {
   const { user } = useContext(AuthContext);
-  console.log("user on App.js", user);
+  /* console.log("user on App.js", user); */
+
+  const refreshToken = async () => {
+    const url = process.env.REACT_APP_SERVER_URL;
+    
+    try {
+      const response = await fetch(`${url}/token/`, {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({}),
+        credentials: "include",
+      })
+
+      const data = await response.json();
+      const decodedToken = jwt_decode(data)
+      console.log(decodedToken);
+    } catch (error) {
+      console.log(error);
+    }
+  } 
+
+ /*  setInterval(refreshToken, 15*60*1000); */
 
   return (
     <div className="App">
