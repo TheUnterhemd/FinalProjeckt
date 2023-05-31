@@ -75,6 +75,7 @@ export const updateCourse = async (req, res, next) => {
     price,
     location,
     maxStudents,
+    currentStudents,
     type,
     start,
     end,
@@ -101,15 +102,17 @@ export const updateCourse = async (req, res, next) => {
         price,
         location: JSON.parse(location),
         maxStudents,
+        currentStudents,
         type,
         start,
         end,
         duration,
         imgURL,
-        active
+        active,
       }
-    ).populate("trainer", "firstName lastName imgURL _id")
-    .populate("currentStudents", "firstName lastName imgURL _id");;
+    )
+      .populate("trainer", "firstName lastName imgURL _id")
+      .populate("currentStudents", "firstName lastName imgURL _id");
 
     if (!course) {
       return res.status(500).json({ message: "Not able to update course" });
@@ -129,18 +132,21 @@ export const updateCurrentStudent = async (req, res) => {
       { _id: courseId },
       { $push: { currentStudents: userId } },
       { new: true }
-    ).populate("trainer").populate("currentStudents");
+    )
+      .populate("trainer")
+      .populate("currentStudents");
 
     if (!course) {
-      return res.status(404).json({ error: 'Kurs nicht gefunden' });
+      return res.status(404).json({ error: "Kurs nicht gefunden" });
     }
 
-    res.status(200).json({ message: 'Benutzer erfolgreich zum Kurs hinzugefügt', course });
+    res
+      .status(200)
+      .json({ message: "Benutzer erfolgreich zum Kurs hinzugefügt", course });
   } catch (error) {
-    res.status(500).json({ error: 'Interner Serverfehler' });
+    res.status(500).json({ error: "Interner Serverfehler" });
   }
 };
-
 
 export const getAllCourses = async (req, res, next) => {
   let courses;
