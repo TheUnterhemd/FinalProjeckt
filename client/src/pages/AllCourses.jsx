@@ -21,34 +21,32 @@ export default function AllCourses() {
   }, [data, url]);
 
   let filteredCourses = data;
-  if (sort) {
-    switch (sort) {
-      case "ascPrice":
-        filteredCourses = filteredCourses.sort((a, b) => a.price - b.price);
-        break;
-      case "descPrice":
-        filteredCourses = filteredCourses.sort((a, b) => b.price - a.price);
-        break;
-      case "ascDate":
-        filteredCourses = filteredCourses.sort(
-          (a, b) => new Date(a.start) - new Date(b.start)
-        );
-        break;
-      case "descDate":
-        filteredCourses = filteredCourses.sort(
-          (a, b) => new Date(b.start) - new Date(a.start)
-        );
-        break;
-      default:
-    }
+
+  switch (sort) {
+    case 'ascPrice':
+      filteredCourses = filteredCourses?.sort((a, b) => a.price - b.price);
+      break;
+    case 'descPrice':
+      filteredCourses = filteredCourses?.sort((a, b) => b.price - a.price);
+      break;
+    case 'ascDate':
+      filteredCourses = filteredCourses?.sort((a, b) => new Date(a.start) - new Date(b.start));
+      break;
+    case 'descDate':
+      filteredCourses = filteredCourses?.sort((a, b) => new Date(b.start) - new Date(a.start));
+      break;
+    default:
   }
+
 
   return (
     <Container sx={{ padding: "2rem" }}>
       <Typography variant="h2">Our Courses</Typography>
       <SortMenu />
-      {data && <MapTest markerOptions={{ data }} />}
-      <Grid container spacing={2}>
+
+      {data && <MapTest markerOptions={{data}} />}
+      <Grid container spacing={2} justifyContent="center">
+
         {data &&
           filteredCourses.map((course) => (
             <Grid item key={uuid()}>
