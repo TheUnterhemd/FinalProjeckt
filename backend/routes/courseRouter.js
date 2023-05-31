@@ -9,7 +9,7 @@ const courseRouter = express.Router();
 courseRouter.post("/add",trainerValidator,upload.single("imgURL"),addCourse)
 
 courseRouter.put("/update/:id",trainerValidator,upload.single("imgURL"),updateCourse)
-courseRouter.put("/update/student/:id", userValidator, updateCurrentStudent)
+courseRouter.put("/update/:student/:id", userValidator, updateCurrentStudent)
 
 courseRouter.get("/",getAllCourses)
 courseRouter.get("/:id", getCourse)
