@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import User from "../models/userModel.js";
-import Token from "../models/refreshModel.js"
+import Token from "../models/refreshModel.js";
 
 //config
 dotenv.config();
@@ -92,10 +92,13 @@ export const loginUser = async (req, res) => {
     const accessToken = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
     let refreshToken = await Token.findOneAndUpdate(
       { user: user._id },
-      { refreshToken: jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" }) },
+      {
+        refreshToken: jwt.sign(tokenPayload, refreshSecret, {
+          expiresIn: "1d",
+        }),
+      },
       { upsert: true, new: true }
     ).select("refreshToken");
-  
 
     res.cookie("LocalTrainer", refreshToken.refreshToken, {
       maxAge: 86400000,

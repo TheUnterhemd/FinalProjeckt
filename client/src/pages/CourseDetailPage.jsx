@@ -14,7 +14,7 @@ import FormattedDate from "../components/Data Formatting/FormattedDate";
 import { update } from "../hooks/update";
 
 export default function CourseDetailPage() {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const theme = useTheme();
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState("");
@@ -35,26 +35,22 @@ export default function CourseDetailPage() {
   async function startBooking(e) {
     e.preventDefault();
     const newCourse = await updateCurrStudents();
-    console.log("newCourse CourseDetailPage:startBooking", newCourse);
-    setData(newCourse);
+    setData(newCourse.course);
     const newUser = await updateBookedCourses();
-    console.log("newUser CourseDetailPage:startBooking", newUser);
-    // dispatch({type:"LOGIN",payload:newUser})
+    dispatch({ type: "LOGIN", payload: newUser });
   }
 
-  /** updates currentStudents Array and passes that to update-function. Returns updated Course */
+  /** updates currentStudents Array and updates course in DB. Returns updated Course */
   async function updateCurrStudents() {
     const temp = data.currentStudents?.map((student) => student._id) || [];
     temp.push(user._id);
     return await update(
-      `${url}/course/update/${data._id}`,
-      {
-        currentStudents: temp,
-      },
+      `${url}/course/update/${user._id}/${data._id}`,
+      {},
       user.accessToken
     );
   }
-  /** updates bookedCourses Array and passes that to update-function. Returns updated user */
+  /** updates bookedCourses Array and updates user in db. Returns updated user */
   async function updateBookedCourses() {
     const temp = user.bookedCourses?.map((course) => course._id);
     temp.push(data._id);
@@ -66,13 +62,18 @@ export default function CourseDetailPage() {
       user.accessToken
     );
   }
+
   /** this will deactivate the course in the future */
   async function handleDelete() {
     try {
       console.log("this will deactivate the course in the future");
-      // const newCourse = update(`${url}/course/update/${data._id}`, {
-      //   active: false,
-      // });
+      // const newCourse = await update(
+      //   `${url}/course/update/${data._id}`,
+      //   {
+      //     active: false,
+      //   },
+      //   user.accessToken
+      // );
       // console.log("newCourse CourseDetailPage:handleDelete", newCourse);
     } catch (error) {
       console.log("error CourseDetailPage:handleDelete", error);
@@ -86,6 +87,7 @@ export default function CourseDetailPage() {
       ? `${remainingHours} hours`
       : `${days} days ${remainingHours} hours`;
 
+  console.log(user);
   return (
     <div>
       {!edit && data && (
@@ -164,18 +166,31 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                  <Avatar src={student.imgURL} alt={student.firstName} />
-                ))
+
+                    <Avatar
+                      src={student.imgURL}
+                      alt={student.firstName}
+                      key={student._id}
+                    />
+                  ))
+
                 : "Be the first to participate!"}
             </Box>
-            {user && (
-              <Button
-                variant="outlined"
-                sx={{ mt: 1 }}
-                onClick={(e) => startBooking(e)}
-              >
-                Book now!
-              </Button>
+            {user && !user.isTrainer && (
+              <>
+                {user.bookedCourses.filter((course) => course._id === data._id)
+                  .length === 0 ? (
+                  <Button
+                    variant="outlined"
+                    sx={{ mt: 1 }}
+                    onClick={(e) => startBooking(e)}
+                  >
+                    Book now!
+                  </Button>
+                ) : (
+                  "You booked this course already"
+                )}
+              </>
             )}
           </Grid>
         </Grid>

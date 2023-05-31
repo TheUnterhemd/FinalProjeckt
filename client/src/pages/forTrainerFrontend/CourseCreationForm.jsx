@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   Container,
   FormControlLabel,
   TextField,
@@ -302,7 +303,13 @@ export default function CourseCreationForm({ course, setEdit }) {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
-
+        {currStud &&
+          currStud.map((student) => (
+            <Box key={student._id}>
+              <Typography variant="body2">Current Participants</Typography>
+              <Chip label={student.firstName}></Chip>
+            </Box>
+          ))}
         <Button
           type="submit"
           variant="contained"

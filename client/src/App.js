@@ -15,6 +15,7 @@ import SearchPage from "./pages/SearchPage";
 import jwt_decode from "jwt-decode";
 
 function App() {
+
   const { user, dispatch } = useContext(AuthContext);
   console.log("user on App.js", user);
 
@@ -40,6 +41,7 @@ function App() {
   user ? setInterval(refreshToken, 57*60*1000) : refreshToken()
 
     
+
 
 
   return (
