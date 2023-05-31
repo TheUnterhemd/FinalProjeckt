@@ -89,11 +89,17 @@ export const loginUser = async (req, res) => {
         comments: user.comments,
       },
     };
+    const refreshTokenPayload = {
+      trainer: false,
+      data: {
+        id: user._id,
+      },
+    };
     const accessToken = jwt.sign(tokenPayload, jwtSecret, { expiresIn: "1h" });
     let refreshToken = await Token.findOneAndUpdate(
       { user: user._id },
       {
-        refreshToken: jwt.sign(tokenPayload, refreshSecret, {
+        refreshToken: jwt.sign(refreshTokenPayload, refreshSecret, {
           expiresIn: "1d",
         }),
       },
@@ -136,7 +142,6 @@ export const updateUser = async (req, res) => {
   const filter = { _id: id };
 
   const updates = req.body;
-  console.log(updates);
 
   try {
     if (req.file) {

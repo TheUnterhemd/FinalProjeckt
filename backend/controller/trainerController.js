@@ -111,12 +111,16 @@ export const loginTrainer = async (req, res, next) => {
       imgURL: trainer.imgURL,
     };
 
+    const refreshTokenPayload = {
+      id: trainer._id,
+    };
+
     const accessToken = jwt.sign(tokenPayload, secret, { expiresIn: "1h" });
 
     // Überprüfe, ob bereits ein Refresh Token für den Trainer in der Datenbank existiert
     let refreshToken = await Token.findOneAndUpdate(
       { trainer: trainer._id },
-      { refreshToken: jwt.sign(tokenPayload, refreshSecret, { expiresIn: "1d" }) },
+      { refreshToken: jwt.sign(refreshTokenPayload, refreshSecret, { expiresIn: "1d" }) },
       { upsert: true, new: true }
     ).select("refreshToken");
 
