@@ -32,7 +32,9 @@ function App() {
 
       const data = await response.json();
       const decodedToken = jwt_decode(data.accessToken);
-      dispatch({type: 'LOGIN', payload: decodedToken.user});
+      const tokenUser = decodedToken.user
+      tokenUser.accessToken = data.accessToken;
+      dispatch({type: 'LOGIN', payload: tokenUser});
     } catch (error) {
       /* console.log(error); */
     }

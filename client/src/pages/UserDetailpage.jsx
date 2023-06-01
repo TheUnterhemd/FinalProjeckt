@@ -77,6 +77,7 @@ function UserProfile() {
                     display="flex"
                     justifyContent="center"
                     alignItems="center"
+                    mb={1}
                   >
                     {showAllCourses ? (
                       user.courses.map((course) => (
@@ -115,6 +116,7 @@ function UserProfile() {
                             sx={{
                               cursor: "pointer",
                               color: theme.palette.primary.main,
+                              marginBottom: 2
                             }}
                             onClick={() => setShowAllCourses(true)}
                           >

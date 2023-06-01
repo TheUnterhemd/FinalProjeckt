@@ -166,12 +166,13 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                    <Avatar
-                      src={student.imgURL}
-                      alt={student.firstName}
-                      key={student._id}
-                    />
-                  ))
+                
+                  <Avatar
+                    src={student.imgURL}
+                    alt={student.firstName}
+                    key={student._id}
+                  />
+                ))
                 : "Be the first to participate!"}
             </Box>
             {user && !user.trainer && (
