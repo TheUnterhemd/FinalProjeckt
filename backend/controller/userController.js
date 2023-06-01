@@ -114,8 +114,8 @@ export const loginUser = async (req, res) => {
     });
 
     return res.status(200).json({
+      accessToken,
       user: {
-        accessToken,
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
