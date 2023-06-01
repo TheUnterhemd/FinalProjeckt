@@ -21,7 +21,7 @@ import { update } from "../../hooks/update";
 
 export default function CourseCreationForm({ course, setEdit }) {
   const { user, dispatch } = useContext(AuthContext);
-
+  console.log(`courseCreation`, user);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");

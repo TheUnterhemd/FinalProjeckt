@@ -167,16 +167,16 @@ export default function CourseDetailPage() {
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
 
-                    <Avatar
-                      src={student.imgURL}
-                      alt={student.firstName}
-                      key={student._id}
-                    />
-                  ))
+                  <Avatar
+                    src={student.imgURL}
+                    alt={student.firstName}
+                    key={student._id}
+                  />
+                ))
 
                 : "Be the first to participate!"}
             </Box>
-            {user && !user.isTrainer && (
+            {user && !user.trainer && (
               <>
                 {user.bookedCourses.filter((course) => course._id === data._id)
                   .length === 0 ? (

@@ -16,7 +16,7 @@ export default function AllTrainers() {
   return (
     <Container sx={{ padding: "2rem" }}>
       <Typography variant="h2">Our Trainers</Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} justifyContent="center">
         {data &&
           data.map((trainer) => (
             <Grid item key={uuid()}>
