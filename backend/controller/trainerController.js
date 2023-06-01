@@ -134,8 +134,8 @@ export const loginTrainer = async (req, res, next) => {
     });
 
     return res.status(200).json({
-      accessToken,
       user: {
+        accessToken,
         _id: trainer._id,
         lastName: trainer.lastName,
         firstName: trainer.firstName,
