@@ -103,12 +103,13 @@ export const loginTrainer = async (req, res, next) => {
     }
 
     const tokenPayload = {
+      user:{
       trainer: true,
       data: trainer._id,
       courses: trainer.courses,
       profession: trainer.profession,
       address: trainer.adress,
-      imgURL: trainer.imgURL,
+      imgURL: trainer.imgURL,}
     };
 
     const refreshTokenPayload = {

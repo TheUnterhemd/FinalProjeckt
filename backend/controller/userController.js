@@ -75,8 +75,8 @@ export const loginUser = async (req, res) => {
   const passAuth = bcrypt.compareSync(password, user.password);
   if (passAuth) {
     const tokenPayload = {
-      trainer: false,
-      data: {
+      user: {
+        trainer: false,
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
