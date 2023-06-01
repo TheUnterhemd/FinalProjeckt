@@ -17,5 +17,27 @@
     /* Stilovi za karticu kada je kliknuta */
     transform: rotate(360deg);
   }
+
+
+  /* cards responsive: */
+  @media (max-width: 600px) {
+    .card {
+      width: 100%;
+      height: auto;
+    }
+  }
   
+  @media (min-width: 601px) and (max-width: 900px) {
+    .card {
+      width: 50%;
+      height: auto;
+    }
+  }
+  
+  @media (min-width: 901px) {
+    .card {
+      width: 30%;
+      height: auto;
+    }
+  }
   

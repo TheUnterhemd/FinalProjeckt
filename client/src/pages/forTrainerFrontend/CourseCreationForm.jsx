@@ -5,6 +5,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Alert,
+  Avatar,
   Box,
   Button,
   Checkbox,
@@ -136,6 +137,16 @@ export default function CourseCreationForm({ course, setEdit }) {
       setError("");
       setImgURL(e.target.files[0]);
     }
+  }
+
+  function handleClick() {
+    console.log("chip clicked");
+  }
+  function handleDelete(id) {
+    console.log("chip deleted");
+    // setCurrStud((prevCurrStud) =>
+    //   prevCurrStud.filter((student) => student._id !== id)
+    // );
   }
 
   return (
@@ -307,7 +318,12 @@ export default function CourseCreationForm({ course, setEdit }) {
           currStud.map((student) => (
             <Box key={student._id}>
               <Typography variant="body2">Current Participants</Typography>
-              <Chip label={student.firstName}></Chip>
+              <Chip
+                avatar={<Avatar src={student.imgURL}></Avatar>}
+                label={student.firstName}
+                onClick={handleClick}
+                onDelete={() => handleDelete(student._id)}
+              ></Chip>
             </Box>
           ))}
         <Button

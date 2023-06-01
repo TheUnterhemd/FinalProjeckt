@@ -33,7 +33,7 @@ const FilterMenu = ({ setFilter, data }) => {
               width: "80%",
             }}
           >
-            {data && <MapTest markerOptions={data.courses} />}
+            {data && <MapTest markerOptions={{ data: data.courses }} />}
             <Box
               sx={{
                 display: "flex",
