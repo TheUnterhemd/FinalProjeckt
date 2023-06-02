@@ -11,7 +11,11 @@ import {
   Checkbox,
   Chip,
   Container,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -77,10 +81,8 @@ export default function CourseCreationForm({ course, setEdit }) {
     formdata.append("end", end);
     formdata.append("imgURL", imgURL);
     formdata.append("trainer", user._id);
+    formdata.append("currentStudents", currStud);
 
-    if (currStud) {
-      formdata.append("currentStudents", currStud);
-    }
     postdata(formdata);
   }
   /** calculates the duration from start to end */
@@ -142,8 +144,9 @@ export default function CourseCreationForm({ course, setEdit }) {
   function handleClick() {
     console.log("chip clicked");
   }
+  /** deletes clicked student from currStud Array */
   function handleDelete(id) {
-    console.log("chip deleted");
+    console.log("will delete student from course in the future.");
     // setCurrStud((prevCurrStud) =>
     //   prevCurrStud.filter((student) => student._id !== id)
     // );
@@ -196,19 +199,19 @@ export default function CourseCreationForm({ course, setEdit }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <TextField
-          required
-          aria-required
-          label="type"
-          fullWidth
-          rows="4"
-          name="type"
-          id="type"
-          placeholder="Course type"
-          variant="filled"
-          value={ctype}
-          onChange={(e) => setCtype(e.target.value)}
-        />
+        <FormControl fullWidth variant="filled" required>
+          <InputLabel id="course-type-label">type</InputLabel>
+          <Select
+            labelId="course-type-label"
+            id="course-type"
+            value={ctype}
+            label="type"
+            onChange={(e) => setCtype(e.target.value)}
+          >
+            <MenuItem value={"indoor"}>indoor</MenuItem>
+            <MenuItem value={"outdoor"}>outdoor</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           focused
           required

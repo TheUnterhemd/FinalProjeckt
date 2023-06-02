@@ -1,13 +1,15 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext.js";
-import { Avatar, Grid, Typography } from "@mui/material";
+import { Avatar, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SmallCards from "../components/SmallCards.jsx";
 import CourseShowcase from "../components/CourseShowcase";
+import ProfileForm from "../components/ProfileForm.jsx";
 
 /**displays the profile of the user  */
 function UserProfile() {
   const [showAllCourses, setShowAllCourses] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   // getting theme for colors
   const theme = useTheme();
@@ -20,7 +22,7 @@ function UserProfile() {
       <Typography variant="h3" sx={{ my: 2 }}>
         Your Profile
       </Typography>
-      {user && (
+      {user && !edit && (
         <Grid container spacing={2} sx={{ mt: "2rem" }}>
           <Grid
             item
@@ -116,7 +118,7 @@ function UserProfile() {
                             sx={{
                               cursor: "pointer",
                               color: theme.palette.primary.main,
-                              marginBottom: 2
+                              marginBottom: 2,
                             }}
                             onClick={() => setShowAllCourses(true)}
                           >
@@ -152,6 +154,12 @@ function UserProfile() {
           </Grid>
         </Grid>
       )}
+      <Chip
+        label={!edit ? "Edit profile" : "Show profile"}
+        onClick={() => setEdit(!edit)}
+        sx={{ mr: 1 }}
+      ></Chip>
+      {user && edit && <ProfileForm />}
     </div>
   );
 }

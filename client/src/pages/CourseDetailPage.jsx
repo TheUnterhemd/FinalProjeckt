@@ -12,7 +12,6 @@ import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 import MapTest from "../components/map/Map";
 import FormattedDate from "../components/Data Formatting/FormattedDate";
 import { update } from "../hooks/update";
-
 export default function CourseDetailPage() {
   const { user, dispatch } = useContext(AuthContext);
   const theme = useTheme();
@@ -34,24 +33,13 @@ export default function CourseDetailPage() {
   /** starts booking process for a course */
   async function startBooking(e) {
     e.preventDefault();
-    const newCourse = await updateCurrStudents();
+    const newCourse = await updateCurrStudents(user, data);
     setData(newCourse.course);
-    const newUser = await updateBookedCourses();
+    const newUser = await updateBookedCourses(user, data);
     dispatch({ type: "LOGIN", payload: newUser });
   }
-
-  /** updates currentStudents Array and updates course in DB. Returns updated Course */
-  async function updateCurrStudents() {
-    const temp = data.currentStudents?.map((student) => student._id) || [];
-    temp.push(user._id);
-    return await update(
-      `${url}/course/update/${user._id}/${data._id}`,
-      {},
-      user.accessToken
-    );
-  }
-  /** updates bookedCourses Array and updates user in db. Returns updated user */
-  async function updateBookedCourses() {
+  /** updates bookedCourses Array with current course id (data._id) and updates user in db. Returns updated user */
+  async function updateBookedCourses(user, data) {
     const temp = user.bookedCourses?.map((course) => course._id);
     temp.push(data._id);
     return await update(
@@ -63,18 +51,27 @@ export default function CourseDetailPage() {
     );
   }
 
+  /** updates currentStudents Array with current course id (data._id) and updates course in DB. Returns updated Course */
+  async function updateCurrStudents(user, data) {
+    const temp = data.currentStudents?.map((student) => student._id) || [];
+    temp.push(user._id);
+    return await update(
+      `${url}/course/update/${user._id}/${data._id}`,
+      {},
+      user.accessToken
+    );
+  }
   /** this will deactivate the course in the future */
   async function handleDelete() {
     try {
-      console.log("this will deactivate the course in the future");
-      // const newCourse = await update(
-      //   `${url}/course/update/${data._id}`,
-      //   {
-      //     active: false,
-      //   },
-      //   user.accessToken
-      // );
-      // console.log("newCourse CourseDetailPage:handleDelete", newCourse);
+      const newCourse = await update(
+        `${url}/course/update/${data._id}`,
+        {
+          active: false,
+        },
+        user.accessToken
+      );
+      console.log("newCourse CourseDetailPage:handleDelete", newCourse);
     } catch (error) {
       console.log("error CourseDetailPage:handleDelete", error);
     }
@@ -166,13 +163,12 @@ export default function CourseDetailPage() {
             <Box display="flex" gap={1}>
               {data.currentStudents.length > 0
                 ? data.currentStudents.map((student) => (
-                
-                  <Avatar
-                    src={student.imgURL}
-                    alt={student.firstName}
-                    key={student._id}
-                  />
-                ))
+                    <Avatar
+                      src={student.imgURL}
+                      alt={student.firstName}
+                      key={student._id}
+                    />
+                  ))
                 : "Be the first to participate!"}
             </Box>
             {user && !user.trainer && (
