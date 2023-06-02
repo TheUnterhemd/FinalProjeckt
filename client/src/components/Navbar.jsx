@@ -3,13 +3,21 @@ import { useTheme } from "@mui/material/styles";
 import { ColorModeContext } from "../context/ThemeContext";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { Button, Avatar, Box, IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material/";
+import {
+  Button,
+  Avatar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+} from "@mui/material/";
 import Logo from "../assets/logo/logo.png";
 import LoginRegModal from "../components/LoginRegister/LoginRegModal";
 import { Link, useNavigate } from "react-router-dom";
@@ -50,17 +58,17 @@ const Navbar = () => {
   };
 
   // Check if it's mobile view
-  const isMobileView = useMediaQuery('(max-width: 600px');
+  const isMobileView = useMediaQuery("(max-width: 600px");
 
   //handling open & close of Menu (for Mobile View)
   const [anchorEl, setAnchorEl] = useState(null);
   const openMenu = Boolean(anchorEl);
   const handleMenuOpen = (e) => {
     setAnchorEl(e.currentTarget);
-  }
+  };
   const handleMenuClose = () => {
     setAnchorEl(null);
-  }
+  };
 
   return (
     <>
@@ -79,52 +87,59 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-            {
-              isMobileView ? (
-                <>
-                  <Button
-                    variant='outlined'
-                    aria-controls={openMenu ? 'menu-Menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openMenu ? 'true' : undefined}
-                    onClick={handleMenuOpen}
-                  >
-                    <MenuIcon />
-                  </Button>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={openMenu}
-                    onClose={handleMenuClose}
-                  >
-                    <MenuItem component={Link} to="/search">Search</MenuItem>
-                    <MenuItem component={Link} to="/user">User</MenuItem>
-                    <MenuItem component={Link} to="/trainer">Trainer</MenuItem>
-                    <MenuItem component={Link} to="/course">Course</MenuItem>
-                    {user?.trainer && (
-                      <MenuItem component={Link} to="/course/create">Create Course</MenuItem>
-                    )}
-                  </Menu>
-                </>
-              ) : (
-                <Box>
-                  <Button component={Link} to="/user">
+            {isMobileView ? (
+              <>
+                <Button
+                  variant="outlined"
+                  aria-controls={openMenu ? "menu-Menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={openMenu ? "true" : undefined}
+                  onClick={handleMenuOpen}
+                >
+                  <MenuIcon />
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem component={Link} to="/search">
+                    Search
+                  </MenuItem>
+                  <MenuItem component={Link} to="/user">
                     User
-                  </Button>
-                  <Button component={Link} to="/trainer">
+                  </MenuItem>
+                  <MenuItem component={Link} to="/trainer">
                     Trainer
-                  </Button>
-                  <Button component={Link} to="/course">
+                  </MenuItem>
+                  <MenuItem component={Link} to="/course">
                     Course
-                  </Button>
+                  </MenuItem>
                   {user?.trainer && (
-                    <Button component={Link} to="/course/create">
+                    <MenuItem component={Link} to="/course/create">
                       Create Course
-                    </Button>
+                    </MenuItem>
                   )}
-                </Box>
-              )
-            }
-
+                </Menu>
+              </>
+            ) : (
+              <Box>
+                <Button component={Link} to="/user">
+                  my profile
+                </Button>
+                <Button component={Link} to="/trainer">
+                  Trainer
+                </Button>
+                <Button component={Link} to="/course">
+                  Course
+                </Button>
+                {user?.trainer && (
+                  <Button component={Link} to="/course/create">
+                    Create Course
+                  </Button>
+                )}
+              </Box>
+            )}
 
             <Box
               sx={{
@@ -144,13 +159,11 @@ const Navbar = () => {
                 <Searchbar />
               </Box>
               <Box>
-                {
-                  !isMobileView && (
-                    <IconButton color="inherit" onClick={toggleSearchbar}>
-                      <SearchIcon />
-                    </IconButton>
-                  )
-                }
+                {!isMobileView && (
+                  <IconButton color="inherit" onClick={toggleSearchbar}>
+                    <SearchIcon />
+                  </IconButton>
+                )}
                 <IconButton
                   sx={{ ml: 1 }}
                   onClick={colorMode.toggleColorMode}
@@ -164,41 +177,36 @@ const Navbar = () => {
                 </IconButton>
                 {!user && (
                   <>
-                    {
-                      isMobileView ? (
-                        <Button variant="contained" onClick={handleOpen}>
-                          <LoginIcon />
-                        </Button>
-                      ) : (
-                        <Button variant="contained" onClick={handleOpen}>
-                          Login/Register
-                        </Button>
-                      )
-                    }
+                    {isMobileView ? (
+                      <Button variant="contained" onClick={handleOpen}>
+                        <LoginIcon />
+                      </Button>
+                    ) : (
+                      <Button variant="contained" onClick={handleOpen}>
+                        Login/Register
+                      </Button>
+                    )}
                   </>
                 )}
                 {user && (
                   <>
-                    {
-                      isMobileView ? (
-                        <Button variant="contained" onClick={handleLogout}>
-                          <LogoutIcon />
-                        </Button>
-                      ) : (
-                        <Button variant="contained" onClick={handleLogout}>
-                          Logout
-                        </Button>
-                      )
-                    }
+                    {isMobileView ? (
+                      <Button variant="contained" onClick={handleLogout}>
+                        <LogoutIcon />
+                      </Button>
+                    ) : (
+                      <Button variant="contained" onClick={handleLogout}>
+                        Logout
+                      </Button>
+                    )}
                   </>
                 )}
               </Box>
             </Box>
           </Box>
         </Toolbar>
-      </AppBar >
-      {!user && <LoginRegModal open={open} close={handleClose} />
-      }
+      </AppBar>
+      {!user && <LoginRegModal open={open} close={handleClose} />}
     </>
   );
 };
