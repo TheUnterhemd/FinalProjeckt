@@ -6,6 +6,9 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import User from "../models/userModel.js";
 import Token from "../models/refreshModel.js";
+import VerifyToken from "../models/verifyToken.js";
+import crypto from 'crypto';
+import {verifyMailer} from "../validation/verifyMail.js"
 
 //config
 dotenv.config();
@@ -53,14 +56,26 @@ export const registerUser = async (req, res) => {
     }
 
     await newUser.save();
-
-    res.status(201).json({
-      message: "User saved",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Server error" });
+  } catch (error) {
+    console.log(error.message);
   }
+  //Validation Email
+  try {
+    const userToken = new VerifyToken({
+      userID: newUser._id,
+      verifyToken: crypto.randomBytes(16).toString('hex'),
+    });
+    console.log(userToken);
+    await userToken.save();
+
+    const link = `http://localhost:5002/token/verify/${userToken.verifyToken}`
+
+    await verifyMailer(newUser.email, link);
+  } catch (error) {
+    console.log(error.message);
+  }
+  return res.status(200).json({
+   message: "user saved successfully, check your email",});
 };
 
 export const loginUser = async (req, res) => {
