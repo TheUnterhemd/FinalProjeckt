@@ -30,16 +30,8 @@ cloudinary.config({
 //FUNCTIONS
 //Funktion zum Hinzufügen eines Trainers mit email zur validierung des accounts.
 export const addTrainer = async (req, res) => {
-  const {
-    courses,
-    email,
-    firstName,
-    lastName,
-    password,
-    address,
-    imgURL,
-    profession,
-  } = req.body;
+
+  const {courses,email,firstName,lastName,password,address,imgURL,profession} = req.body;
 
   let exist;
   // Überprüfen, ob der Trainer bereits existiert
