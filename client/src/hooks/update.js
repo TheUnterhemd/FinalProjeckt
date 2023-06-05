@@ -1,8 +1,9 @@
-/** updates database with specific update object at entered url - JSON.stringifies update object*/
-export async function update(url, update, authToken) {
+/** updates database with specific update object at entered url
+ - JSON.stringifies update object. default method is PUT*/
+export async function update(url, update, authToken, method = "PUT") {
   try {
     const result = await fetch(url, {
-      method: "PUT",
+      method: method,
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${authToken}`,
@@ -17,5 +18,6 @@ export async function update(url, update, authToken) {
     return json;
   } catch (error) {
     console.log("update.js", error);
+    return { error: true, content: error };
   }
 }

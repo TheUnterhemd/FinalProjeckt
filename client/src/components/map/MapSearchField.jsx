@@ -48,7 +48,7 @@ export const MapSearchField = ({ markerOptions }) => {
   useEffect(() => {
     map.addControl(searchControl);
     return () => map.removeControl(searchControl);
-  }, []);
+  });
 
   return !position ? null : <Marker position={position}></Marker>;
 };

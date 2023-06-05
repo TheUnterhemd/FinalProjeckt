@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MapTest from "./map/Map";
+
 import SortMenu from "./SortMenu";
 import { Box, Button, Typography, Slider } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -33,7 +33,6 @@ const FilterMenu = ({ setFilter, data }) => {
               width: "80%",
             }}
           >
-            {data && <MapTest markerOptions={{ data: data.courses }} />}
             <Box
               sx={{
                 display: "flex",

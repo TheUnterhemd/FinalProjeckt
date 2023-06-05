@@ -9,8 +9,12 @@ import "./Map.scss";
 export default function Map({ markerOptions }) {
   // display the courses on the map
   const { data } = markerOptions;
+  const { oneMarker } = markerOptions;
   const navigate = useNavigate();
-
+  const inputProps = {};
+  if (oneMarker) {
+    inputProps.opacity = 0.5;
+  }
   return (
     <Container sx={{ my: 1 }} disableGutters={true}>
       <MapContainer
@@ -46,10 +50,12 @@ export default function Map({ markerOptions }) {
                     lat: course.location.location.split(",")[0],
                     lng: course.location.location.split(",")[1],
                   }}
+                  alt={`Course takes place at: ${course.location.location}`}
+                  {...inputProps}
                 >
                   <Popup>
                     <span
-                      onClick={(e) => navigate(`/course/${course._id}`)}
+                      onClick={() => navigate(`/course/${course._id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       {course.title} | {course.price} €
