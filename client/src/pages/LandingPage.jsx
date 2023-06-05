@@ -3,6 +3,7 @@ import Searchbar from "../components/Search/Searchbar.jsx";
 import { Box } from "@mui/system";
 import beispielBild from "../assets/beispielBild.jpg";
 import "../styles.css"; // Dodali smo import za CSS datoteku
+import { Grid } from "@mui/material";
 
 export default function LandingPage() {
   return (
@@ -12,9 +13,10 @@ export default function LandingPage() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: "80%",
+        width: "100%",
         margin: "4rem auto",
         position: "relative",
+        padding: "2rem",
       }}
     >
       <img
@@ -37,6 +39,7 @@ export default function LandingPage() {
           width: "70%",
           borderRadius: "10px",
           boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4)",
+          
         }}
       >
         <Searchbar />
@@ -55,17 +58,20 @@ export default function LandingPage() {
         }}
       >
         <h2 style={{ marginBottom: "1rem" }}>About Local Trainer</h2>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <Card title="Our Mission" text="bla bla" />
-          <Card title="Our Goals" text="bla bla" />
-          <Card title="Our Team"  text="bla blabla blabla bla bla blabla bla blablabla bla bla blabla blabla bla bla blabla bla blablabla blabla blabla blabla bla bla blabla bla blablabla bla" />
-        </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card title="Our Mission" text="bla bla" />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card title="Our Goals" text="bla bla" />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Card
+              title="Our Team"
+              text="bla blabla blabla bla bla blabla bla blablabla bla bla blabla blabla bla bla blabla bla blablabla blabla blabla blabla bla bla blabla bla blablabla bla"
+            />
+          </Grid>
+        </Grid>
       </Box>
     </Box>
   );
@@ -79,11 +85,12 @@ function Card({ title, text }) {
   };
 
   return (
-    <Box sx= {{
-        width:"300px",
-        height:"300px",
-        overflow:"hidden",
-    }}
+    <Box
+      sx={{
+        width: "300px",
+        height: "300px",
+        overflow: "hidden",
+      }}
       className={`card ${isClicked ? "active" : ""}`}
       onClick={handleClick}
     >
@@ -104,4 +111,3 @@ function Card({ title, text }) {
     </Box>
   );
 }
-
