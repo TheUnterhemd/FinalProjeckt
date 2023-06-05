@@ -26,7 +26,6 @@ import { update } from "../../hooks/update";
 
 export default function CourseCreationForm({ course, setEdit }) {
   const { user, dispatch } = useContext(AuthContext);
-  console.log(`courseCreation`, user);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -67,7 +66,7 @@ export default function CourseCreationForm({ course, setEdit }) {
   /** submits the entered data as formdata/multipart */
   function handleCourseSubmit(e) {
     e.preventDefault();
-
+    console.log("CurrStud in CourseCreationForm:handleCourseSubmit", currStud);
     const formdata = new FormData();
 
     formdata.append("title", title);
@@ -81,8 +80,11 @@ export default function CourseCreationForm({ course, setEdit }) {
     formdata.append("end", end);
     formdata.append("imgURL", imgURL);
     formdata.append("trainer", user._id);
-    formdata.append("currentStudents", currStud);
-
+    formdata.append(
+      "currentStudents",
+      currStud.map((student) => student._id)
+    );
+    setError("");
     postdata(formdata);
   }
   /** calculates the duration from start to end */
@@ -110,6 +112,7 @@ export default function CourseCreationForm({ course, setEdit }) {
       navigate(`/course/${json.course._id}`);
       if (setEdit) setEdit(false);
     } catch (err) {
+      setError(err);
       console.log("error while posting:", err);
     }
   }
@@ -123,9 +126,13 @@ export default function CourseCreationForm({ course, setEdit }) {
         { courses: temp },
         user.accessToken
       );
+      if (result.error) {
+        throw new Error("Error when updating Trainer");
+      }
       dispatch({ type: "LOGIN", payload: result.trainer });
     } catch (err) {
       console.log("error in CourseCreationForm:updateTrainer", err);
+      setError(err);
     }
   }
 
@@ -141,9 +148,6 @@ export default function CourseCreationForm({ course, setEdit }) {
     }
   }
 
-  function handleClick() {
-    console.log("chip clicked");
-  }
   /** deletes clicked student from currStud Array */
   function handleDelete(id) {
     console.log("will delete student from course in the future.");
@@ -240,7 +244,9 @@ export default function CourseCreationForm({ course, setEdit }) {
         />
         {online && (
           <Box>
-            <MapTest markerOptions={{ setLocation, data: [course] }} />
+            <MapTest
+              markerOptions={{ setLocation, data: [course], oneMarker: true }}
+            />
           </Box>
         )}
         <TextField
@@ -324,7 +330,6 @@ export default function CourseCreationForm({ course, setEdit }) {
               <Chip
                 avatar={<Avatar src={student.imgURL}></Avatar>}
                 label={student.firstName}
-                onClick={handleClick}
                 onDelete={() => handleDelete(student._id)}
               ></Chip>
             </Box>

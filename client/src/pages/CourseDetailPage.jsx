@@ -5,7 +5,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { Avatar, Box, Button, Chip, Grid, Typography } from "@mui/material";
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { AuthContext } from "../context/AuthContext";
 import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
@@ -17,6 +25,7 @@ export default function CourseDetailPage() {
   const theme = useTheme();
   const [edit, setEdit] = useState(false);
   const [data, setData] = useState("");
+  const [error, setError] = useState("");
 
   const url = process.env.REACT_APP_SERVER_URL;
 
@@ -34,6 +43,9 @@ export default function CourseDetailPage() {
   async function startBooking(e) {
     e.preventDefault();
     const newCourse = await updateCurrStudents(user, data);
+    if (newCourse.error) {
+      return setError(newCourse.content);
+    }
     setData(newCourse.course);
     const newUser = await updateBookedCourses(user, data);
     dispatch({ type: "LOGIN", payload: newUser });
@@ -84,11 +96,11 @@ export default function CourseDetailPage() {
       ? `${remainingHours} hours`
       : `${days} days ${remainingHours} hours`;
 
-  console.log(user);
   return (
     <div>
       {!edit && data && (
         <Grid container spacing={2} sx={{ mt: "2rem" }}>
+          {error && <Alert severity="error">{error}</Alert>}
           <Grid
             item
             xs={12}

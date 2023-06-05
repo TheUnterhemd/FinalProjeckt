@@ -1,7 +1,7 @@
 import { Button, Box, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-
+import { update } from "../hooks/update";
 export default function CommentForm({ data, setCounter, setCommentList }) {
   const { user } = useContext(AuthContext);
   const [comment, setComment] = useState("");
@@ -11,28 +11,25 @@ export default function CommentForm({ data, setCounter, setCommentList }) {
   /** submits comment to database, updates comment array on TrainerDetailpage and increases commentCounter */
   async function handleCommentSubmit(e) {
     e.preventDefault();
-    const update = { body: comment, trainerId: data._id, userId: user._id };
+    const updateObj = { body: comment, trainerId: data._id, userId: user._id };
     try {
-      const result = await fetch(`${url}/comment/add/`, {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(update),
-      });
-      if (!result.ok) {
-        throw new Error(result.statusText);
+      const result = await update(
+        `${url}/comment/add/`,
+        updateObj,
+        user.accessToken,
+        "POST"
+      );
+      if (result.error) {
+        throw new Error("could not add comment");
       }
-      const json = await result.json();
 
       setCommentList((prevCommentList) => {
         const temp = prevCommentList;
-        temp.push(json.comment);
+        temp.push(result.comment);
         return temp;
       });
     } catch (err) {
-      console.log("error", err);
+      console.log("error in handleCommentSubmit", err);
     }
     setCounter((prevCounter) => prevCounter + 1);
     setComment("");

@@ -72,7 +72,7 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="static" /* width="100%" */>
+      <AppBar position="static" color="primary" /* width="100%" */>
         <Toolbar>
           <Avatar
             alt="Logo"
