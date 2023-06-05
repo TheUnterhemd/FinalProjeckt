@@ -91,7 +91,7 @@ export const updateCourse = async (req, res, next) => {
 
 // Überprüfen, ob der Trainer, der die Anfrage sendet, der Eigentümer des Kurses ist
 // ID des angemeldeten Trainers aus dem Authentifizierungstoken
-    const trainerId = req.user.data; 
+    const trainerId = req.trainer.id; 
     const trainer = await Trainer.findById(trainerId);
 
     if (!trainer) {
