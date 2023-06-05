@@ -8,10 +8,10 @@ const setUndefined = (val) => (val === "" ? undefined : val);
     firstName: {type: String, required: true, set: setUndefined},
     lastName: {type: String, required: true, set: setUndefined},
     address: {
-      street: {type: String, required: true, set: setUndefined},
-      number: {type: String, required: true, set: setUndefined},
-      code: {type: String, required: true, set: setUndefined},
-      city: {type: String, required: true, set: setUndefined}
+      street: {type: String, set: setUndefined},
+      number: {type: String, set: setUndefined},
+      code: {type: String, set: setUndefined},
+      city: {type: String, set: setUndefined}
     },
     email: {type: String, required: true, set: setUndefined},
     password: {type: String, required: true, set: setUndefined},
