@@ -2,14 +2,21 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+const setUndefined = (val) => (val === "" ? undefined : val);
+
  const userSchema = new Schema({
-    firstName: {type: String, required: true, set: a => a === '' ? undefined : a},
-    lastName: {type: String, required: true, set: b => b === '' ? undefined : b},
-    address: {type: String, set: c => c === '' ? undefined : c},
-    email: {type: String },
-    password: {type: String, required: true, set: d => d === '' ? undefined : d},
-    imgURL: {type: String, default: "https://res.cloudinary.com/dhdugvhj3/image/upload/v1680609327/default_profile_picture/default_profile_picture_qssq71.jpg", set: e => e === '' ? undefined : e},
-    interests: {type: [String], set: f => f === '' ? undefined : f},
+    firstName: {type: String, required: true, set: setUndefined},
+    lastName: {type: String, required: true, set: setUndefined},
+    address: {
+      street: {type: String, required: true, set: setUndefined},
+      number: {type: String, required: true, set: setUndefined},
+      code: {type: String, required: true, set: setUndefined},
+      city: {type: String, required: true, set: setUndefined}
+    },
+    email: {type: String, required: true, set: setUndefined},
+    password: {type: String, required: true, set: setUndefined},
+    imgURL: {type: String, default: "https://res.cloudinary.com/dhdugvhj3/image/upload/v1680609327/default_profile_picture/default_profile_picture_qssq71.jpg", set: setUndefined},
+    interests: {type: [String], set: setUndefined},
     bookedCourses:[{ type: Schema.Types.ObjectId, ref: 'Course' }],
     solvedCourses:[{ type: Schema.Types.ObjectId, ref: 'Course' }],
     comments:[{ type: Schema.Types.ObjectId, ref: 'Comment' }],
