@@ -1,6 +1,7 @@
 import Course from "../models/courseModel.js";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
+import Trainer from "../models/trainerModel.js";
 
 //ENVIROMENTALS
 const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -68,32 +69,42 @@ export const addCourse = async (req, res, next) => {
 };
 
 export const updateCourse = async (req, res, next) => {
+// Die ID des Kurses, der aktualisiert werden soll
   const id = req.params.id;
-  const {
-    title,
-    description,
-    price,
-    location,
-    maxStudents,
-    currentStudents,
-    type,
-    start,
-    end,
-    duration,
-    active,
-  } = req.body;
+// Die zu aktualisierenden Informationen
+  const {title,description,price,location,maxStudents,currentStudents,type,start,end,duration,active,} = req.body;
+// Variable, um den aktualisierten Kurs zu speichern 
   let course;
+// Variable für das Bild-URL des Kurses (falls vorhanden)
   let imgURL;
 
   try {
+// Wenn eine Datei (Bild) in der Anfrage enthalten ist, wird sie zu Cloudinary hochgeladen
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `picture_${id}`,
         folder: `localtrainer/picture/course/${id}`,
       });
 
-      imgURL = result.secure_url;
+      imgURL = result.secure_url; // Die sichere URL des hochgeladenen Bildes wird gespeichert
     }
+
+// Überprüfen, ob der Trainer, der die Anfrage sendet, der Eigentümer des Kurses ist
+// ID des angemeldeten Trainers aus dem Authentifizierungstoken
+    const trainerId = req.user.data; 
+    const trainer = await Trainer.findById(trainerId);
+
+    if (!trainer) {
+      return res.status(404).json({ message: "Trainer not found" });
+    }
+
+// Überprüfen, ob der Trainer der Eigentümer des Kurses ist
+    if (!trainer.courses.includes(id)) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to update this course" });
+    }
+// Kurs in der Datenbank anhand der ID aktualisieren und die neuen Informationen setzen
     course = await Course.findByIdAndUpdate(
       { _id: id },
       {
@@ -114,9 +125,12 @@ export const updateCourse = async (req, res, next) => {
       .populate("trainer", "firstName lastName imgURL _id")
       .populate("currentStudents", "firstName lastName imgURL _id");
 
+// Wenn kein Kurs gefunden wurde, gibt es einen Fehler bei der Aktualisierung
     if (!course) {
       return res.status(500).json({ message: "Not able to update course" });
     }
+
+// Erfolgreiche Aktualisierung des Kurses und den aktualisierten Kurs zurückgeben
     return res.status(200).json({ course, message: "Course updated" });
   } catch (error) {
     console.log(error.message);
