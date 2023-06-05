@@ -1,9 +1,18 @@
+// carousel mora da bude veci
 import React, { useState } from "react";
 import Searchbar from "../components/Search/Searchbar.jsx";
 import { Box } from "@mui/system";
 import beispielBild from "../assets/beispielBild.jpg";
-import "../styles.css"; // Dodali smo import za CSS datoteku
+import "../styles.css";
 import { Grid } from "@mui/material";
+import {
+  CarouselProvider,
+  Slider,
+  Slide,
+  ButtonBack,
+  ButtonNext,
+} from "pure-react-carousel";
+import "pure-react-carousel/dist/react-carousel.es.css";
 
 export default function LandingPage() {
   return (
@@ -39,7 +48,6 @@ export default function LandingPage() {
           width: "70%",
           borderRadius: "10px",
           boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4)",
-          
         }}
       >
         <Searchbar />
@@ -72,6 +80,17 @@ export default function LandingPage() {
             />
           </Grid>
         </Grid>
+      </Box>
+      <Box
+        sx={{
+          marginTop: "2rem",
+          width: "100%",  // Povećana širina Carousel kontejnera
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Carousel />
       </Box>
     </Box>
   );
@@ -109,5 +128,39 @@ function Card({ title, text }) {
         </h2>
       )}
     </Box>
+  );
+}
+
+function Carousel() {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const handleSlideChange = (index) => {
+    setActiveSlide(index);
+  };
+
+  return (
+    <CarouselProvider
+      naturalSlideWidth={100}
+      naturalSlideHeight={125}
+      totalSlides={2}
+      visibleSlides={1}
+      step={1}
+      currentSlide={activeSlide}
+      className="carousel-container"
+    >
+      <Slider>
+        <Slide index={0}>
+          <h2>Online Course</h2>
+          <img src="../assets/onlineCourse.jpg" alt="Online Course" />
+        </Slide>
+        <Slide index={1}>
+          <h2>Outdoor Course</h2>
+          <img src="../assets/outdoorCourse.jpg" alt="Outdoor Course" />
+        </Slide>
+      </Slider>
+
+      <ButtonBack>{"<"}</ButtonBack>
+      <ButtonNext>{">"}</ButtonNext>
+    </CarouselProvider>
   );
 }
