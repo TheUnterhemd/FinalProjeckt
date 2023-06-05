@@ -78,6 +78,8 @@ const Navbar = () => {
             alt="Logo"
             src={Logo}
             sx={{ width: "80px", height: "80px" }}
+            component={Link}
+            to="/"
           />
           <Box
             sx={{
@@ -107,7 +109,7 @@ const Navbar = () => {
                     Search
                   </MenuItem>
                   <MenuItem component={Link} to="/user">
-                    User
+                    My Profile
                   </MenuItem>
                   <MenuItem component={Link} to="/trainer">
                     Trainer

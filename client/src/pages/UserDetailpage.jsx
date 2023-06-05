@@ -5,11 +5,13 @@ import { useTheme } from "@mui/material/styles";
 import SmallCards from "../components/SmallCards.jsx";
 import CourseShowcase from "../components/CourseShowcase";
 import ProfileForm from "../components/ProfileForm.jsx";
+import EmailPasswordForm from "../components/EmailPasswordForm.jsx";
 
 /**displays the profile of the user  */
 function UserProfile() {
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [edit, setEdit] = useState(false);
+  const [updatePW, setUpdatePW] = useState(false);
 
   // getting theme for colors
   const theme = useTheme();
@@ -22,7 +24,7 @@ function UserProfile() {
       <Typography variant="h3" sx={{ my: 2 }}>
         Your Profile
       </Typography>
-      {user && !edit && (
+      {user && !edit && !updatePW && (
         <Grid container spacing={2} sx={{ mt: "2rem" }}>
           <Grid
             item
@@ -154,12 +156,26 @@ function UserProfile() {
           </Grid>
         </Grid>
       )}
-      <Chip
-        label={!edit ? "Edit profile" : "Show profile"}
-        onClick={() => setEdit(!edit)}
-        sx={{ mr: 1 }}
-      ></Chip>
+      {
+        !updatePW && (
+          <Chip
+            label={!edit ? "Edit profile" : "Show profile"}
+            onClick={() => setEdit(!edit)}
+            sx={{ mr: 1 }}
+          ></Chip>
+        )
+      }
+      {
+        !edit && (
+          <Chip
+            label={!updatePW ? "Update Password/Email" : "Show profile"}
+            onClick={() => setUpdatePW(!updatePW)}
+            sx={{ mr: 1 }}
+          ></Chip>
+        )
+      }
       {user && edit && <ProfileForm />}
+      {user && updatePW && <EmailPasswordForm />}
     </div>
   );
 }
