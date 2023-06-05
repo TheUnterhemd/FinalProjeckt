@@ -44,7 +44,7 @@ export default function CourseCreationForm({ course, setEdit }) {
 
   const navigate = useNavigate();
   const today = new Date();
-
+  console.log(user);
   // loads course data, if provided
   useEffect(() => {
     if (course) {
@@ -66,7 +66,6 @@ export default function CourseCreationForm({ course, setEdit }) {
   /** submits the entered data as formdata/multipart */
   function handleCourseSubmit(e) {
     e.preventDefault();
-    console.log("CurrStud in CourseCreationForm:handleCourseSubmit", currStud);
     const formdata = new FormData();
 
     formdata.append("title", title);
@@ -80,10 +79,13 @@ export default function CourseCreationForm({ course, setEdit }) {
     formdata.append("end", end);
     formdata.append("imgURL", imgURL);
     formdata.append("trainer", user._id);
-    formdata.append(
-      "currentStudents",
-      currStud.map((student) => student._id)
-    );
+    if (currStud) {
+      formdata.append(
+        "currentStudents",
+        JSON.stringify(currStud?.map((student) => student._id))
+      );
+    }
+
     setError("");
     postdata(formdata);
   }
@@ -176,7 +178,7 @@ export default function CourseCreationForm({ course, setEdit }) {
         <Typography variant="h3">
           {course ? "Update your course" : "Create a Course"}
         </Typography>
-        {error && <Alert severity="error"> {error}</Alert>}
+        {error && <Alert severity="error"> {error.message}</Alert>}
         <TextField
           required
           aria-required
