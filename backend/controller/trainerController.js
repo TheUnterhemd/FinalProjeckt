@@ -49,7 +49,7 @@ export const addTrainer = async (req, res) => {
   const hashedPW = bcrypt.hashSync(password, salt);
 
 // Ein neues Trainer-Objekt erstellen
-  const trainer = new Trainer({lastName,firstName,adress,email,password: hashedPW,courses,imgURL,profession,});
+  const trainer = new Trainer({lastName,firstName,address,email,password: hashedPW,courses,imgURL,profession,});
 
 // Trainer in der Datenbank speichern
   try {
@@ -130,7 +130,7 @@ export const loginTrainer = async (req, res, next) => {
         data: trainer._id,
         courses: trainer.courses,
         profession: trainer.profession,
-        address: trainer.adress,
+        address: trainer.address,
         imgURL: trainer.imgURL,
       },
     };
@@ -188,7 +188,7 @@ export const updateTrainer = async (req, res, next) => {
 // Die ID des Trainers, der aktualisiert werden soll
   const id = req.params.id;
 // Die zu aktualisierenden Informationen
-  const { courses, adress, profession } = req.body;
+  const { courses, address, profession } = req.body;
 // Variable, um den aktualisierten Trainer zu speichern
   let trainer;
 // Variable für das Bild-URL des Trainers (falls vorhanden) 
@@ -210,7 +210,7 @@ export const updateTrainer = async (req, res, next) => {
       { _id: id },
       {
         courses,
-        adress,
+        address,
         profession,
         imgURL,
       }
