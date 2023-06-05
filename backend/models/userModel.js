@@ -14,6 +14,7 @@ const Schema = mongoose.Schema;
     solvedCourses:[{ type: Schema.Types.ObjectId, ref: 'Course' }],
     comments:[{ type: Schema.Types.ObjectId, ref: 'Comment' }],
     trainer: {type: Boolean,default: false},
+    verified:{type: Boolean,default: false}
  })
 
 

@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import Token from "../models/refreshModel.js"
+import VerifyToken from "../models/verifyToken.js";
+import crypto from 'crypto';
+import {verifyMailer} from "../validation/verifyMail.js"
 
 //CONFIGS
 dotenv.config();
@@ -73,9 +76,23 @@ export const addTrainer = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
+  //Validation Email
+  try {
+    const trainerToken = new VerifyToken({
+      userID: trainer._id,
+      verifyToken: crypto.randomBytes(16).toString('hex'),
+    });
+    console.log(trainerToken);
+    await trainerToken.save();
+
+    const link = `http://localhost:5002/token/verify/${trainerToken.verifyToken}`
+
+    await verifyMailer(trainer.email, link);
+  } catch (error) {
+    console.log(error.message);
+  }
   return res.status(200).json({
-    message: "trainer saved successfully",
-  });
+   message: "trainer saved successfully, check your email",});
 };
 
 export const loginTrainer = async (req, res, next) => {

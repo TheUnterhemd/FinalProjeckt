@@ -35,6 +35,7 @@ const trainerSchema = new Schema({
         type: Boolean,
         default: true,
     },
+    verified:{type: Boolean,default: false},
     courses: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
 })
