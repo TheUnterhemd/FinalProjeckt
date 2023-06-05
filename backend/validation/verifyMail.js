@@ -1,4 +1,4 @@
-import nodemailer from   'nodemailer';
+import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 import VerifyToken from '../models/verifyToken.js';
 import User from '../models/userModel.js';
@@ -7,58 +7,57 @@ import Trainer from '../models/trainerModel.js';
 dotenv.config();
 
 //send mail in user- and trainerController
-export const verifyMailer = async (email,link) =>
-{
+export const verifyMailer = async (email, link) => {
     try {
-        let transporter = nodemailer.createTransport({
-            service: "smtp.sendgrid.net",
-            port: 465,
-            auth:{
-                user: process.env.NODEMAIL_USER,
-                pass: process.env.NODEMAIL_PASS
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        })
-
-    let mail = await transporter.sendMail({
-        from: process.env.NODEMAIL_USER,
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  
+      const msg = {
         to: email,
-        subject: 'verify your email',
-        text: ' welcome to LocalTrainer.com',
-        html:`
-        <div>
-        <a href=${link}>Click here to activate your account</a>
-        </div>`
-    })
-    console.log('mail sended successfully');
-}catch(error) {
-    console.log(error.message);
-}};
+        from: process.env.SENDER_EMAIL,
+        subject: 'Verify Your Email',
+        text: 'Welcome to LocalTrainer.com',
+        html: `<div><a href=${link}>Click here to activate your account</a></div>`
+      };
+  
+      await sgMail.send(msg);
+      console.log('Mail sent successfully');
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+  };
 
 //confirm mail in tokenRouter
-export const confirmMail = async (req,res) =>{
+export const confirmMail = async (req, res) => {
     try {
-        const token = await VerifyToken.findOne({token: req.params.token});
+        const token = await VerifyToken.findOne({ verifyToken: req.params.token });
 
-        if(!token){ res.status(403).send("no token found")}
-
-        const user = await User.updateOne({_id: token.userID},{$set:{verified: true}});
-            
-            if(!user){
-                const trainer = await Trainer.updateOne({_id: token.userID},{$set:{verified:true}});
-
-                if(!trainer && !user){
-                    res.status(403).send("no user or trainer found");
-                }
-            
-            }
-
-            await TokenExpiredError.findByIdAndRemove(token._id)
-            res.status(200).send("Email verified")
+        if (!token) {
+            return res.status(403).send("No token found");
         }
-     catch (error) {
+
+        let updateResult;
+
+        const trainer = await Trainer.findOne({ _id: token.userID });
+        if (trainer) {
+            updateResult = await Trainer.updateOne(
+                { _id: token.userID },
+                { $set: { verified: true } }
+            );
+        } else {
+            updateResult = await User.updateOne(
+                { _id: token.userID },
+                { $set: { verified: true } }
+            );
+        }
+
+        if (!updateResult) {
+            return res.status(403).send("No user or trainer found");
+        }
+
+        await VerifyToken.findByIdAndRemove(token._id);
+        return res.status(200).send("Email verified");
+    } catch (error) {
         console.log(error.message);
+        return res.status(500).send("Internal server error");
     }
-}
+};
