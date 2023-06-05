@@ -1,5 +1,4 @@
 //imports
-/* import express from 'express'; */
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -85,7 +84,12 @@ export const loginUser = async (req, res) => {
     .populate("bookedCourses")
     .populate("solvedCourses")
     .populate("comments");
+
   if (!user) return res.status(400).json({ msg: "User does not exist. " });
+
+  if (!user.verified) {
+    return res.status(401).json({ message: "User not verified" });
+  }
 
   const passAuth = bcrypt.compareSync(password, user.password);
   if (passAuth) {
