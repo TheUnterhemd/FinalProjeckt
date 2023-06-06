@@ -14,10 +14,15 @@ export const addComment = async (req, res, next) => {
 
   try {
     await comment.save();
+
+    const populatedComment = await comment
+      .populate("trainerId', 'firstName lastName imgURL")
+      .populate('userId', 'firstName lastName imgURL')
+
   } catch (error) {
     console.log(error.message);
   }
-  return res.status(200).json({ comment, message: "comment added" });
+  return res.status(200).json({ populatedComment, message: "comment added" });
 };
 
 export const updateComment = async (req, res, next) => {
