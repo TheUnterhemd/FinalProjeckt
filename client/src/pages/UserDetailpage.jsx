@@ -19,6 +19,18 @@ function UserProfile() {
   // getting the logged in user out of AuthContext
   const { user } = useContext(AuthContext);
 
+  let upcomingCourses = user?.courses.filter((course) => {
+    const courseStartDate = course.start.split("T")[0];
+    const today = new Date().toISOString().split("T")[0];
+    return courseStartDate >= today;
+  })
+
+  let pastCourses = user?.courses.filter((course) => {
+    const courseStartDate = course.start.split("T")[0];
+    const today = new Date().toISOString().split("T")[0];
+    return courseStartDate <= today;
+  })
+
   return (
     <div>
       <Typography variant="h3" sx={{ my: 2 }}>
@@ -72,8 +84,8 @@ function UserProfile() {
             {/* displays if user is a trainer */}
             {user.trainer && (
               <>
-                <Typography variant="h4">Courses</Typography>
-                {user.courses && user.courses.length > 0 ? (
+                <Typography variant="h4">Upcoming Courses</Typography>
+                {upcomingCourses && upcomingCourses.length > 0 ? (
                   <Grid
                     container
                     spacing={2}
@@ -84,7 +96,7 @@ function UserProfile() {
                     mb={1}
                   >
                     {showAllCourses ? (
-                      user.courses.map((course) => (
+                      upcomingCourses.map((course) => (
                         <Grid
                           item
                           md={12}
@@ -100,7 +112,7 @@ function UserProfile() {
                       ))
                     ) : (
                       <>
-                        {user.courses.slice(0, 3).map((course) => (
+                        {upcomingCourses.slice(0, 3).map((course) => (
                           <Grid
                             item
                             md={12}
@@ -114,7 +126,7 @@ function UserProfile() {
                             <CourseShowcase data={course} />
                           </Grid>
                         ))}
-                        {user.courses.length > 3 && (
+                        {upcomingCourses.length > 3 && (
                           <Typography
                             variant="body2"
                             sx={{
@@ -131,7 +143,69 @@ function UserProfile() {
                     )}
                   </Grid>
                 ) : (
-                  "Currrently no courses offered."
+                  "Currrently no upcoming courses."
+                )}
+                {/* Past Courses */}
+                <Typography variant="h4">Past Courses</Typography>
+                {pastCourses && pastCourses.length > 0 ? (
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ width: "60%" }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    mb={1}
+                  >
+                    {showAllCourses ? (
+                      pastCourses.map((course) => (
+                        <Grid
+                          item
+                          md={12}
+                          lg={6}
+                          xl={4}
+                          key={course._id}
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <CourseShowcase data={course} />
+                        </Grid>
+                      ))
+                    ) : (
+                      <>
+                        {pastCourses.slice(0, 3).map((course) => (
+                          <Grid
+                            item
+                            md={12}
+                            lg={6}
+                            xl={4}
+                            key={course._id}
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <CourseShowcase data={course} />
+                          </Grid>
+                        ))}
+                        {pastCourses.length > 3 && (
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              cursor: "pointer",
+                              color: theme.palette.primary.main,
+                              marginBottom: 2,
+                            }}
+                            onClick={() => setShowAllCourses(true)}
+                          >
+                            Show more...
+                          </Typography>
+                        )}
+                      </>
+                    )}
+                  </Grid>
+                ) : (
+                  "No past courses to display."
                 )}
               </>
             )}
