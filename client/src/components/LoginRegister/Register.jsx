@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   Avatar,
   Button,
@@ -11,23 +11,20 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
 
-const Register = ({ setLogin, close }) => {
-  const { dispatch } = useContext(AuthContext);
+const Register = ({
+  setLogin,
+  setErrorMessage,
+  setErrorToast,
+  setOpenToast,
+}) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [imgURL, setImgURL] = useState();
-  // as long as there is only one Frontend: State to check if
-  // sb wants to register as trainer, then the URL in
-  // postData will be changed
   const [endpoint, setEndpoint] = useState("user");
-
   const [profession, setProfession] = useState("");
-  const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -53,15 +50,25 @@ const Register = ({ setLogin, close }) => {
           body: formData,
         }
       );
+      if (!response.ok) {
+        throw new Error({ msg: "could not register user, really sorry." });
+      }
 
-      const data = await response.json();
+      await handleSuccess();
+      setLogin();
     } catch (error) {
+      handleError(error);
       console.log(error);
-    } finally {
-      close();
-      navigate("/");
     }
   };
+
+  async function handleSuccess() {
+    setOpenToast(true);
+  }
+  function handleError(error) {
+    setErrorToast(true);
+    if (error.msg) setErrorMessage(error.msg);
+  }
 
   return (
     <>
