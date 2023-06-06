@@ -43,6 +43,13 @@ const SearchList = ({ searchData, courseFilter }) => {
     }
   }
 
+  //filter to only show courses that are upcoming
+  filteredCourses = filteredCourses.filter((course) => {
+    const courseStartDate = course.start.split("T")[0];
+    const today = new Date().toISOString().split("T")[0];
+    return courseStartDate >= today;
+  })
+
   return (
     <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
       {searchData && <MapTest markerOptions={{ data: filteredCourses }} />}

@@ -10,6 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import {
+  Alert,
   Button,
   Avatar,
   Box,
@@ -209,6 +210,7 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
       {!user && <LoginRegModal open={open} close={handleClose} />}
+      {user && !user.verified && <Alert severity="warning">Please verify your E-Mail! You'll have limited access until then!</Alert>}
     </>
   );
 };

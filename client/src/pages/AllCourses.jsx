@@ -38,13 +38,20 @@ export default function AllCourses() {
     default:
   }
 
+  //filter to only show courses that are upcoming
+  filteredCourses = filteredCourses?.filter((course) => {
+    const courseStartDate = course.start.split("T")[0];
+    const today = new Date().toISOString().split("T")[0];
+    return courseStartDate >= today;
+  })
+
 
   return (
     <Container sx={{ padding: "2rem" }}>
       <Typography variant="h2">Our Courses</Typography>
       <SortMenu />
 
-      {data && <MapTest markerOptions={{data}} />}
+      {data && <MapTest markerOptions={{ data }} />}
       <Grid container spacing={2} justifyContent="center">
 
         {data &&
