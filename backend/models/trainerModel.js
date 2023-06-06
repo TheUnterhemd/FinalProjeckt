@@ -8,7 +8,6 @@ const trainerSchema = new Schema({
   firstName: { type: String, set: setUndefined, required: true },
   lastName: { type: String, set: setUndefined, required: true },
   address: {
-
     street: {type: String,set: setUndefined,},
     number: {type: Number,set: setUndefined,},
     code: {type: Number,set: setUndefined,},

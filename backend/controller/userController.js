@@ -81,7 +81,12 @@ export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email })
-    .populate("bookedCourses")
+  .populate({
+    path: "bookedCourses",
+    populate: {
+      path: "trainer",
+      select: "firstName lastName imgURL",
+    },})
     .populate("solvedCourses")
     .populate("comments");
 
@@ -174,7 +179,12 @@ export const updateUser = async (req, res) => {
 
     const result = await User.findOneAndUpdate(filter, updates, {
       new: true,
-    }).select("-password").populate("bookedCourses")
+    }).select("-password").populate({
+      path: "bookedCourses",
+      populate: {
+        path: "trainer",
+        select: "firstName lastName imgURL",
+      },})
     .populate("solvedCourses")
     .populate("comments");;
 
@@ -184,12 +194,47 @@ export const updateUser = async (req, res) => {
   }
 };
 
+export const removeBookedCourse = async (req, res) => {
+  const userId = req.params.id;
+  const courseId = req.params.courseId;
+
+  try {
+    const result = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { bookedCourses: courseId } },
+      { new: true }
+    ).select("-password")
+    .populate({
+      path: "bookedCourses",
+      populate: {
+        path: "trainer",
+        select: "firstName lastName imgURL",
+      },})
+      .populate("solvedCourses")
+      .populate("comments");
+
+    if (!result) {
+      return res.status(404).json({ error: "Benutzer nicht gefunden." });
+    }
+
+    res.status(200).json(result,"booked courses deleted");
+  } catch (error) {
+    console.error("Fehler beim Entfernen des Kurses:", error);
+    res.status(500).json({ error: "Ein Fehler ist aufgetreten." });
+  }
+};
+
 export const getUser = async (req, res) => {
   const id = req.params.id;
   try {
     const user = await User.findById(id)
       .select("-password")
-      .populate("bookedCourses")
+      .populate({
+        path: "bookedCourses",
+        populate: {
+          path: "trainer",
+          select: "firstName lastName imgURL",
+        },})
       .populate("solvedCourses")
       .populate("comments");
     res.send(user);
@@ -201,7 +246,15 @@ export const getUser = async (req, res) => {
 export const getUserByName = async (req, res) => {
   const userName = req.query.q;
   try {
-    const result = await User.findByName(userName);
+    const result = await User.findByName(userName).select("-password")
+    .populate({
+      path: "bookedCourses",
+      populate: {
+        path: "trainer",
+        select: "firstName lastName imgURL",
+      },})
+    .populate("solvedCourses")
+    .populate("comments");
     res.send(result);
   } catch (error) {
     res.send(error);
