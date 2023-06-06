@@ -34,16 +34,20 @@ const Login = ({ setReg, close }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-    }
+    };
 
     if (remember) {
       options.credentials = "include";
     }
 
     try {
-      const response = await fetch(`http://localhost:5002/${endpoint}/login`, options);
+      const response = await fetch(
+        `http://localhost:5002/${endpoint}/login`,
+        options
+      );
 
       const data = await response.json();
+      console.log(data);
       dispatch({ type: "LOGIN", payload: data.user });
     } catch (error) {
       console.log(error);
@@ -109,7 +113,13 @@ const Login = ({ setReg, close }) => {
             label="I'm a trainer"
           ></FormControlLabel>
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" onChange={(e) => setRemember(!remember)} />}
+            control={
+              <Checkbox
+                value="remember"
+                color="primary"
+                onChange={(e) => setRemember(!remember)}
+              />
+            }
             label="Remember me"
           />
           <Button

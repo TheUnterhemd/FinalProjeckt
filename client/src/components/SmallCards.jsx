@@ -23,7 +23,7 @@ export default function SmallCards({ data }) {
       }}
     >
       {data &&
-        data.map((course) => (
+        data?.map((course) => (
           <Card
             key={uuid()}
             sx={{
@@ -42,7 +42,10 @@ export default function SmallCards({ data }) {
               <Typography variant="h6">{course.title}</Typography>
               {course.trainer && (
                 <Typography varant="body2">
-                  mit <Link>{course.trainer}</Link>
+                  mit{" "}
+                  <Link to={`/trainer/${course.trainer._id}`}>
+                    {course.trainer.firstName}
+                  </Link>
                 </Typography>
               )}
             </CardContent>

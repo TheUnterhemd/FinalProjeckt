@@ -19,17 +19,17 @@ function UserProfile() {
   // getting the logged in user out of AuthContext
   const { user } = useContext(AuthContext);
 
-  let upcomingCourses = user?.courses.filter((course) => {
+  let upcomingCourses = user?.courses?.filter((course) => {
     const courseStartDate = course.start.split("T")[0];
     const today = new Date().toISOString().split("T")[0];
     return courseStartDate >= today;
-  })
+  });
 
-  let pastCourses = user?.courses.filter((course) => {
+  let pastCourses = user?.courses?.filter((course) => {
     const courseStartDate = course.start.split("T")[0];
     const today = new Date().toISOString().split("T")[0];
     return courseStartDate <= today;
-  })
+  });
 
   return (
     <div>
@@ -96,7 +96,7 @@ function UserProfile() {
                     mb={1}
                   >
                     {showAllCourses ? (
-                      upcomingCourses.map((course) => (
+                      upcomingCourses?.map((course) => (
                         <Grid
                           item
                           md={12}
@@ -112,7 +112,7 @@ function UserProfile() {
                       ))
                     ) : (
                       <>
-                        {upcomingCourses.slice(0, 3).map((course) => (
+                        {upcomingCourses?.slice(0, 3).map((course) => (
                           <Grid
                             item
                             md={12}
@@ -158,7 +158,7 @@ function UserProfile() {
                     mb={1}
                   >
                     {showAllCourses ? (
-                      pastCourses.map((course) => (
+                      pastCourses?.map((course) => (
                         <Grid
                           item
                           md={12}
@@ -220,34 +220,30 @@ function UserProfile() {
                 <Typography variant="h6" gutterBottom>
                   Booked Courses
                 </Typography>
-                <SmallCards data={user.bookedCourses} />
+                <SmallCards data={user?.bookedCourses} />
                 <Typography variant="h6" gutterBottom>
                   Past Courses
                 </Typography>
-                <SmallCards data={user.solvedCourses} />
+                <SmallCards data={user?.solvedCourses} />
               </>
             )}
           </Grid>
         </Grid>
       )}
-      {
-        !updatePW && (
-          <Chip
-            label={!edit ? "Edit profile" : "Show profile"}
-            onClick={() => setEdit(!edit)}
-            sx={{ mr: 1 }}
-          ></Chip>
-        )
-      }
-      {
-        !edit && (
-          <Chip
-            label={!updatePW ? "Update Password/Email" : "Show profile"}
-            onClick={() => setUpdatePW(!updatePW)}
-            sx={{ mr: 1 }}
-          ></Chip>
-        )
-      }
+      {!updatePW && (
+        <Chip
+          label={!edit ? "Edit profile" : "Show profile"}
+          onClick={() => setEdit(!edit)}
+          sx={{ mr: 1 }}
+        ></Chip>
+      )}
+      {!edit && (
+        <Chip
+          label={!updatePW ? "Update Password/Email" : "Show profile"}
+          onClick={() => setUpdatePW(!updatePW)}
+          sx={{ mr: 1 }}
+        ></Chip>
+      )}
       {user && edit && <ProfileForm />}
       {user && updatePW && <EmailPasswordForm />}
     </div>
