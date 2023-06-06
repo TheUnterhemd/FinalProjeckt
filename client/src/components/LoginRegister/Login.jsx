@@ -15,7 +15,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 /* import { useNavigate } from 'react-router-dom'; */
 
-const Login = ({ setReg, close }) => {
+const Login = ({ setReg, close, setWarningToast }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // endpoint is used to switch between users and trainers logging in
@@ -43,6 +43,10 @@ const Login = ({ setReg, close }) => {
     try {
       const response = await fetch(`http://localhost:5002/${endpoint}/login`, options);
 
+      if (response.status === 401) {
+        await handleWarning();
+      }
+
       const data = await response.json();
       dispatch({ type: "LOGIN", payload: data.user });
     } catch (error) {
@@ -52,6 +56,10 @@ const Login = ({ setReg, close }) => {
       close();
     }
   };
+
+  const handleWarning = async () => {
+    setWarningToast(true);
+  }
 
   return (
     <>

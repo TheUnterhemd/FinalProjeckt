@@ -7,17 +7,19 @@ const LoginRegModal = ({ open, close }) => {
   const [isReg, setIsReg] = useState(false);
   const [openToast, setOpenToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
+  const [warningToast, setWarningToast] = useState(false);
   const [errorMessage, setErrorMessage] = useState(
     "Something has gone very wrong. Contact support please."
   );
   function handleClose() {
     setOpenToast(false);
     setErrorToast(false);
+    setWarningToast(false);
   }
   return (
     <>
       <Portal>
-        {/* Feedback for successful registration */}
+        {/* Feedback for successful registration (Register)*/}
 
         <Snackbar
           open={openToast}
@@ -33,7 +35,7 @@ const LoginRegModal = ({ open, close }) => {
             You successfully registered. Check your mail to verify your account.
           </Alert>
         </Snackbar>
-        {/* Error Message */}
+        {/* Error Message (Register) */}
         <Snackbar
           open={errorToast}
           autoHideDuration={5000}
@@ -41,6 +43,16 @@ const LoginRegModal = ({ open, close }) => {
         >
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
             {errorMessage}
+          </Alert>
+        </Snackbar>
+        {/* Warning Message (Login) */}
+        <Snackbar
+          open={warningToast}
+          autoHideDuration={5000}
+          onClose={handleClose}
+        >
+          <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
+            Please verify your E-Mail!
           </Alert>
         </Snackbar>
       </Portal>
@@ -54,7 +66,7 @@ const LoginRegModal = ({ open, close }) => {
             setErrorToast={setErrorToast}
           />
         ) : (
-          <Login setReg={() => setIsReg(true)} close={close} />
+          <Login setReg={() => setIsReg(true)} close={close} setWarningToast={setWarningToast} />
         )}
       </Modal>
     </>

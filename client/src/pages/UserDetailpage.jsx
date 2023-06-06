@@ -19,13 +19,13 @@ function UserProfile() {
   // getting the logged in user out of AuthContext
   const { user } = useContext(AuthContext);
 
-  let upcomingCourses = user?.courses.filter((course) => {
+  let upcomingCourses = user?.courses?.filter((course) => {
     const courseStartDate = course.start.split("T")[0];
     const today = new Date().toISOString().split("T")[0];
     return courseStartDate >= today;
   })
 
-  let pastCourses = user?.courses.filter((course) => {
+  let pastCourses = user?.courses?.filter((course) => {
     const courseStartDate = course.start.split("T")[0];
     const today = new Date().toISOString().split("T")[0];
     return courseStartDate <= today;
