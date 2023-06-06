@@ -28,6 +28,19 @@ export default function TrainerDetailpage() {
     }
   }, [trainer, comments]);
 
+  let upcomingCourses = trainer?.courses.filter((course) => {
+    const courseStartDate = course.start.split("T")[0];
+    const today = new Date().toISOString().split("T")[0];
+    return courseStartDate >= today;
+  })
+
+  let pastCourses = trainer?.courses.filter((course) => {
+    const courseStartDate = course.start.split("T")[0];
+    const today = new Date().toISOString().split("T")[0];
+    return courseStartDate <= today;
+  })
+
+
   return (
     <div>
       {trainer && (
@@ -79,9 +92,9 @@ export default function TrainerDetailpage() {
               {trainer.profession}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Courses offered
+              Upcoming Courses
             </Typography>
-            {trainer.courses && trainer.courses.length > 0 ? (
+            {upcomingCourses && upcomingCourses.length > 0 ? (
               <Grid
                 container
                 spacing={2}
@@ -91,7 +104,7 @@ export default function TrainerDetailpage() {
                 alignItems="center"
               >
                 {showAllCourses ? (
-                  trainer.courses.map((course) => (
+                  upcomingCourses.map((course) => (
                     <Grid
                       item
                       md={12}
@@ -107,7 +120,7 @@ export default function TrainerDetailpage() {
                   ))
                 ) : (
                   <>
-                    {trainer.courses.slice(0, 3).map((course) => (
+                    {upcomingCourses.slice(0, 3).map((course) => (
                       <Grid
                         item
                         md={12}
@@ -121,7 +134,7 @@ export default function TrainerDetailpage() {
                         <CourseShowcase data={course} />
                       </Grid>
                     ))}
-                    {trainer.courses.length > 3 && (
+                    {upcomingCourses.length > 3 && (
                       <Typography
                         variant="body2"
                         sx={{
@@ -137,7 +150,68 @@ export default function TrainerDetailpage() {
                 )}
               </Grid>
             ) : (
-              "Currrently no courses offered."
+              "Currrently no upcoming courses."
+            )}
+            <Typography variant="h6" gutterBottom>
+              Past Courses
+            </Typography>
+            {pastCourses && pastCourses.length > 0 ? (
+              <Grid
+                container
+                spacing={2}
+                sx={{ width: "60%" }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                {showAllCourses ? (
+                  pastCourses.map((course) => (
+                    <Grid
+                      item
+                      md={12}
+                      lg={6}
+                      xl={4}
+                      key={course._id}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <CourseShowcase data={course} />
+                    </Grid>
+                  ))
+                ) : (
+                  <>
+                    {pastCourses.slice(0, 3).map((course) => (
+                      <Grid
+                        item
+                        md={12}
+                        lg={6}
+                        xl={4}
+                        key={course._id}
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <CourseShowcase data={course} />
+                      </Grid>
+                    ))}
+                    {pastCourses.length > 3 && (
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          cursor: "pointer",
+                          color: theme.palette.primary.main,
+                        }}
+                        onClick={() => setShowAllCourses(true)}
+                      >
+                        Show more...
+                      </Typography>
+                    )}
+                  </>
+                )}
+              </Grid>
+            ) : (
+              "No past courses to display."
             )}
             <Typography variant="h6" gutterBottom>
               {counter} Comments
@@ -152,15 +226,15 @@ export default function TrainerDetailpage() {
             <Box>
               {commentList?.length > 0
                 ? commentList
-                    .reverse()
-                    .map((comment) => (
-                      <CommentCard
-                        data={comment}
-                        key={uuid()}
-                        setCommentList={setCommentList}
-                        setCounter={setCounter}
-                      />
-                    ))
+                  .reverse()
+                  .map((comment) => (
+                    <CommentCard
+                      data={comment}
+                      key={uuid()}
+                      setCommentList={setCommentList}
+                      setCounter={setCounter}
+                    />
+                  ))
                 : "Be the first to comment!"}
             </Box>
           </Grid>
