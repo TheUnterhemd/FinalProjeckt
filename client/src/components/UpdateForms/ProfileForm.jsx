@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, Grid, TextField } from "@mui/material";
 
 function ProfileForm() {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const [endpoint, setEndpoint] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -16,8 +16,7 @@ function ProfileForm() {
 
   useEffect(() => {
     user.trainer ? setEndpoint("trainer") : setEndpoint("user");
-  }, [user.trainer])
-
+  }, [user.trainer]);
 
   // user und trainer haben folgende relevante keys gemeinsam:
   // firstName
@@ -32,19 +31,29 @@ function ProfileForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    postData({ firstName, lastName, imgURL, street, postalCode, city })
+    postData({ firstName, lastName, imgURL, street, postalCode, city });
     /* console.log(
       "this will submit the updated profiledata to database and dispatch with the returned user to update context"
     ); */
   }
 
-  const postData = async ({ firstName, lastName, imgURL, street, postalCode, city }) => {
+  const postData = async ({
+    firstName,
+    lastName,
+    imgURL,
+    street,
+    postalCode,
+    city,
+  }) => {
     try {
       const formData = new FormData();
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("imgURL", imgURL);
-      formData.append("address", JSON.stringify({ street: street, code: postalCode, city: city }));
+      formData.append(
+        "address",
+        JSON.stringify({ street: street, code: postalCode, city: city })
+      );
       if (profession) {
         formData.append("profession", profession);
       }
@@ -52,23 +61,26 @@ function ProfileForm() {
         formData.append("interests", interests);
       }
 
-      const response = await fetch(`http://localhost:5002/${endpoint}/update/${user._id}`,
+      const response = await fetch(
+        `http://localhost:5002/${endpoint}/update/${user._id}`,
         {
-          method: 'PUT',
+          method: "PUT",
           body: formData,
           headers: {
-            authorization: `Bearer ${user.accessToken}`
+            authorization: `Bearer ${user.accessToken}`,
           },
-        });
+        }
+      );
 
       const data = await response.json();
+      dispatch({ type: "LOGIN", payload: data });
       console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
       window.location.reload();
     }
-  }
+  };
 
   return (
     <Box
