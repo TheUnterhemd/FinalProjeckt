@@ -165,7 +165,13 @@ export const updateUser = async (req, res) => {
   const id = req.params.id;
   const filter = { _id: id };
 
-  const updates = req.body;
+  const updates = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    address: JSON.parse(req.body.address),
+    interests: req.body.interests
+  };
+
 
   try {
     if (req.file) {

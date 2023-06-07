@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext.js";
 import { Avatar, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SmallCards from "../components/SmallCards.jsx";
 import CourseShowcase from "../components/CourseShowcase";
-import ProfileForm from "../components/ProfileForm.jsx";
-import EmailPasswordForm from "../components/EmailPasswordForm.jsx";
+import ProfileForm from "../components/UpdateForms/ProfileForm.jsx";
+import EmailPasswordForm from "../components/UpdateForms/EmailPasswordForm.jsx";
 
 /**displays the profile of the user  */
 function UserProfile() {
@@ -18,6 +18,11 @@ function UserProfile() {
 
   // getting the logged in user out of AuthContext
   const { user } = useContext(AuthContext);
+
+  //if user.address = empty force update
+  /* useEffect(() => {
+    user.address === undefined && setEdit(true);
+  }, [user.address]); */
 
   let upcomingCourses = user?.courses?.filter((course) => {
     const courseStartDate = course.start.split("T")[0];
