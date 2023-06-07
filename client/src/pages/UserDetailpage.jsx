@@ -38,7 +38,7 @@ function UserProfile() {
 
   return (
     <div>
-      <Typography variant="h3" sx={{ my: 2 }}>
+      <Typography variant="h3" sx={{ my: 11 }}>
         Your Profile
       </Typography>
       {user && !edit && !updatePW && (
@@ -70,6 +70,7 @@ function UserProfile() {
                   width: "100%",
                   borderRadius: "0 50% 50% 0%/0% 60% 25% 0%",
                 },
+                boxShadow: "0px 2px 10px 0px #145191",
               }}
             ></Avatar>
           </Grid>

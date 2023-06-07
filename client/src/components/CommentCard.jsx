@@ -27,7 +27,15 @@ export default function CommentCard({ data, setCommentList, setCounter }) {
   return (
     <>
       {data && (
-        <Card sx={{ width: 300, maxWidth: 300, padding: 1, mt: 1 }}>
+        <Card
+          sx={{
+            width: 300,
+            maxWidth: 300,
+            padding: 1,
+            mt: 1,
+            boxShadow: "0px 2px 10px 0px #145191",
+          }}
+        >
           <Box display="flex" justifyContent="space-between">
             <Avatar
               alt={`picture of ${data.userId}`}

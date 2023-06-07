@@ -1,0 +1,20 @@
+Our Mission
+
+Our Mission is to create connection.
+We want to enable people to feel at home right where they are
+by creating a way to easily connect with others around them through a shared goal.
+
+Our Goals
+
+We want to support learners in their strive for knowledge and excercise, and teachers in their search for an easy way to offer their knowledge to others.
+Simply put, LocalTrainer does that, by offering a platform where teachers can offer courses (on- and offline) and learners can book those. 
+
+Our Team
+This Website was developed as our final project for the Web Development course @ DigitalCareerInstitute(Link:digitalcareerinstitute.org/) by:
+ const creators = [
+    { fullName: "Kathrine Beuth", github: "https://github.com/dkathrine" },
+    { fullName: "Lina Simonovic", github: "https://github.com/LinaSimonovic" },
+    { fullName: "Thomas Kodel", github: "https://github.com/TheUnterhemd" },
+    { fullName: "Michael Lieber", github: "https://github.com/micha-lieber" },
+  ];
+

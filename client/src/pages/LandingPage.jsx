@@ -91,6 +91,7 @@ export default function LandingPage() {
       <Box
         sx={{
           width: "100%",
+          mb: 10,
         }}
       >
         <Carousel />

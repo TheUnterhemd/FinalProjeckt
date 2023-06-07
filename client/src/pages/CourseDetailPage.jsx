@@ -99,7 +99,7 @@ export default function CourseDetailPage() {
   return (
     <div>
       {!edit && data && (
-        <Grid container spacing={2} sx={{ mt: "2rem" }}>
+        <Grid container spacing={2} sx={{ my: 10 }}>
           {error && <Alert severity="error">{error}</Alert>}
           <Grid
             item
