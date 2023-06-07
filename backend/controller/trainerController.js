@@ -225,7 +225,7 @@ export const updateTrainer = async (req, res, next) => {
       { _id: id },
       {
         courses,
-        address,
+        address: JSON.parse(address),
         profession,
         imgURL,
       }

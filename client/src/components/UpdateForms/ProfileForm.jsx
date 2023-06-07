@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, Grid, TextField } from "@mui/material";
 
 function ProfileForm() {
@@ -12,12 +12,12 @@ function ProfileForm() {
   const [street, setStreet] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
   const [interests, setInterests] = useState("");
 
   useEffect(() => {
     user.trainer ? setEndpoint("trainer") : setEndpoint("user");
   }, [user.trainer])
+
 
   // user und trainer haben folgende relevante keys gemeinsam:
   // firstName
@@ -32,22 +32,19 @@ function ProfileForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    postData({ firstName, lastName, imgURL, street, postalCode, city, country })
-    console.log(
+    postData({ firstName, lastName, imgURL, street, postalCode, city })
+    /* console.log(
       "this will submit the updated profiledata to database and dispatch with the returned user to update context"
-    );
+    ); */
   }
 
-  const postData = async ({ firstName, lastName, imgURL, street, postalCode, city, country }) => {
+  const postData = async ({ firstName, lastName, imgURL, street, postalCode, city }) => {
     try {
       const formData = new FormData();
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("imgURL", imgURL);
-      formData.append("street", street);
-      formData.append("postalCode", postalCode);
-      formData.append("city", city);
-      formData.append("country", country);
+      formData.append("address", JSON.stringify({ street: street, code: postalCode, city: city }));
       if (profession) {
         formData.append("profession", profession);
       }
@@ -57,11 +54,15 @@ function ProfileForm() {
 
       const response = await fetch(`http://localhost:5002/${endpoint}/update/${user._id}`,
         {
-          method: 'POST',
+          method: 'PUT',
           body: formData,
+          headers: {
+            authorization: `Bearer ${user.accessToken}`
+          },
         });
 
       const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -83,7 +84,6 @@ function ProfileForm() {
           <TextField
             autoComplete="given-name"
             name="firstName"
-            required
             fullWidth
             id="firstName"
             label="First Name"
@@ -92,7 +92,6 @@ function ProfileForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             fullWidth
             id="lastName"
             label="Last Name"
@@ -103,7 +102,6 @@ function ProfileForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            required
             fullWidth
             name="Street + No"
             label="Street + No."
@@ -113,7 +111,6 @@ function ProfileForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             fullWidth
             name="Postal Code"
             label="Postal Code"
@@ -123,7 +120,6 @@ function ProfileForm() {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            required
             fullWidth
             name="City"
             label="City"
@@ -133,17 +129,6 @@ function ProfileForm() {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            required
-            fullWidth
-            name="Country"
-            label="Country"
-            type="text"
-            onChange={(e) => setCountry(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
             fullWidth
             accept=".jpeg, .jpg, .png"
             name="file"
@@ -157,7 +142,6 @@ function ProfileForm() {
         {user.trainer ? (
           <Grid item xs={12}>
             <TextField
-              required
               fullWidth
               name="profession"
               label="Profession"
@@ -169,7 +153,6 @@ function ProfileForm() {
         ) : (
           <Grid item xs={12}>
             <TextField
-              required
               fullWidth
               name="interests"
               label="Interests"

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
 function EmailPasswordForm() {
@@ -55,7 +55,6 @@ function EmailPasswordForm() {
             <Grid item xs={12}>
               <TextField
                 name="current password"
-                required
                 fullWidth
                 label="Current Password"
                 type="password"
@@ -65,7 +64,6 @@ function EmailPasswordForm() {
             <Grid item xs={12}>
               <TextField
                 name="new password"
-                required
                 fullWidth
                 label="New Password"
                 type="password"
@@ -75,7 +73,6 @@ function EmailPasswordForm() {
             <Grid item xs={12}>
               <TextField
                 name="repeat password"
-                required
                 fullWidth
                 label="Repeat New Password"
                 type="password"
@@ -105,7 +102,6 @@ function EmailPasswordForm() {
             <Grid item xs={12}>
               <TextField
                 name="new email"
-                required
                 fullWidth
                 label="New Email"
                 onChange={(e) => setEmail(e.target.value)}
@@ -114,7 +110,6 @@ function EmailPasswordForm() {
             <Grid item xs={12}>
               <TextField
                 name="current password"
-                required
                 fullWidth
                 label="Current Password"
                 type="password"
