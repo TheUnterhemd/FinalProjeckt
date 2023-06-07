@@ -19,6 +19,6 @@ export async function update(url, update, authToken, method = "PUT") {
   } catch (error) {
     console.log("update.js", error);
     console.log("error.message", error.message);
-    return { error: true, content: error };
+    return { error: true, content: error.message };
   }
 }
