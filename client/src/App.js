@@ -13,38 +13,34 @@ import CourseDetailPage from "./pages/CourseDetailPage";
 import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
 import SearchPage from "./pages/SearchPage";
 import jwt_decode from "jwt-decode";
+import Footer from "./components/Footer";
 
 function App() {
-
   const { user, dispatch } = useContext(AuthContext);
   console.log("user on App.js", user);
 
   const refreshToken = async () => {
     const url = process.env.REACT_APP_SERVER_URL;
-    
+
     try {
       const response = await fetch(`${url}/token/`, {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
         credentials: "include",
-      })
+      });
 
       const data = await response.json();
       const decodedToken = jwt_decode(data.accessToken);
-      const tokenUser = decodedToken.user
+      const tokenUser = decodedToken.user;
       tokenUser.accessToken = data.accessToken;
-      dispatch({type: 'LOGIN', payload: tokenUser});
+      dispatch({ type: "LOGIN", payload: tokenUser });
     } catch (error) {
       /* console.log(error); */
     }
-  } 
+  };
 
-  user ? setInterval(refreshToken, 57*60*1000) : refreshToken()
-
-    
-
-
+  user ? setInterval(refreshToken, 57 * 60 * 1000) : refreshToken();
 
   return (
     <div className="App">
@@ -69,6 +65,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

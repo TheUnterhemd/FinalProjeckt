@@ -73,8 +73,9 @@ const Navbar = () => {
   return (
     <>
       <AppBar
-        position="static"
-        sx={{ backgroundColor: "background.navbar" }} /* width="100%" */
+        position="fixed"
+        sx={{ backgroundColor: "background.navbar" }}
+        /* width="100%" */
       >
         <Toolbar>
           <Avatar
@@ -108,16 +109,32 @@ const Navbar = () => {
                   open={openMenu}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem component={Link} to="/search">
+                  <MenuItem
+                    component={Link}
+                    to="/search"
+                    sx={{ color: "text.secondary" }}
+                  >
                     Search
                   </MenuItem>
-                  <MenuItem component={Link} to="/user">
+                  <MenuItem
+                    component={Link}
+                    to="/user"
+                    sx={{ color: "text.secondary" }}
+                  >
                     My Profile
                   </MenuItem>
-                  <MenuItem component={Link} to="/trainer">
+                  <MenuItem
+                    component={Link}
+                    to="/trainer"
+                    sx={{ color: "text.secondary" }}
+                  >
                     Trainer
                   </MenuItem>
-                  <MenuItem component={Link} to="/course">
+                  <MenuItem
+                    component={Link}
+                    to="/course"
+                    sx={{ color: "text.secondary" }}
+                  >
                     Course
                   </MenuItem>
                   {user?.trainer && (
@@ -129,17 +146,33 @@ const Navbar = () => {
               </>
             ) : (
               <Box>
-                <Button component={Link} to="/user">
+                <Button
+                  component={Link}
+                  to="/user"
+                  sx={{ color: "text.secondary" }}
+                >
                   my profile
                 </Button>
-                <Button component={Link} to="/trainer">
+                <Button
+                  component={Link}
+                  to="/trainer"
+                  sx={{ color: "text.secondary" }}
+                >
                   Trainer
                 </Button>
-                <Button component={Link} to="/course">
+                <Button
+                  component={Link}
+                  to="/course"
+                  sx={{ color: "text.secondary" }}
+                >
                   Course
                 </Button>
                 {user?.trainer && (
-                  <Button component={Link} to="/course/create">
+                  <Button
+                    component={Link}
+                    to="/course/create"
+                    sx={{ color: "text.secondary" }}
+                  >
                     Create Course
                   </Button>
                 )}

@@ -7,7 +7,13 @@ const authReducer = (state, action) => {
   switch (action.type) {
     // User is Loging in
     case "LOGIN":
-      return { ...state, user: action.payload };
+      let result;
+      if (state.user) {
+        result = { user: { ...state.user, ...action.payload } };
+      } else {
+        result = { ...state, user: action.payload };
+      }
+      return result;
     //User is logged out
     case "LOGOUT":
       return { ...state, user: null };
