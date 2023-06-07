@@ -29,11 +29,12 @@ export default function ToggleColorMode({ children }) {
                 },
                 text: {
                   primary: "#f5f5f5",
+                  secondary: "#f5f5f5",
                 },
                 background: {
                   default: "#0a1d30",
                   paper: "#08437d",
-                  navbar: "#0a1d30",
+                  navbar: "#145191",
                 },
                 error: {
                   main: "#e62f21",
@@ -53,6 +54,7 @@ export default function ToggleColorMode({ children }) {
                 },
                 text: {
                   primary: "#103965",
+                  secondary: "#f5f5f5",
                 },
                 error: {
                   main: "#e62f21",

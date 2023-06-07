@@ -41,6 +41,7 @@ export default function CourseCreationForm({ course, setEdit }) {
   const [method, setMethod] = useState("POST");
   const [online, setOnline] = useState(true);
   const url = `${process.env.REACT_APP_SERVER_URL}/course/${endpoint}`;
+  const inputPropsForLocationField = {};
 
   const navigate = useNavigate();
   const today = new Date();
@@ -62,6 +63,11 @@ export default function CourseCreationForm({ course, setEdit }) {
       setMethod("PUT");
     }
   }, [user, course]);
+
+  // renders Input for Location read only
+  if (online) {
+    inputPropsForLocationField.readOnly = true;
+  }
 
   /** submits the entered data as formdata/multipart */
   function handleCourseSubmit(e) {
@@ -224,22 +230,25 @@ export default function CourseCreationForm({ course, setEdit }) {
           aria-required
           label="location"
           fullWidth
-          disabled={online}
           name="location"
           id="location"
           variant="filled"
           value={location.location}
+          InputProps={{ ...inputPropsForLocationField }}
           onChange={(e) =>
             setLocation({ location: e.target.value, description: "online" })
           }
-          defaultValue="click on the map where you want to meet or insert link"
+          placeholder="click on the map or insert link to zoom / teams / ..."
         />
 
         <FormControlLabel
           control={
             <Checkbox
               inputProps={{ "aria-label": "Course is online" }}
-              onChange={() => setOnline(!online)}
+              onChange={() => {
+                setOnline(!online);
+                setLocation({ location: "" });
+              }}
             />
           }
           label="Course is online"
