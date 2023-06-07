@@ -249,7 +249,7 @@ function UserProfile() {
           sx={{ mr: 1 }}
         ></Chip>
       )}
-      {user && edit && <ProfileForm />}
+      {user && edit && <ProfileForm setEdit={setEdit} />}
       {user && updatePW && <EmailPasswordForm />}
     </div>
   );

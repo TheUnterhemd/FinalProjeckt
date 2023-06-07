@@ -14,7 +14,7 @@ const setUndefined = (val) => (val === "" ? undefined : val);
     },
     email: {type: String, required: true, set: setUndefined},
     password: {type: String, required: true, set: setUndefined},
-    imgURL: {type: String, default: "https://res.cloudinary.com/dhdugvhj3/image/upload/v1680609327/default_profile_picture/default_profile_picture_qssq71.jpg", set: setUndefined},
+    imgURL: {type: String, default: "https://res.cloudinary.com/dhdugvhj3/image/upload/v1680609327/default_profile_picture/default_profile_picture_qssq71.jpg", set: a => a === 'undefined' ? undefined : a},
     interests: {type: [String], set: setUndefined},
     bookedCourses:[{ type: Schema.Types.ObjectId, ref: 'Course' }],
     solvedCourses:[{ type: Schema.Types.ObjectId, ref: 'Course' }],

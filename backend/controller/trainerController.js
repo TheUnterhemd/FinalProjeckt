@@ -199,55 +199,73 @@ export const logoutTrainer = async (req, res) => {
 };
 
 //Funktion um den Trainer zu updaten
-export const updateTrainer = async (req, res, next) => {
+export const updateTrainer = async (req, res) => {
   // Die ID des Trainers, der aktualisiert werden soll
   const id = req.params.id;
+  const filter = { _id: id };
+  
   // Die zu aktualisierenden Informationen
-  const { courses, address, profession } = req.body;
-  // Variable, um den aktualisierten Trainer zu speichern
-  let trainer;
-  // Variable für das Bild-URL des Trainers (falls vorhanden)
-  let imgURL;
+  const updates = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    address:{
+      street: req.body.street,
+      code: req.body.postalCode,
+      city: req.body.city,
+    },
+    imgURL: req.body.imgURL,
+    profession: req.body.profession
+  }
+
+  // Trainer wird anhand von ID gesucht um address-werte beizubehalten falls keine neuen mitgesendet wurden
+  const trainer = await Trainer.findById(id);
+
+  if(!req.body.street){
+    updates.address.street = trainer.address.street
+  }
+
+  if(!req.body.city){
+    updates.address.city = trainer.address.city
+  }
+
+  if(!req.body.postalCode){
+    updates.address.code = trainer.address.code
+  }
 
   try {
-    // Wenn eine Datei (Bild) in der Anfrage enthalten ist, wird sie zu Cloudinary hochgeladen
+
+// Wenn eine Datei (Bild) in der Anfrage enthalten ist, wird sie zu Cloudinary hochgeladen
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `profile_picture_${id}`,
         folder: `localtrainer/avatar/trainer/${id}`,
       });
       // Die sichere URL des hochgeladenen Bildes wird gespeichert
-      imgURL = result.secure_url;
+      updates.imgURL = result.secure_url;
     }
 
     // Trainer in der Datenbank anhand der ID aktualisieren und die neuen Informationen setzen
-    trainer = await Trainer.findByIdAndUpdate(
-      { _id: id },
-      {
-        courses,
-        address: JSON.parse(address),
-        profession,
-        imgURL,
-      }
-    )
-      .select("-passwort")
-      .populate({
-        path: "courses",
-        populate: {
-          path: "currentStudents",
-          select: "firstName lastName imgURL",
-        },
-      });
+    const result = await Trainer.findOneAndUpdate(filter, updates, {
+      new: true,
+    })
+    .select("-passwort")
+    .populate({
+      path: "courses",
+      populate: {
+        path: "currentStudents",
+        select: "firstName lastName imgURL",
+      },
+    });
 
     // Wenn kein Trainer gefunden wurde, gibt es einen Fehler bei der Aktualisierung
-    if (!trainer) {
+    if (!result) {
       return res.status(500).json({ message: "Not able to update trainer" });
     }
 
     // Erfolgreiche Aktualisierung des Trainers und den aktualisierten Trainer zurückgeben
     return res
       .status(200)
-      .json({ trainer: trainer, message: "trainer updated" });
+      .json({ user: result, message: "trainer updated" });
   } catch (error) {
     console.log(error.message);
   }
