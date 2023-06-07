@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
 function EmailPasswordForm() {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const [endpoint, setEndpoint] = useState("");
   const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -33,6 +33,7 @@ function EmailPasswordForm() {
       const response = await fetch(`http://localhost:5002/${endpoint}/update/${user._id}`, options);
 
       const data = await response.json();
+      dispatch({ type: "LOGIN", payload: data.user });
     } catch (error) {
       console.log(error);
     } finally {

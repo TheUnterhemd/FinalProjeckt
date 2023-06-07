@@ -167,12 +167,37 @@ export const updateUser = async (req, res) => {
   const id = req.params.id;
   const filter = { _id: id };
 
-  let updates = req.body;
-  if (updates.address) {
-    updates = { ...updates, address: JSON.parse(updates.address) };
+
+  const updates = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    address:{
+      street: req.body.street,
+      code: req.body.postalCode,
+      city: req.body.city,
+    },
+    imgURL: req.body.imgURL,
+    interests: req.body.interests
+  }
+
+
+  const user = await User.findById(id);
+
+  if(!req.body.street){
+    updates.address.street = user.address.street
+  }
+
+  if(!req.body.city){
+    updates.address.city = user.address.city
+  }
+
+  if(!req.body.postalCode){
+    updates.address.code = user.address.code
   }
 
   try {
+
+
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `profile_picture_${id}`,
@@ -248,7 +273,7 @@ export const getUser = async (req, res) => {
       })
       .populate("solvedCourses")
       .populate("comments");
-    res.send(user);
+    res.send({user});
   } catch (error) {
     res.send(error);
   }
