@@ -1,56 +1,63 @@
-// carousel mora da bude veci
 import React, { useState } from "react";
 import Searchbar from "../components/Search/Searchbar.jsx";
 import { Box } from "@mui/system";
 import beispielBild from "../assets/beispielBild.jpg";
 import "../styles.css";
 import { Grid } from "@mui/material";
+import onlineCourse from "../assets/onlineCourse.jpg";
+import outdoorCourse from "../assets/outdoorCourse.jpg";
+import indoorCourse from "../assets/indoorCourse.jpg";
 import {
   CarouselProvider,
   Slider,
   Slide,
   ButtonBack,
   ButtonNext,
+  Image,
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
+import s from "pure-react-carousel/dist/react-carousel.es.css";
 
 export default function LandingPage() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        margin: "4rem auto",
-        position: "relative",
-        padding: "2rem",
-      }}
-    >
-      <img
-        src={beispielBild}
-        alt="bild"
-        style={{
-          width: "100%",
-          height: "auto",
-          maxHeight: "950px",
-        }}
-      />
+    <>
       <Box
         sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          backgroundColor: "#632b5d",
-          padding: "1rem",
-          width: "70%",
-          borderRadius: "10px",
-          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          margin: "4rem auto",
+          position: "relative",
+          padding: "2rem",
         }}
       >
-        <Searchbar />
+        <img
+          src={beispielBild}
+          alt="bild"
+          style={{
+            width: "100%",
+            height: "auto",
+            maxHeight: "950px",
+          }}
+        />
+
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "#632b5d",
+            padding: "1rem",
+            width: "70%",
+            borderRadius: "10px",
+            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4)",
+          }}
+        >
+          <Searchbar />
+        </Box>
       </Box>
       <Box
         sx={{
@@ -83,16 +90,12 @@ export default function LandingPage() {
       </Box>
       <Box
         sx={{
-          marginTop: "2rem",
-          width: "100%",  // Povećana širina Carousel kontejnera
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          width: "100%",
         }}
       >
         <Carousel />
       </Box>
-    </Box>
+    </>
   );
 }
 
@@ -140,22 +143,23 @@ function Carousel() {
 
   return (
     <CarouselProvider
-      naturalSlideWidth={100}
-      naturalSlideHeight={125}
-      totalSlides={2}
-      visibleSlides={1}
+      naturalSlideWidth={400}
+      naturalSlideHeight={500}
+      totalSlides={3}
+      visibleSlides={2}
       step={1}
-      currentSlide={activeSlide}
-      className="carousel-container"
+      dragStep={1}
+      infinite={true}
     >
-      <Slider>
+      <Slider className={s.slider}>
         <Slide index={0}>
-          <h2>Online Course</h2>
-          <img src="../assets/onlineCourse.jpg" alt="Online Course" />
+          <Image src={onlineCourse} alt="Online Course" />
         </Slide>
         <Slide index={1}>
-          <h2>Outdoor Course</h2>
-          <img src="../assets/outdoorCourse.jpg" alt="Outdoor Course" />
+          <Image src={outdoorCourse} alt="Outdoor Course" />
+        </Slide>
+        <Slide index={2}>
+          <Image src={indoorCourse} alt="Indoor Course" />
         </Slide>
       </Slider>
 
