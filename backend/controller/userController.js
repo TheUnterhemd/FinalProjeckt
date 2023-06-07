@@ -6,8 +6,8 @@ import { v2 as cloudinary } from "cloudinary";
 import User from "../models/userModel.js";
 import Token from "../models/refreshModel.js";
 import VerifyToken from "../models/verifyToken.js";
-import crypto from 'crypto';
-import {verifyMailer} from "../validation/verifyMail.js"
+import crypto from "crypto";
+import { verifyMailer } from "../validation/verifyMail.js";
 
 //config
 dotenv.config();
@@ -62,31 +62,33 @@ export const registerUser = async (req, res) => {
   try {
     const userToken = new VerifyToken({
       userID: newUser._id,
-      verifyToken: crypto.randomBytes(16).toString('hex'),
+      verifyToken: crypto.randomBytes(16).toString("hex"),
     });
     console.log(userToken);
     await userToken.save();
 
-    const link = `http://localhost:5002/token/verify/${userToken.verifyToken}`
+    const link = `http://localhost:5002/token/verify/${userToken.verifyToken}`;
 
     await verifyMailer(newUser.email, link);
   } catch (error) {
     console.log(error.message);
   }
   return res.status(200).json({
-   message: "user saved successfully, check your email",});
+    message: "user saved successfully, check your email",
+  });
 };
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email })
-  .populate({
-    path: "bookedCourses",
-    populate: {
-      path: "trainer",
-      select: "firstName lastName imgURL",
-    },})
+    .populate({
+      path: "bookedCourses",
+      populate: {
+        path: "trainer",
+        select: "firstName lastName imgURL",
+      },
+    })
     .populate("solvedCourses")
     .populate("comments");
 
@@ -148,7 +150,7 @@ export const loginUser = async (req, res) => {
         bookedCourses: user.bookedCourses,
         solvedCourses: user.solvedCourses,
         comments: user.comments,
-        trainer: user.trainer
+        trainer: user.trainer,
       },
       message: "User logged in",
     });
@@ -165,13 +167,10 @@ export const updateUser = async (req, res) => {
   const id = req.params.id;
   const filter = { _id: id };
 
-  const updates = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    address: JSON.parse(req.body.address),
-    interests: req.body.interests
-  };
-
+  let updates = req.body;
+  if (updates.address) {
+    updates = { ...updates, address: JSON.parse(updates.address) };
+  }
 
   try {
     if (req.file) {
@@ -185,14 +184,17 @@ export const updateUser = async (req, res) => {
 
     const result = await User.findOneAndUpdate(filter, updates, {
       new: true,
-    }).select("-password").populate({
-      path: "bookedCourses",
-      populate: {
-        path: "trainer",
-        select: "firstName lastName imgURL",
-      },})
-    .populate("solvedCourses")
-    .populate("comments");;
+    })
+      .select("-password")
+      .populate({
+        path: "bookedCourses",
+        populate: {
+          path: "trainer",
+          select: "firstName lastName imgURL",
+        },
+      })
+      .populate("solvedCourses")
+      .populate("comments");
 
     res.send(result);
   } catch (error) {
@@ -209,13 +211,15 @@ export const removeBookedCourse = async (req, res) => {
       userId,
       { $pull: { bookedCourses: courseId } },
       { new: true }
-    ).select("-password")
-    .populate({
-      path: "bookedCourses",
-      populate: {
-        path: "trainer",
-        select: "firstName lastName imgURL",
-      },})
+    )
+      .select("-password")
+      .populate({
+        path: "bookedCourses",
+        populate: {
+          path: "trainer",
+          select: "firstName lastName imgURL",
+        },
+      })
       .populate("solvedCourses")
       .populate("comments");
 
@@ -223,7 +227,7 @@ export const removeBookedCourse = async (req, res) => {
       return res.status(404).json({ error: "Benutzer nicht gefunden." });
     }
 
-    res.status(200).json(result,"booked courses deleted");
+    res.status(200).json(result, "booked courses deleted");
   } catch (error) {
     console.error("Fehler beim Entfernen des Kurses:", error);
     res.status(500).json({ error: "Ein Fehler ist aufgetreten." });
@@ -240,7 +244,8 @@ export const getUser = async (req, res) => {
         populate: {
           path: "trainer",
           select: "firstName lastName imgURL",
-        },})
+        },
+      })
       .populate("solvedCourses")
       .populate("comments");
     res.send(user);
@@ -252,15 +257,17 @@ export const getUser = async (req, res) => {
 export const getUserByName = async (req, res) => {
   const userName = req.query.q;
   try {
-    const result = await User.findByName(userName).select("-password")
-    .populate({
-      path: "bookedCourses",
-      populate: {
-        path: "trainer",
-        select: "firstName lastName imgURL",
-      },})
-    .populate("solvedCourses")
-    .populate("comments");
+    const result = await User.findByName(userName)
+      .select("-password")
+      .populate({
+        path: "bookedCourses",
+        populate: {
+          path: "trainer",
+          select: "firstName lastName imgURL",
+        },
+      })
+      .populate("solvedCourses")
+      .populate("comments");
     res.send(result);
   } catch (error) {
     res.send(error);
