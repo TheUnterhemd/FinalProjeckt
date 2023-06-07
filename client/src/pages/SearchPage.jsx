@@ -48,7 +48,9 @@ const SearchPage = () => {
     <Container maxWidth="lg">
       {isMobileView && <Searchbar />}
       <FilterMenu setFilter={setFilters} data={data} />
-      <Box sx={{ height: "100vh", display: "flex", flexWrap: "wrap" }}>
+      <Box
+        sx={{ minHeight: "100vh", display: "flex", flexWrap: "wrap", mb: 10 }}
+      >
         {error && <Typography variant="body1">{error}</Typography>}
         {isPending && <Typography variant="body1">Loading...</Typography>}
         {data && <SearchList searchData={data} courseFilter={filters} />}

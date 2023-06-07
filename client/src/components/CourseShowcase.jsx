@@ -21,7 +21,10 @@ const CourseShowcase = ({ data }) => {
   };
 
   return (
-    <Card sx={{ width: "15rem", mb: 1 }} onClick={handleOpen}>
+    <Card
+      sx={{ width: "15rem", mb: 1, boxShadow: "0px 2px 10px 0px #145191" }}
+      onClick={handleOpen}
+    >
       <CardActionArea>
         <Box
           sx={{
