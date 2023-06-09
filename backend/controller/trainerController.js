@@ -30,8 +30,16 @@ cloudinary.config({
 //FUNCTIONS
 //Funktion zum Hinzufügen eines Trainers mit email zur validierung des accounts.
 export const addTrainer = async (req, res) => {
-
-  const {courses,email,firstName,lastName,password,address,imgURL,profession} = req.body;
+  const {
+    courses,
+    email,
+    firstName,
+    lastName,
+    password,
+    address,
+    imgURL,
+    profession,
+  } = req.body;
 
   let exist;
   // Überprüfen, ob der Trainer bereits existiert
@@ -138,7 +146,7 @@ export const loginTrainer = async (req, res, next) => {
     const tokenPayload = {
       user: {
         trainer: true,
-        data: trainer._id,
+        _id: trainer._id,
         courses: trainer.courses,
         profession: trainer.profession,
         address: trainer.address,
@@ -184,6 +192,7 @@ export const loginTrainer = async (req, res, next) => {
         imgURL: trainer.imgURL,
         profession: trainer.profession,
         courses: trainer.courses,
+        address: trainer.address,
         trainer: true,
       },
       message: "Trainer logged in",
@@ -203,38 +212,46 @@ export const updateTrainer = async (req, res) => {
   // Die ID des Trainers, der aktualisiert werden soll
   const id = req.params.id;
   const filter = { _id: id };
-  
+
   // Die zu aktualisierenden Informationen
   const updates = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    address:{
+    address: {
       street: req.body.street,
       code: req.body.postalCode,
       city: req.body.city,
     },
+    courses: req.body.courses,
     imgURL: req.body.imgURL,
-    profession: req.body.profession
-  }
+    profession: req.body.profession,
+  };
 
   // Trainer wird anhand von ID gesucht um address-werte beizubehalten falls keine neuen mitgesendet wurden
   const trainer = await Trainer.findById(id);
 
-  if(!req.body.street){
-    updates.address.street = trainer.address.street
+  if (!req.body.street) {
+    updates.address.street = trainer.address.street;
   }
 
-  if(!req.body.city){
-    updates.address.city = trainer.address.city
+  if (!req.body.city) {
+    updates.address.city = trainer.address.city;
   }
 
-  if(!req.body.postalCode){
-    updates.address.code = trainer.address.code
+  if (!req.body.postalCode) {
+    updates.address.code = trainer.address.code;
   }
 
+  // trainer._id wird mit der ID des Trainers verglichen, der versucht die Änderungen zu pushen.
+  // wenn das nicht die gleiche ist, wird Fehler geworfen
+
+  if (!trainer._id.equals(req.trainer.user._id)) {
+    return res
+      .status(403)
+      .json({ message: "You are not allowed to update this trainer." });
+  }
   try {
-
-// Wenn eine Datei (Bild) in der Anfrage enthalten ist, wird sie zu Cloudinary hochgeladen
+    // Wenn eine Datei (Bild) in der Anfrage enthalten ist, wird sie zu Cloudinary hochgeladen
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `profile_picture_${id}`,
@@ -248,14 +265,14 @@ export const updateTrainer = async (req, res) => {
     const result = await Trainer.findOneAndUpdate(filter, updates, {
       new: true,
     })
-    .select("-passwort")
-    .populate({
-      path: "courses",
-      populate: {
-        path: "currentStudents",
-        select: "firstName lastName imgURL",
-      },
-    });
+      .select("-passwort")
+      .populate({
+        path: "courses",
+        populate: {
+          path: "currentStudents",
+          select: "firstName lastName imgURL",
+        },
+      });
 
     // Wenn kein Trainer gefunden wurde, gibt es einen Fehler bei der Aktualisierung
     if (!result) {
@@ -263,9 +280,7 @@ export const updateTrainer = async (req, res) => {
     }
 
     // Erfolgreiche Aktualisierung des Trainers und den aktualisierten Trainer zurückgeben
-    return res
-      .status(200)
-      .json({ user: result, message: "trainer updated" });
+    return res.status(200).json({ user: result, message: "trainer updated" });
   } catch (error) {
     console.log(error.message);
   }
