@@ -167,37 +167,40 @@ export const updateUser = async (req, res) => {
   const id = req.params.id;
   const filter = { _id: id };
 
-
   const updates = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    address:{
+    address: {
       street: req.body.street,
       code: req.body.postalCode,
       city: req.body.city,
     },
     imgURL: req.body.imgURL,
-    interests: req.body.interests
-  }
-
+    interests: req.body.interests,
+    bookedCourses: req.body.bookedCourses,
+  };
 
   const user = await User.findById(id);
-
-  if(!req.body.street){
-    updates.address.street = user.address.street
+  // Überprüfen ob user wirklich user ist
+  if (!user._id.equals(req.user.user.id)) {
+    return res
+      .status(403)
+      .json({ message: "You are not allowed to update this user." });
   }
 
-  if(!req.body.city){
-    updates.address.city = user.address.city
+  if (!req.body.street) {
+    updates.address.street = user.address.street;
   }
 
-  if(!req.body.postalCode){
-    updates.address.code = user.address.code
+  if (!req.body.city) {
+    updates.address.city = user.address.city;
+  }
+
+  if (!req.body.postalCode) {
+    updates.address.code = user.address.code;
   }
 
   try {
-
-
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         public_id: `profile_picture_${id}`,
@@ -220,7 +223,7 @@ export const updateUser = async (req, res) => {
       })
       .populate("solvedCourses")
       .populate("comments");
-
+    console.log("result in updateUser:", result);
     res.send(result);
   } catch (error) {
     res.send(error);
@@ -252,7 +255,7 @@ export const removeBookedCourse = async (req, res) => {
       return res.status(404).json({ error: "Benutzer nicht gefunden." });
     }
 
-    res.status(200).json(result, "booked courses deleted");
+    res.status(200).json(result);
   } catch (error) {
     console.error("Fehler beim Entfernen des Kurses:", error);
     res.status(500).json({ error: "Ein Fehler ist aufgetreten." });
@@ -273,7 +276,7 @@ export const getUser = async (req, res) => {
       })
       .populate("solvedCourses")
       .populate("comments");
-    res.send({user});
+    res.send({ user });
   } catch (error) {
     res.send(error);
   }

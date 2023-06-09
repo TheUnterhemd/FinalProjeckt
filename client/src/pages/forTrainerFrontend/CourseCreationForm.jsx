@@ -111,14 +111,18 @@ export default function CourseCreationForm({ course, setEdit }) {
       });
       if (!result.ok) {
         const err = await result.json();
-        throw new Error(err.message);
+        throw new Error(err);
       }
       const json = await result.json();
       if (method === "POST") {
         updateTrainer(json);
       }
-      navigate(`/course/${json.course._id}`);
-      if (setEdit) setEdit(false);
+      if (setEdit) {
+        setEdit(false);
+        navigate(`/success?id=${course._id}`);
+      } else {
+        navigate(`/course/${json.course._id}`);
+      }
     } catch (err) {
       setError(err);
       console.log("error while posting:", err);
@@ -157,10 +161,22 @@ export default function CourseCreationForm({ course, setEdit }) {
   }
 
   /** deletes clicked student from currStud Array */
-  function handleDelete(id) {
+  async function handleDelete(id) {
     setCurrStud((prevCurrStud) =>
       prevCurrStud.filter((student) => student._id !== id)
     );
+    try {
+      await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/user/update/${course._id}/${id}`,
+        {
+          method: "DELETE",
+          headers: { authorization: `Bearer ${user.accessToken}` },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+    }
   }
 
   return (
