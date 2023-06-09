@@ -147,6 +147,7 @@ export const loginUser = async (req, res) => {
         lastName: user.lastName,
         imgURL: user.imgURL,
         interests: user.interests,
+        address: user.address,
         bookedCourses: user.bookedCourses,
         solvedCourses: user.solvedCourses,
         comments: user.comments,

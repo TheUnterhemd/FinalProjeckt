@@ -192,6 +192,7 @@ export const loginTrainer = async (req, res, next) => {
         imgURL: trainer.imgURL,
         profession: trainer.profession,
         courses: trainer.courses,
+        address: trainer.address,
         trainer: true,
       },
       message: "Trainer logged in",
