@@ -35,7 +35,9 @@ export default function ToggleColorMode({ children }) {
                   default: "#0a1d30",
                   paper: "#08437d",
                   navbar: "#145191",
+                  boxes: "#14519150",
                 },
+
                 error: {
                   main: "#e62f21",
                 },

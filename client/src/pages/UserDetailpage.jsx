@@ -37,10 +37,16 @@ function UserProfile() {
   });
 
   return (
-    <Box sx={{ my: 11 }}>
-      <Typography variant="h3">Your Profile</Typography>
+    <Box sx={{ my: 10, p: "2rem" }}>
+      <Typography variant="h2">Your Profile</Typography>
       {user && !edit && !updatePW && (
-        <Grid container spacing={2} sx={{ my: "2rem" }}>
+        <Grid
+          container
+          spacing={4}
+          sx={{
+            my: "2rem",
+          }}
+        >
           <Grid
             item
             xs={12}
@@ -72,51 +78,38 @@ function UserProfile() {
               }}
             ></Avatar>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={8}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Typography variant="h4" gutterBottom>
-              {user.firstName} {user.lastName}
-            </Typography>
+          <Grid item xs={12} sm={8}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              sx={{
+                p: 4,
+                borderRadius: 2,
+                backgroundColor: "background.boxes",
+              }}
+            >
+              <Typography variant="h4" gutterBottom>
+                {user.firstName} {user.lastName}
+              </Typography>
 
-            {/* displays if user is a trainer */}
-            {user.trainer && (
-              <>
-                <Typography variant="h4">Upcoming Courses</Typography>
-                {upcomingCourses && upcomingCourses.length > 0 ? (
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{ width: "60%" }}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    mb={1}
-                  >
-                    {showAllCourses ? (
-                      upcomingCourses?.map((course) => (
-                        <Grid
-                          item
-                          md={12}
-                          lg={6}
-                          xl={4}
-                          key={course._id}
-                          display="flex"
-                          justifyContent="center"
-                          alignItems="center"
-                        >
-                          <CourseShowcase data={course} />
-                        </Grid>
-                      ))
-                    ) : (
-                      <>
-                        {upcomingCourses?.slice(0, 3).map((course) => (
+              {/* displays if user is a trainer */}
+              {user.trainer && (
+                <>
+                  <Typography variant="h4">Upcoming Courses</Typography>
+                  {upcomingCourses && upcomingCourses.length > 0 ? (
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ width: "60%" }}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      mb={1}
+                    >
+                      {showAllCourses ? (
+                        upcomingCourses?.map((course) => (
                           <Grid
                             item
                             md={12}
@@ -129,56 +122,56 @@ function UserProfile() {
                           >
                             <CourseShowcase data={course} />
                           </Grid>
-                        ))}
-                        {upcomingCourses.length > 3 && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              cursor: "pointer",
-                              color: theme.palette.primary.main,
-                              marginBottom: 2,
-                            }}
-                            onClick={() => setShowAllCourses(true)}
-                          >
-                            Show more...
-                          </Typography>
-                        )}
-                      </>
-                    )}
-                  </Grid>
-                ) : (
-                  "Currrently no upcoming courses."
-                )}
-                {/* Past Courses */}
-                <Typography variant="h4">Past Courses</Typography>
-                {pastCourses && pastCourses.length > 0 ? (
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{ width: "60%" }}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    mb={1}
-                  >
-                    {showAllCourses ? (
-                      pastCourses?.map((course) => (
-                        <Grid
-                          item
-                          md={12}
-                          lg={6}
-                          xl={4}
-                          key={course._id}
-                          display="flex"
-                          justifyContent="center"
-                          alignItems="center"
-                        >
-                          <CourseShowcase data={course} />
-                        </Grid>
-                      ))
-                    ) : (
-                      <>
-                        {pastCourses.slice(0, 3).map((course) => (
+                        ))
+                      ) : (
+                        <>
+                          {upcomingCourses?.slice(0, 3).map((course) => (
+                            <Grid
+                              item
+                              md={12}
+                              lg={6}
+                              xl={4}
+                              key={course._id}
+                              display="flex"
+                              justifyContent="center"
+                              alignItems="center"
+                            >
+                              <CourseShowcase data={course} />
+                            </Grid>
+                          ))}
+                          {upcomingCourses.length > 3 && (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                cursor: "pointer",
+                                color: theme.palette.primary.main,
+                                marginBottom: 2,
+                              }}
+                              onClick={() => setShowAllCourses(true)}
+                            >
+                              Show more...
+                            </Typography>
+                          )}
+                        </>
+                      )}
+                    </Grid>
+                  ) : (
+                    "Currrently no upcoming courses."
+                  )}
+                  {/* Past Courses */}
+                  <Typography variant="h4">Past Courses</Typography>
+                  {pastCourses && pastCourses.length > 0 ? (
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ width: "60%" }}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      mb={1}
+                    >
+                      {showAllCourses ? (
+                        pastCourses?.map((course) => (
                           <Grid
                             item
                             md={12}
@@ -191,46 +184,63 @@ function UserProfile() {
                           >
                             <CourseShowcase data={course} />
                           </Grid>
-                        ))}
-                        {pastCourses.length > 3 && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              cursor: "pointer",
-                              color: theme.palette.primary.main,
-                              marginBottom: 2,
-                            }}
-                            onClick={() => setShowAllCourses(true)}
-                          >
-                            Show more...
-                          </Typography>
-                        )}
-                      </>
-                    )}
-                  </Grid>
-                ) : (
-                  "No past courses to display."
-                )}
-              </>
-            )}
+                        ))
+                      ) : (
+                        <>
+                          {pastCourses.slice(0, 3).map((course) => (
+                            <Grid
+                              item
+                              md={12}
+                              lg={6}
+                              xl={4}
+                              key={course._id}
+                              display="flex"
+                              justifyContent="center"
+                              alignItems="center"
+                            >
+                              <CourseShowcase data={course} />
+                            </Grid>
+                          ))}
+                          {pastCourses.length > 3 && (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                cursor: "pointer",
+                                color: theme.palette.primary.main,
+                                marginBottom: 2,
+                              }}
+                              onClick={() => setShowAllCourses(true)}
+                            >
+                              Show more...
+                            </Typography>
+                          )}
+                        </>
+                      )}
+                    </Grid>
+                  ) : (
+                    "No past courses to display."
+                  )}
+                </>
+              )}
 
-            {/* displays if user is not a trainer */}
-            {!user.trainer && (
-              <>
-                <Typography variant="h6">Interests</Typography>
-                <Typography variant="body2" gutterBottom>
-                  {user?.interests?.join(", ")}
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  Booked Courses
-                </Typography>
-                <SmallCards data={user?.bookedCourses} />
-                <Typography variant="h6" gutterBottom>
-                  Past Courses
-                </Typography>
-                <SmallCards data={user?.solvedCourses} />
-              </>
-            )}
+              {/* displays if user is not a trainer */}
+              {!user.trainer && (
+                <>
+                  <Typography variant="h6">Interests</Typography>
+                  <Typography variant="body2" gutterBottom>
+                    {user?.interests?.join(", ")}
+                  </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    Booked Courses
+                  </Typography>
+                  <SmallCards data={user?.bookedCourses} />
+                  <Typography variant="h6" gutterBottom>
+                    Past Courses
+                  </Typography>
+                  <SmallCards data={user?.solvedCourses} />
+                </>
+              )}
+            </Box>
           </Grid>
         </Grid>
       )}

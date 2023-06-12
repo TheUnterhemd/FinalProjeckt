@@ -44,9 +44,25 @@ export default function SmallCards({ data }) {
                 sx={{ height: 80 }}
               />
               <CardContent>
-                <Typography variant="h6">{course.title}</Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {course.title}
+                </Typography>
                 {course.trainer && (
-                  <Typography varant="body2">
+                  <Typography
+                    varant="body2"
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     mit{" "}
                     <Link
                       style={{ color: "white" }}
