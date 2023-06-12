@@ -25,7 +25,7 @@ export default function CommentForm({ data, setCounter, setCommentList }) {
 
       setCommentList((prevCommentList) => {
         const temp = prevCommentList;
-        temp.push(result.comment);
+        temp.push(result.populatedComment);
         return temp;
       });
     } catch (err) {

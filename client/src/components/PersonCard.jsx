@@ -29,11 +29,20 @@ export default function PersonCard({ data }) {
           alt={`picture of ${data.firstName}`}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div">
             {data.firstName} {data.lastName}
           </Typography>
           {data.profession && (
-            <Typography variant="h6">Profession: {data.profession}</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Profession: {data.profession}
+            </Typography>
           )}
           {data.likes && (
             <Typography variant="body1">{data.likes.length} likes</Typography>
