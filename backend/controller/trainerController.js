@@ -298,7 +298,8 @@ export const passwordChange = async (req, res) => {
     }
 
     // Validierung des alten Passworts
-    const isPasswordCorrect = await bcrypt.compare(oldPassword, trainer.password);
+    const isPasswordCorrect = await bcrypt.compare(currentPassword, trainer.password);
+
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "Invalid old password" });
     }
@@ -309,8 +310,7 @@ export const passwordChange = async (req, res) => {
     //}
 
     // Passwort hashen
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    const hashedPassword = bcrypt.hash(newPassword, process.env.SALT_ROUNDS);
 
     // Speichern des neuen Passworts
     trainer.password = hashedPassword;
