@@ -143,8 +143,13 @@ function Carousel() {
 
   return (
     <CarouselProvider
-      naturalSlideWidth={400}
-      naturalSlideHeight={500}
+      style={{
+        maxWidth: "50%",
+        height: "50px",
+        padding: "10px",
+      }}
+      naturalSlideWidth={100}
+      naturalSlideHeight={100}
       totalSlides={3}
       visibleSlides={2}
       step={1}
@@ -162,7 +167,6 @@ function Carousel() {
           <Image src={indoorCourse} alt="Indoor Course" />
         </Slide>
       </Slider>
-
       <ButtonBack>{"<"}</ButtonBack>
       <ButtonNext>{">"}</ButtonNext>
     </CarouselProvider>
