@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   Chip,
+  Link,
   Grid,
   Typography,
 } from "@mui/material";
@@ -20,6 +21,7 @@ import CourseCreationForm from "./forTrainerFrontend/CourseCreationForm";
 import MapTest from "../components/map/Map";
 import FormattedDate from "../components/Data Formatting/FormattedDate";
 import { update } from "../hooks/update";
+
 export default function CourseDetailPage() {
   const { user, dispatch } = useContext(AuthContext);
   const theme = useTheme();
@@ -54,6 +56,7 @@ export default function CourseDetailPage() {
   async function updateBookedCourses(user, data) {
     const temp = user.bookedCourses?.map((course) => course._id);
     temp.push(data._id);
+    console.log("temp in updateBookedCourses", temp);
     return await update(
       `${url}/user/update/${user._id}`,
       {
@@ -99,7 +102,7 @@ export default function CourseDetailPage() {
   return (
     <div>
       {!edit && data && (
-        <Grid container spacing={2} sx={{ mt: "2rem" }}>
+        <Grid container spacing={2} sx={{ my: 10 }}>
           {error && <Alert severity="error">{error}</Alert>}
           <Grid
             item
@@ -116,8 +119,8 @@ export default function CourseDetailPage() {
             }}
           >
             <Avatar
-              alt={`picture of ${data.title}`}
-              src={data.imgURL}
+              alt={`picture for ${data?.title}`}
+              src={data?.imgURL}
               sx={{
                 width: 200,
                 height: 200,
@@ -150,9 +153,25 @@ export default function CourseDetailPage() {
             <Box sx={{ width: "300px", height: "200px", my: 2 }}>
               <MapTest markerOptions={{ data: [data] }} />
             </Box>
-            <Typography variant="body1">
-              Location: {data?.location?.description}
-            </Typography>
+            {data?.location?.description !== "online" ? (
+              <Typography variant="body1">
+                Location: {data?.location?.description}
+              </Typography>
+            ) : user?.bookedCourses?.filter((c) => c._id === data._id).length >
+              0 ? (
+              <Link
+                href={data?.location?.location}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {data?.location?.location}
+              </Link>
+            ) : (
+              <Typography variant="body1">
+                Location: {data?.location?.description}
+              </Typography>
+            )}
+
             <FormattedDate startDate={data.start} />
             <FormattedDate endDate={data.end} />
             <Typography variant="body1">Duration: {duration}</Typography>
@@ -162,8 +181,8 @@ export default function CourseDetailPage() {
             <Chip
               avatar={
                 <Avatar
-                  src={data.trainer?.imgURL}
-                  alt={`Avatar for ${data.trainer.firstName}`}
+                  src={data?.trainer?.imgURL}
+                  alt={`Avatar for ${data?.trainer?.firstName}`}
                 />
               }
               label={data.trainer?.firstName}
@@ -213,7 +232,7 @@ export default function CourseDetailPage() {
         </Box>
       )}
       {edit && data && user?.trainer && (
-        <CourseCreationForm course={data} setEdit={setEdit} />
+        <CourseCreationForm course={data} setEdit={setEdit} setData={setData} />
       )}
     </div>
   );

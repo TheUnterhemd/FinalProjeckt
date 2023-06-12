@@ -14,6 +14,7 @@ import CourseCreationForm from "./pages/forTrainerFrontend/CourseCreationForm";
 import SearchPage from "./pages/SearchPage";
 import jwt_decode from "jwt-decode";
 import Footer from "./components/Footer";
+import Success from "./pages/Success";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
@@ -57,6 +58,8 @@ function App() {
           <Route path="/course" element={<AllCourses />} />
           <Route path="/course/:id" element={<CourseDetailPage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/success" element={<Success />} />
+
           {/* Routes for Trainers only */}
           <Route
             path="/course/create"

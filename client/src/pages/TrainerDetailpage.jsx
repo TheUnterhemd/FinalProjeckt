@@ -32,19 +32,18 @@ export default function TrainerDetailpage() {
     const courseStartDate = course.start.split("T")[0];
     const today = new Date().toISOString().split("T")[0];
     return courseStartDate >= today;
-  })
+  });
 
   let pastCourses = trainer?.courses.filter((course) => {
     const courseStartDate = course.start.split("T")[0];
     const today = new Date().toISOString().split("T")[0];
     return courseStartDate <= today;
-  })
-
+  });
 
   return (
     <div>
       {trainer && (
-        <Grid container spacing={2} sx={{ mt: "2rem" }}>
+        <Grid container spacing={2} sx={{ my: 10 }}>
           <Grid
             item
             xs={12}
@@ -72,6 +71,7 @@ export default function TrainerDetailpage() {
                   width: "100%",
                   borderRadius: "0 50% 50% 0%/0% 60% 25% 0%",
                 },
+                boxShadow: "0px 2px 10px 0px #145191",
               }}
             ></Avatar>
           </Grid>
@@ -226,15 +226,15 @@ export default function TrainerDetailpage() {
             <Box>
               {commentList?.length > 0
                 ? commentList
-                  .reverse()
-                  .map((comment) => (
-                    <CommentCard
-                      data={comment}
-                      key={uuid()}
-                      setCommentList={setCommentList}
-                      setCounter={setCounter}
-                    />
-                  ))
+                    .reverse()
+                    .map((comment) => (
+                      <CommentCard
+                        data={comment}
+                        key={uuid()}
+                        setCommentList={setCommentList}
+                        setCounter={setCounter}
+                      />
+                    ))
                 : "Be the first to comment!"}
             </Box>
           </Grid>

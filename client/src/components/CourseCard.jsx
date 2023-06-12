@@ -22,7 +22,10 @@ export default function CourseCard({ data }) {
   }
 
   return (
-    <Card sx={{ width: 250, maxWidth: 250 }} onClick={(e) => clickHandler(e)}>
+    <Card
+      sx={{ width: 250, maxWidth: 250, boxShadow: "0px 2px 10px 0px #145191" }}
+      onClick={(e) => clickHandler(e)}
+    >
       <CardActionArea>
         <CardMedia
           component="img"
@@ -67,11 +70,16 @@ export default function CourseCard({ data }) {
             >
               {data.title}
             </Typography>
-            <Typography variant="body1" sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}>Location: {data?.location?.description}</Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Location: {data?.location?.description}
+            </Typography>
             <FormattedDate startDate={data?.start} />
             <FormattedDate endDate={data?.end} />
             <Chip label={`${data.price} €`} />

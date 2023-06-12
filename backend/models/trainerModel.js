@@ -13,7 +13,7 @@ const trainerSchema = new Schema({
     city: {type: String,set: setUndefined,}
     },
   profession: {type: String,set: setUndefined,required: true,},
-  imgURL: {type: String,set: setUndefined,default:  "https://res.cloudinary.com/dhdugvhj3/image/upload/v1680609327/default_profile_picture/default_profile_picture_qssq71.jpg",},
+  imgURL: {type: String, set: a => a === 'undefined' ? undefined : a ,default:  "https://res.cloudinary.com/dhdugvhj3/image/upload/v1680609327/default_profile_picture/default_profile_picture_qssq71.jpg",},
   password: {type: String,set: setUndefined,required: true,},
   email: {type: String,set: setUndefined,required: true,},
   trainer: {type: Boolean,default: true,},

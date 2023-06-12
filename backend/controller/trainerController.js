@@ -30,8 +30,16 @@ cloudinary.config({
 //FUNCTIONS
 //Funktion zum Hinzufügen eines Trainers mit email zur validierung des accounts.
 export const addTrainer = async (req, res) => {
-
-  const {courses,email,firstName,lastName,password,address,imgURL,profession} = req.body;
+  const {
+    courses,
+    email,
+    firstName,
+    lastName,
+    password,
+    address,
+    imgURL,
+    profession,
+  } = req.body;
 
   let exist;
   // Überprüfen, ob der Trainer bereits existiert
@@ -138,7 +146,7 @@ export const loginTrainer = async (req, res, next) => {
     const tokenPayload = {
       user: {
         trainer: true,
-        data: trainer._id,
+        _id: trainer._id,
         courses: trainer.courses,
         profession: trainer.profession,
         address: trainer.address,
@@ -184,6 +192,7 @@ export const loginTrainer = async (req, res, next) => {
         imgURL: trainer.imgURL,
         profession: trainer.profession,
         courses: trainer.courses,
+        address: trainer.address,
         trainer: true,
       },
       message: "Trainer logged in",
@@ -199,16 +208,48 @@ export const logoutTrainer = async (req, res) => {
 };
 
 //Funktion um den Trainer zu updaten
-export const updateTrainer = async (req, res, next) => {
+export const updateTrainer = async (req, res) => {
   // Die ID des Trainers, der aktualisiert werden soll
   const id = req.params.id;
-  // Die zu aktualisierenden Informationen
-  const { courses, address, profession } = req.body;
-  // Variable, um den aktualisierten Trainer zu speichern
-  let trainer;
-  // Variable für das Bild-URL des Trainers (falls vorhanden)
-  let imgURL;
+  const filter = { _id: id };
 
+  // Die zu aktualisierenden Informationen
+  const updates = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    address: {
+      street: req.body.street,
+      code: req.body.postalCode,
+      city: req.body.city,
+    },
+    courses: req.body.courses,
+    imgURL: req.body.imgURL,
+    profession: req.body.profession,
+  };
+
+  // Trainer wird anhand von ID gesucht um address-werte beizubehalten falls keine neuen mitgesendet wurden
+  const trainer = await Trainer.findById(id);
+
+  if (!req.body.street) {
+    updates.address.street = trainer.address.street;
+  }
+
+  if (!req.body.city) {
+    updates.address.city = trainer.address.city;
+  }
+
+  if (!req.body.postalCode) {
+    updates.address.code = trainer.address.code;
+  }
+
+  // trainer._id wird mit der ID des Trainers verglichen, der versucht die Änderungen zu pushen.
+  // wenn das nicht die gleiche ist, wird Fehler geworfen
+
+  if (!trainer._id.equals(req.trainer.user._id)) {
+    return res
+      .status(403)
+      .json({ message: "You are not allowed to update this trainer." });
+  }
   try {
     // Wenn eine Datei (Bild) in der Anfrage enthalten ist, wird sie zu Cloudinary hochgeladen
     if (req.file) {
@@ -217,19 +258,13 @@ export const updateTrainer = async (req, res, next) => {
         folder: `localtrainer/avatar/trainer/${id}`,
       });
       // Die sichere URL des hochgeladenen Bildes wird gespeichert
-      imgURL = result.secure_url;
+      updates.imgURL = result.secure_url;
     }
 
     // Trainer in der Datenbank anhand der ID aktualisieren und die neuen Informationen setzen
-    trainer = await Trainer.findByIdAndUpdate(
-      { _id: id },
-      {
-        courses,
-        address: JSON.parse(address),
-        profession,
-        imgURL,
-      }
-    )
+    const result = await Trainer.findOneAndUpdate(filter, updates, {
+      new: true,
+    })
       .select("-passwort")
       .populate({
         path: "courses",
@@ -240,14 +275,12 @@ export const updateTrainer = async (req, res, next) => {
       });
 
     // Wenn kein Trainer gefunden wurde, gibt es einen Fehler bei der Aktualisierung
-    if (!trainer) {
+    if (!result) {
       return res.status(500).json({ message: "Not able to update trainer" });
     }
 
     // Erfolgreiche Aktualisierung des Trainers und den aktualisierten Trainer zurückgeben
-    return res
-      .status(200)
-      .json({ trainer: trainer, message: "trainer updated" });
+    return res.status(200).json({ user: result, message: "trainer updated" });
   } catch (error) {
     console.log(error.message);
   }

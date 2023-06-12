@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, Grid, TextField } from "@mui/material";
 
-function ProfileForm() {
+function ProfileForm({ setEdit }) {
   const { user, dispatch } = useContext(AuthContext);
   const [endpoint, setEndpoint] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -50,10 +50,13 @@ function ProfileForm() {
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("imgURL", imgURL);
-      formData.append(
+      /* formData.append(
         "address",
         JSON.stringify({ street: street, code: postalCode, city: city })
-      );
+      ); */
+      formData.append("street", street);
+      formData.append("city", city);
+      formData.append("postalCode", postalCode);
       if (profession) {
         formData.append("profession", profession);
       }
@@ -73,12 +76,12 @@ function ProfileForm() {
       );
 
       const data = await response.json();
-      dispatch({ type: "LOGIN", payload: data });
+      dispatch({ type: "LOGIN", payload: data.user });
       console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
-      window.location.reload();
+      setEdit(false);
     }
   };
 

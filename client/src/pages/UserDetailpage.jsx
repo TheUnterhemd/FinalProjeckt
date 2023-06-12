@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext.js";
-import { Avatar, Chip, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Chip, Grid, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SmallCards from "../components/SmallCards.jsx";
 import CourseShowcase from "../components/CourseShowcase";
@@ -37,12 +37,10 @@ function UserProfile() {
   });
 
   return (
-    <div>
-      <Typography variant="h3" sx={{ my: 2 }}>
-        Your Profile
-      </Typography>
+    <Box sx={{ my: 11 }}>
+      <Typography variant="h3">Your Profile</Typography>
       {user && !edit && !updatePW && (
-        <Grid container spacing={2} sx={{ mt: "2rem" }}>
+        <Grid container spacing={2} sx={{ my: "2rem" }}>
           <Grid
             item
             xs={12}
@@ -70,6 +68,7 @@ function UserProfile() {
                   width: "100%",
                   borderRadius: "0 50% 50% 0%/0% 60% 25% 0%",
                 },
+                boxShadow: "0px 2px 10px 0px #145191",
               }}
             ></Avatar>
           </Grid>
@@ -249,9 +248,9 @@ function UserProfile() {
           sx={{ mr: 1 }}
         ></Chip>
       )}
-      {user && edit && <ProfileForm />}
+      {user && edit && <ProfileForm setEdit={setEdit} />}
       {user && updatePW && <EmailPasswordForm />}
-    </div>
+    </Box>
   );
 }
 
