@@ -56,7 +56,6 @@ export default function CourseDetailPage() {
   async function updateBookedCourses(user, data) {
     const temp = user.bookedCourses?.map((course) => course._id);
     temp.push(data._id);
-    console.log("temp in updateBookedCourses", temp);
     return await update(
       `${url}/user/update/${user._id}`,
       {

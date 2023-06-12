@@ -103,7 +103,7 @@ export const loginUser = async (req, res) => {
     const tokenPayload = {
       user: {
         trainer: false,
-        id: user._id,
+        _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         address: user.address,
@@ -183,7 +183,7 @@ export const updateUser = async (req, res) => {
 
   const user = await User.findById(id);
   // Überprüfen ob user wirklich user ist
-  if (!user._id.equals(req.user.user.id)) {
+  if (!user._id.equals(req.user.user._id)) {
     return res
       .status(403)
       .json({ message: "You are not allowed to update this user." });
@@ -264,7 +264,7 @@ export const removeBookedCourse = async (req, res) => {
 };
 export const passwordChange = async (req, res) => {
   const id = req.params.id;
-  const { currentPassword, newPassword} = req.body;
+  const { currentPassword, newPassword } = req.body;
 
   try {
     //Suche nach dem Trainer in der Datenbank
@@ -274,7 +274,10 @@ export const passwordChange = async (req, res) => {
     }
 
     // Validierung des alten Passworts
-    const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "Invalid old password" });
     }
