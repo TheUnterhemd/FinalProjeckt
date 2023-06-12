@@ -299,6 +299,7 @@ export const passwordChange = async (req, res) => {
 
     // Validierung des alten Passworts
     const isPasswordCorrect = await bcrypt.compare(currentPassword, trainer.password);
+
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "Invalid old password" });
     }
