@@ -253,6 +253,43 @@ export const updateTrainer = async (req, res, next) => {
   }
 };
 
+export const passwordChange = async (req, res) => {
+  const id = req.params.id;
+  const { currentPassword, newPassword} = req.body;
+
+  try {
+    //Suche nach dem Trainer in der Datenbank
+    const trainer = await Trainer.findById(id);
+    if (!trainer) {
+      return res.status(404).json({ error: "Trainer not found" });
+    }
+
+    // Validierung des alten Passworts
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, trainer.password);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid old password" });
+    }
+
+    // Sicherstellung ob die beiden neuen Eingaben identisch sind
+    //if (newPassword !== confirmPassword) {
+    //  return res.status(400).json({ error: "Passwords do not match" });
+    //}
+
+    // Passwort hashen
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Speichern des neuen Passworts
+    trainer.password = hashedPassword;
+    await trainer.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
   try {
