@@ -15,14 +15,16 @@ export const addComment = async (req, res, next) => {
   try {
     await comment.save();
 
-    const populatedComment = await comment
-      .populate("trainerId', 'firstName lastName imgURL")
-      .populate('userId', 'firstName lastName imgURL')
-
+    const populatedComment = await Comment.populate(comment, [
+      { path: "trainerId", select: "firstName lastName imgURL" },
+      { path: "userId", select: "firstName lastName imgURL" }
+    ]);
+    console.log(populatedComment);
+    return res.status(200).json({ populatedComment, message: "Comment added" });
   } catch (error) {
     console.log(error.message);
+    return res.status(500).json({ error: "Internal server error" });
   }
-  return res.status(200).json({ populatedComment, message: "comment added" });
 };
 
 export const updateComment = async (req, res, next) => {
