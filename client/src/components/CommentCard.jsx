@@ -38,8 +38,9 @@ export default function CommentCard({ data, setCommentList, setCounter }) {
         >
           <Box display="flex" justifyContent="space-between">
             <Avatar
-              alt={`picture of ${data.userId}`}
-              src={data.imgURL}
+              alt={`picture of ${data.userId.firstName}`}
+              title={data.userId.firstName}
+              src={data.userId.imgURL}
             ></Avatar>
             {user && user._id === data.userId._id && (
               <DeleteIcon
