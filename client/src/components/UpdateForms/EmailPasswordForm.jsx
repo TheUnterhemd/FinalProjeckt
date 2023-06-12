@@ -9,6 +9,7 @@ function EmailPasswordForm() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [route, setRoute] = useState("");
 
   useEffect(() => {
     user.trainer ? setEndpoint("trainer") : setEndpoint("user");
@@ -24,13 +25,13 @@ function EmailPasswordForm() {
 
   const postData = async ({ email, currentPassword, newPassword }) => {
     const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "authorization": `Bearer ${user.accessToken}` },
       body: JSON.stringify({ email, currentPassword, newPassword }),
     }
 
     try {
-      const response = await fetch(`http://localhost:5002/${endpoint}/update/${user._id}`, options);
+      const response = await fetch(`http://localhost:5002/${endpoint}/${route}/${user._id}`, options);
 
       const data = await response.json();
       dispatch({ type: "LOGIN", payload: data.user });
@@ -84,13 +85,13 @@ function EmailPasswordForm() {
               {
                 newPassword !== repeatPassword ? (
                   <>
-                    <Typography>Passwords do not match!</Typography>
+                    <Typography >Passwords do not match!</Typography>
                     <Button disabled type="submit" variant="contained" fullWidth sx={{ mt: 1, mb: 1 }}>
                       Update Password
                     </Button>
                   </>
                 ) : (
-                  <Button type="submit" variant="contained" fullWidth sx={{ mt: 1, mb: 1 }}>
+                  <Button type="submit" variant="contained" fullWidth sx={{ mt: 1, mb: 1 }} onMouseOver={() => setRoute("password")}>
                     Update Password
                   </Button>
                 )
@@ -118,7 +119,7 @@ function EmailPasswordForm() {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" fullWidth sx={{ mt: 1, mb: 1 }}>
+              <Button type="submit" variant="contained" fullWidth sx={{ mt: 1, mb: 1 }} onMouseOver={() => setRoute("email")}>
                 Update Email
               </Button>
             </Grid>
