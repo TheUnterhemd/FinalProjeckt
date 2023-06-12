@@ -75,10 +75,13 @@ export default function LandingPage() {
         <h2 style={{ marginBottom: "1rem" }}>About Local Trainer</h2>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={4}>
-            <Card title="Our Mission" text="bla bla" />
+            <Card title="Our Mission" text="Our Mission is to create connection.
+We want to enable people to feel at home right where they are
+by creating a way to easily connect with others around them through a shared goal." />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Card title="Our Goals" text="bla bla" />
+            <Card title="Our Goals" text="We want to support learners in their strive for knowledge and excercise, and teachers in their search for an easy way to offer their knowledge to others.
+Simply put, LocalTrainer does that, by offering a platform where teachers can offer courses (on- and offline) and learners can book those. " />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Card
@@ -91,6 +94,7 @@ export default function LandingPage() {
       <Box
         sx={{
           width: "100%",
+          mt: 10,
           mb: 10,
         }}
       >
@@ -145,9 +149,9 @@ function Carousel() {
   return (
     <CarouselProvider
       style={{
-        maxWidth: "50%",
-        height: "50px",
-        padding: "10px",
+        maxWidth: "70%",
+        padding: "20px",
+        margin: "0 auto",
       }}
       naturalSlideWidth={100}
       naturalSlideHeight={100}
