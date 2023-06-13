@@ -145,7 +145,11 @@ export default function CourseDetailPage() {
             <Typography variant="h4" gutterBottom>
               {data.title} <Chip label={`${data.price} €`} />
             </Typography>
-            <Typography variant="body2" gutterBottom>
+            <Typography
+              variant="body2"
+              gutterBottom
+              sx={{ maxWidth: "100%", wordWrap: "break-word" }}
+            >
               {data.description}
             </Typography>
 
@@ -185,6 +189,7 @@ export default function CourseDetailPage() {
                 />
               }
               label={data.trainer?.firstName}
+              title={data?.trainer?.firstName}
               onClick={() => navigate(`/trainer/${data.trainer._id}`)}
             ></Chip>
             <Typography variant="h6" gutterBottom>
@@ -197,6 +202,7 @@ export default function CourseDetailPage() {
                       src={student.imgURL}
                       alt={student.firstName}
                       key={student._id}
+                      title={`${student.firstName} ${student.lastName}`}
                     />
                   ))
                 : "Be the first to participate!"}

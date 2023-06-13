@@ -26,6 +26,7 @@ export default function Footer() {
             sx={{ color: "text.secondary" }}
             target="_blank"
             rel="noopener noreferrer"
+            key={creator.fullName}
           >
             {`${creator.fullName}, `}
           </Link>

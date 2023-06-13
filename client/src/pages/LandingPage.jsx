@@ -214,6 +214,7 @@ function Carousel() {
     >
       <h2>Our Courses</h2>
       <Slider className={s.slider}>
+
         <Slide index={0}>
           <RouterLink to="/search?q= ">
 
@@ -225,6 +226,7 @@ function Carousel() {
               tag="div"
             />
           </RouterLink>
+
         </Slide>
 
         <Slide index={1}>

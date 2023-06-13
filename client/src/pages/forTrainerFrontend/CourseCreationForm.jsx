@@ -208,6 +208,7 @@ export default function CourseCreationForm({ course, setEdit }) {
           fullWidth
           name="title"
           id="title"
+          inputProps={{ maxLength: 30 }}
           placeholder="Course title"
           variant="filled"
           value={title}
@@ -220,6 +221,7 @@ export default function CourseCreationForm({ course, setEdit }) {
           fullWidth
           multiline
           rows="4"
+          inputProps={{ maxLength: 400 }}
           name="description"
           id="description"
           placeholder="Course description"
@@ -244,6 +246,7 @@ export default function CourseCreationForm({ course, setEdit }) {
           focused
           required
           aria-required
+          inputProps={{ maxLength: 100 }}
           label="location"
           fullWidth
           name="location"

@@ -97,6 +97,7 @@ const Navbar = () => {
               <>
                 <Button
                   variant="outlined"
+                  aria-label="Menu"
                   aria-controls={openMenu ? "menu-Menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={openMenu ? "true" : undefined}
@@ -110,6 +111,7 @@ const Navbar = () => {
                   onClose={handleMenuClose}
                 >
                   <MenuItem
+                    aria-label="search"
                     component={Link}
                     to="/search"
                     sx={{ color: "text.secondary" }}
@@ -117,6 +119,7 @@ const Navbar = () => {
                     Search
                   </MenuItem>
                   <MenuItem
+                    aria-label="my profile"
                     component={Link}
                     to="/user"
                     sx={{ color: "text.secondary" }}
@@ -124,6 +127,7 @@ const Navbar = () => {
                     My Profile
                   </MenuItem>
                   <MenuItem
+                    aria-label="Trainers"
                     component={Link}
                     to="/trainer"
                     sx={{ color: "text.secondary" }}
@@ -131,6 +135,7 @@ const Navbar = () => {
                     Trainer
                   </MenuItem>
                   <MenuItem
+                    aria-label="courses"
                     component={Link}
                     to="/course"
                     sx={{ color: "text.secondary" }}
@@ -138,7 +143,11 @@ const Navbar = () => {
                     Course
                   </MenuItem>
                   {user?.trainer && (
-                    <MenuItem component={Link} to="/course/create">
+                    <MenuItem
+                      component={Link}
+                      to="/course/create"
+                      aria-label="create course"
+                    >
                       Create Course
                     </MenuItem>
                   )}
@@ -147,6 +156,7 @@ const Navbar = () => {
             ) : (
               <Box>
                 <Button
+                  aria-label="my profile"
                   component={Link}
                   to="/user"
                   sx={{ color: "text.secondary" }}
@@ -154,6 +164,7 @@ const Navbar = () => {
                   my profile
                 </Button>
                 <Button
+                  aria-label="trainers"
                   component={Link}
                   to="/trainer"
                   sx={{ color: "text.secondary" }}
@@ -161,6 +172,7 @@ const Navbar = () => {
                   Trainer
                 </Button>
                 <Button
+                  aria-label="courses"
                   component={Link}
                   to="/course"
                   sx={{ color: "text.secondary" }}
@@ -169,6 +181,7 @@ const Navbar = () => {
                 </Button>
                 {user?.trainer && (
                   <Button
+                    aria-label="create course"
                     component={Link}
                     to="/course/create"
                     sx={{ color: "text.secondary" }}
@@ -198,7 +211,11 @@ const Navbar = () => {
               </Box>
               <Box>
                 {!isMobileView && (
-                  <IconButton color="inherit" onClick={toggleSearchbar}>
+                  <IconButton
+                    color="inherit"
+                    onClick={toggleSearchbar}
+                    aria-label="open searchbar"
+                  >
                     <SearchIcon />
                   </IconButton>
                 )}
@@ -206,6 +223,7 @@ const Navbar = () => {
                   sx={{ ml: 1 }}
                   onClick={colorMode.toggleColorMode}
                   color="inherit"
+                  aria-label="light or dark mode"
                 >
                   {theme.palette.mode === "dark" ? (
                     <Brightness7Icon />
@@ -216,11 +234,19 @@ const Navbar = () => {
                 {!user && (
                   <>
                     {isMobileView ? (
-                      <Button variant="contained" onClick={handleOpen}>
+                      <Button
+                        variant="contained"
+                        onClick={handleOpen}
+                        aria-label="login/register"
+                      >
                         <LoginIcon />
                       </Button>
                     ) : (
-                      <Button variant="contained" onClick={handleOpen}>
+                      <Button
+                        variant="contained"
+                        onClick={handleOpen}
+                        aria-label="login/register"
+                      >
                         Login/Register
                       </Button>
                     )}
