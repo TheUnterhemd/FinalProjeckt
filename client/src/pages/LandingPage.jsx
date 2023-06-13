@@ -3,7 +3,7 @@ import Searchbar from "../components/Search/Searchbar.jsx";
 import { Box } from "@mui/system";
 import beispielBild from "../assets/beispielBild.jpg";
 import "../styles.css";
-import { Grid } from "@mui/material";
+import { Grid, Link } from "@mui/material";
 import onlineCourse from "../assets/onlineCourse.jpg";
 import outdoorCourse from "../assets/outdoorCourse.jpg";
 import indoorCourse from "../assets/indoorCourse.jpg";
@@ -17,6 +17,7 @@ import {
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import s from "pure-react-carousel/dist/react-carousel.es.css";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function LandingPage() {
   return (
@@ -75,18 +76,68 @@ export default function LandingPage() {
         <h2 style={{ marginBottom: "1rem" }}>About Local Trainer</h2>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={4}>
-            <Card title="Our Mission" text="Our Mission is to create connection.
+            <Card
+              title="Our Mission"
+              text="Our Mission is to create connection.
 We want to enable people to feel at home right where they are
-by creating a way to easily connect with others around them through a shared goal." />
+by creating a way to easily connect with others around them through a shared goal."
+            />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Card title="Our Goals" text="We want to support learners in their strive for knowledge and excercise, and teachers in their search for an easy way to offer their knowledge to others.
-Simply put, LocalTrainer does that, by offering a platform where teachers can offer courses (on- and offline) and learners can book those. " />
+            <Card
+              title="Our Goals"
+              text="We want to support learners in their strive for knowledge and excercise, and teachers in their search for an easy way to offer their knowledge to others.
+Simply put, LocalTrainer does that, by offering a platform where teachers can offer courses (on- and offline) and learners can book those. "
+            />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Card
               title="Our Team"
-              text="bla blabla blabla bla bla blabla bla blablabla bla bla blabla blabla bla bla blabla bla blablabla blabla blabla blabla bla bla blabla bla blablabla bla"
+              text={[
+                "This Website was developed as our final project for the Web Development course @",
+                <Link
+                  href="https://digitalcareerinstitute.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "text.secondary" }}
+                >
+                  DigitalCareerInstitute,
+                </Link>,
+                " by : ",
+                <Link
+                  href="https://github.com/dkathrine"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "text.secondary" }}
+                >
+                  Kathrine Beuth,
+                </Link>,
+                <Link
+                  href="https://github.com/LinaSimonovic"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "text.secondary" }}
+                >
+                  {" "}
+                  Lina Simonovic,
+                </Link>,
+                <Link
+                  href="https://github.com/TheUnterhemd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "text.secondary" }}
+                >
+                  Thomas Kodel und{" "}
+                </Link>,
+                <Link
+                  href="https://github.com/micha-lieber"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: "text.secondary" }}
+                >
+                  Michael Lieber.
+                </Link>,
+              ]}
             />
           </Grid>
         </Grid>
@@ -161,15 +212,44 @@ function Carousel() {
       dragStep={1}
       infinite={true}
     >
+      <h2>Our Courses</h2>
       <Slider className={s.slider}>
         <Slide index={0}>
-          <Image src={onlineCourse} alt="Online Course" />
+          <RouterLink to="/search?q= ">
+
+            <Image
+              src={onlineCourse}
+              alt="Online Course"
+              isBgImage="true"
+              children={<p style={{ color: "whitesmoke" }}>Online Course</p>}
+              tag="div"
+            />
+          </RouterLink>
         </Slide>
+
         <Slide index={1}>
-          <Image src={outdoorCourse} alt="Outdoor Course" />
+          <RouterLink to="/search?q= ">
+            
+            <Image
+              src={outdoorCourse}
+              alt="Outdoor Course"
+              isBgImage="true"
+              children={<p style={{ color: "whitesmoke" }}>Outdoor Course</p>}
+              tag="div"
+            />
+          </RouterLink>
         </Slide>
+
         <Slide index={2}>
-          <Image src={indoorCourse} alt="Indoor Course" />
+          <RouterLink to="/search?q= ">
+            <Image
+              src={indoorCourse}
+              alt="Indoor Course"
+              isBgImage="true"
+              children={<p style={{ color: "whitesmoke" }}>Indoor Course</p>}
+              tag="div"
+            />
+          </RouterLink>
         </Slide>
       </Slider>
       <ButtonBack>{"<"}</ButtonBack>
