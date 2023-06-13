@@ -45,7 +45,7 @@ const SearchPage = () => {
   const { data, isPending, error } = useFetch(searchURL);
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ mt: 12 }}>
       {isMobileView && <Searchbar />}
       <FilterMenu setFilter={setFilters} data={data} />
       <Box

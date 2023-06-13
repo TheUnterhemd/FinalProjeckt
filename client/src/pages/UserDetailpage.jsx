@@ -20,9 +20,9 @@ function UserProfile() {
   const { user } = useContext(AuthContext);
 
   //if user.address = empty force update
-  /* useEffect(() => {
+  useEffect(() => {
     user.address === undefined && setEdit(true);
-  }, [user.address]); */
+  }, [user.address]);
 
   let upcomingCourses = user?.courses?.filter((course) => {
     const courseStartDate = course.start.split("T")[0];

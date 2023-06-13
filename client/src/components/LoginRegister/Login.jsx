@@ -42,7 +42,7 @@ const Login = ({ setReg, close, setWarningToast }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:5002/${endpoint}/login`,
+        `${process.env.REACT_APP_SERVER_URL}/${endpoint}/login`,
         options
       );
 
