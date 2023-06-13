@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Alert, Box, Button, Grid, TextField } from "@mui/material";
 
 function ProfileForm({ setEdit }) {
   const { user, dispatch } = useContext(AuthContext);
@@ -65,7 +65,7 @@ function ProfileForm({ setEdit }) {
       }
 
       const response = await fetch(
-        `http://localhost:5002/${endpoint}/update/${user._id}`,
+        `${process.env.REACT_APP_SERVER_URL}/${endpoint}/update/${user._id}`,
         {
           method: "PUT",
           body: formData,
@@ -94,6 +94,7 @@ function ProfileForm({ setEdit }) {
       sx={{ width: 500, mx: "auto", my: 1 }}
       onSubmit={handleSubmit}
     >
+      {user.address === undefined && <Alert severity="warning">Please add an address to your profile!</Alert>}
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
