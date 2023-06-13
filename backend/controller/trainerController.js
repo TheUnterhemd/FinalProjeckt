@@ -310,7 +310,7 @@ export const passwordChange = async (req, res) => {
     //}
 
     // Passwort hashen
-    const hashedPassword = bcrypt.hash(newPassword, process.env.SALT_ROUNDS);
+    const hashedPassword = bcrypt.hashSync(newPassword, salt);
 
     // Speichern des neuen Passworts
     trainer.password = hashedPassword;
@@ -324,7 +324,7 @@ export const passwordChange = async (req, res) => {
 };
 
 export const emailChange = async (req, res) => {
-  id = req.params.id;
+  const id = req.params.id;
   const {email,password} = req.body;
 
   try {
