@@ -303,7 +303,7 @@ export const passwordChange = async (req, res) => {
 
 export const emailChange = async (req, res) => {
   const id = req.params.id;
-  const {email,password} = req.body;
+  const {email,currentPassword} = req.body;
 
   try {
       const user = await User.findById(id);
@@ -312,7 +312,7 @@ export const emailChange = async (req, res) => {
       }
 
       // Validierung des alten Passworts
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
 
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "Invalid password" });
