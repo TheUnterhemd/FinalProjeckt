@@ -6,7 +6,8 @@ import {
   getTrainer,
   updateTrainer,
   logoutTrainer,
-  passwordChange
+  passwordChange,
+  emailChange
 } from "../controller/trainerController.js";
 import { upload } from "../controller/cloudinaryController.js";
 import { trainerValidator } from "../validation/validator.js";
@@ -19,6 +20,7 @@ trainerRouter.post("/login", loginTrainer);
 trainerRouter.post("/logout", logoutTrainer); 
 
 trainerRouter.put("/password/:id", trainerValidator, passwordChange)
+trainerRouter.put("/email/:id", trainerValidator, emailChange)
 trainerRouter.put("/update/:id",trainerValidator, upload.single("imageURL"), updateTrainer);
 
 trainerRouter.get("/",getAllTrainers);

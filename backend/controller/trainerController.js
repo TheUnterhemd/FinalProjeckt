@@ -323,6 +323,49 @@ export const passwordChange = async (req, res) => {
   }
 };
 
+export const emailChange = async (req, res) => {
+  id = req.params.id;
+  const {email,password} = req.body;
+
+  try {
+      const trainer = await Trainer.findById(id);
+      if(!trainer){
+        return res.status(404).json({ error: "Trainer not found" });
+      }
+
+      // Validierung des alten Passworts
+    const isPasswordCorrect = await bcrypt.compare(password, trainer.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+
+    trainer.email = email,
+    trainer.verified = false;
+    await trainer.save();
+    // E-Mail-Validierung
+  // Einen Verifizierungstoken für den Trainer erstellen
+  try {
+    const changeToken = new VerifyToken({
+      userID: trainer._id,
+      verifyToken: crypto.randomBytes(16).toString("hex"),
+    });
+    console.log(changeToken);
+    await changeToken.save();
+
+    // E-Mail mit dem Verifizierungslink an den Trainer senden
+    const link = `http://localhost:5002/token/verify/${changeToken.verifyToken}`;
+    await verifyMailer(trainer.email, link);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+    return res.status(200).json({ message: "check your emails" });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const getAllTrainers = async (req, res, next) => {
   let trainers;
   try {
