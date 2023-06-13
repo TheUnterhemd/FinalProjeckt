@@ -57,17 +57,19 @@ const LoginRegModal = ({ open, close }) => {
         </Snackbar>
       </Portal>
       <Modal open={open} onClose={close}>
-        {isReg ? (
-          <Register
-            setLogin={() => setIsReg(!isReg)}
-            close={close}
-            setErrorMessage={setErrorMessage}
-            setOpenToast={setOpenToast}
-            setErrorToast={setErrorToast}
-          />
-        ) : (
-          <Login setReg={() => setIsReg(true)} close={close} setWarningToast={setWarningToast} />
-        )}
+        <>
+          {isReg ? (
+            <Register
+              setLogin={() => setIsReg(!isReg)}
+              close={close}
+              setErrorMessage={setErrorMessage}
+              setOpenToast={setOpenToast}
+              setErrorToast={setErrorToast}
+            />
+          ) : (
+            <Login setReg={() => setIsReg(true)} close={close} setWarningToast={setWarningToast} />
+          )}
+        </>
       </Modal>
     </>
   );
