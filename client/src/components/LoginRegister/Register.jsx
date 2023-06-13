@@ -44,7 +44,7 @@ const Register = ({
       }
 
       const response = await fetch(
-        `http://localhost:5002/${endpoint}/register`,
+        `${process.env.REACT_APP_SERVER_URL}/${endpoint}/register`,
         {
           method: "POST",
           body: formData,

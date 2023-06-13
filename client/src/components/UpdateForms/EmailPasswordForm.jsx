@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function EmailPasswordForm() {
   const { user, dispatch } = useContext(AuthContext);
@@ -11,6 +12,8 @@ function EmailPasswordForm() {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [route, setRoute] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     user.trainer ? setEndpoint("trainer") : setEndpoint("user");
   }, [user.trainer])
@@ -18,9 +21,6 @@ function EmailPasswordForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     postData({ email, currentPassword, newPassword })
-    console.log(
-      "this will submit the updated profiledata to database and dispatch with the returned user to update context"
-    );
   }
 
   const postData = async ({ email, currentPassword, newPassword }) => {
@@ -31,9 +31,19 @@ function EmailPasswordForm() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5002/${endpoint}/${route}/${user._id}`, options);
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/${endpoint}/${route}/${user._id}`, options);
 
       const data = await response.json();
+
+      if (data.message.includes("emails")) {
+        dispatch({ type: "LOGOUT" });
+        fetch(`${process.env.REACT_APP_SERVER_URL}/${endpoint}/logout`, {
+          method: "POST",
+          credentials: "include",
+        });
+        navigate("/");
+      }
+
       dispatch({ type: "LOGIN", payload: data.user });
     } catch (error) {
       console.log(error);
