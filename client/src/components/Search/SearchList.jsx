@@ -1,10 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 import PersonCard from "../PersonCard";
 import CourseCard from "../CourseCard";
 import MapTest from "../map/Map";
 const SearchList = ({ searchData, courseFilter }) => {
   if (searchData.trainer.length === 0 && searchData.courses.length === 0) {
-    return <Typography variant="body1">No data to load...</Typography>;
+    return <Alert sx={{ height: "50px", width: "100%" }} severity="info">No matches found!</Alert>;
   }
 
   //filter & conditions
