@@ -104,6 +104,7 @@ const Register = ({
                 label="First Name"
                 autoFocus
                 onChange={(e) => setFirstName(e.target.value)}
+                inputProps={{ maxLength: 16 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -115,6 +116,7 @@ const Register = ({
                 name="lastName"
                 autoComplete="family-name"
                 onChange={(e) => setLastName(e.target.value)}
+                inputProps={{ maxLength: 16 }}
               />
             </Grid>
             <Grid item xs={12}>
