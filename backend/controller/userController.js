@@ -285,7 +285,7 @@ export const passwordChange = async (req, res) => {
     //}
 
     // Passwort hashen
-    const hashedPassword = bcrypt.hash(newPassword, process.env.SALT_ROUNDS);
+    const hashedPassword = bcrypt.hashSync(newPassword, saltRounds);
 
     // Speichern des neuen Passworts
     user.password = hashedPassword;
@@ -295,6 +295,49 @@ export const passwordChange = async (req, res) => {
   } catch (error) {
     console.error("Error changing password:", error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const emailChange = async (req, res) => {
+  const id = req.params.id;
+  const {email,password} = req.body;
+
+  try {
+      const user = await User.findById(id);
+      if(!user){
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Validierung des alten Passworts
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+
+    user.email = email,
+    user.verified = false;
+    await user.save();
+    // E-Mail-Validierung
+  // Einen Verifizierungstoken für den Trainer erstellen
+  try {
+    const changeToken = new VerifyToken({
+      userID: user._id,
+      verifyToken: crypto.randomBytes(16).toString("hex"),
+    });
+    console.log(changeToken);
+    await changeToken.save();
+
+    // E-Mail mit dem Verifizierungslink an den Trainer senden
+    const link = `http://localhost:5002/token/verify/${changeToken.verifyToken}`;
+    await verifyMailer(user.email, link);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+    return res.status(200).json({ message: "check your emails" });
+  } catch (error) {
+    console.log(error.message);
   }
 };
 
