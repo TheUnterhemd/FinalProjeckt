@@ -43,15 +43,40 @@ export default function LandingPage() {
             maxHeight: "950px",
           }}
         />
-
         <Box
           sx={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            top: "20%",
+            left: "10%",
+            width: { xs: "80%", sm: "90%" },
+            textAlign: "left",
+          }}
+        >
+          <Typography
+            variant="h2"
+            sx={{
+              textShadow: "1px 1px 3px black",
+            }}
+          >
+            Welcome to <span style={{ color: "#ebcbe5" }}>trainMe</span>
+          </Typography>
+          <Typography
+            variant="h3"
+            sx={{
+              visibility: { xs: "hidden", sm: "visible" },
+              textShadow: "1px 1px 3px black",
+            }}
+          >
+            we find courses near you!
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            position: "absolute",
+            top: { xs: "55%", sm: "50%", md: "45%" },
+            left: { xs: "20%", sm: "25%" },
             backgroundColor: "#632b5df6",
-            padding: "1rem",
+            padding: { xs: "1px 0px", sm: "5px 10px" },
             width: "70%",
             borderRadius: "10px",
             boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4)",
@@ -70,14 +95,21 @@ export default function LandingPage() {
           backgroundColor: "rgba(255, 255, 255, 0.2)",
           padding: "2rem",
           borderRadius: "10px",
-          width: "90%",
+          width: { xs: "100%", sm: "90%", md: "80%", lg: "70%", xl: "50%" },
           boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
         }}
       >
-        <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
-          About Local Trainer
+        <Typography
+          variant="h3"
+          sx={{ marginBottom: "1rem", textDecoration: "underline" }}
+        >
+          About trainMe
         </Typography>
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
           <Grid
             item
             xs={12}
