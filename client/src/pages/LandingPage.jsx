@@ -260,6 +260,7 @@ function Carousel() {
         maxWidth: "70%",
         padding: "20px",
         margin: "0 auto",
+        position: "relative",
       }}
       naturalSlideWidth={100}
       naturalSlideHeight={100}
@@ -353,9 +354,36 @@ function Carousel() {
         </Slide>
       </Slider>
 
-      <ButtonBack>{"<"}</ButtonBack>
+      <ButtonBack
+        style={{
+          position: "absolute",
+          top: "60%",
+          left: "-10%",
+          backgroundColor: "transparent",
+          color: "#c73e9d",
+          border: "none",
+          borderRadius: "50%",
+          fontSize: "3rem",
+          fontWeight: "bold"
+        }}
+      >
+        {"<"}
+      </ButtonBack>
 
-      <ButtonNext>{">"}</ButtonNext>
+      <ButtonNext
+        style={{
+          position: "absolute",
+          top: "60%",
+          right: "-10%",
+          backgroundColor: "transparent",
+          color: "#c73e9d",
+          border: "none",
+          fontSize: "3rem",
+          fontWeight: "bold"
+        }}
+      >
+        {">"}
+      </ButtonNext>
     </CarouselProvider>
   );
 }
