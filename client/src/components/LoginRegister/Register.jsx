@@ -104,7 +104,7 @@ const Register = ({
                 label="First Name"
                 autoFocus
                 onChange={(e) => setFirstName(e.target.value)}
-                inputProps={{ maxLength: 16 }}
+                inputProps={{ maxLength: 25 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -116,7 +116,7 @@ const Register = ({
                 name="lastName"
                 autoComplete="family-name"
                 onChange={(e) => setLastName(e.target.value)}
-                inputProps={{ maxLength: 16 }}
+                inputProps={{ maxLength: 25 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -128,6 +128,7 @@ const Register = ({
                 name="email"
                 autoComplete="email"
                 onChange={(e) => setEmail(e.target.value)}
+                inputProps={{ maxLength: 100 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -140,6 +141,7 @@ const Register = ({
                 id="password"
                 autoComplete="new-password"
                 onChange={(e) => setPassword(e.target.value)}
+                inputProps={{ maxLength: 100 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -165,6 +167,7 @@ const Register = ({
                   type="text"
                   id="profession"
                   onChange={(e) => setProfession(e.target.value)}
+                  inputProps={{ maxLength: 100 }}
                 />
               </Grid>
             )}
