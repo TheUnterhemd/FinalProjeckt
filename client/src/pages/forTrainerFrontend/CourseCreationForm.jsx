@@ -194,10 +194,10 @@ export default function CourseCreationForm({ course, setEdit }) {
         display="flex"
         flexDirection="column"
         gap={1}
-        sx={{ width: 500 }}
+        sx={{ width: { xs: "100%", sm: 500 } }}
         onSubmit={(e) => handleCourseSubmit(e)}
       >
-        <Typography variant="h3">
+        <Typography variant="h2" sx={{ textDecoration: "underline", mb: 3 }}>
           {course ? "Update your course" : "Create a Course"}
         </Typography>
         {error && <Alert severity="error"> {error.message}</Alert>}

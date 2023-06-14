@@ -91,10 +91,12 @@ function ProfileForm({ setEdit }) {
       display="flex"
       flexDirection="column"
       gap={1}
-      sx={{ width: 500, mx: "auto", my: 1 }}
+      sx={{ width: { xs: "100%", sm: 500 }, mx: "auto", my: 1 }}
       onSubmit={handleSubmit}
     >
-      {user.address === undefined && <Alert severity="warning">Please add an address to your profile!</Alert>}
+      {user.address === undefined && (
+        <Alert severity="warning">Please add an address to your profile!</Alert>
+      )}
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField

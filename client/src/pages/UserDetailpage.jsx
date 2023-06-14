@@ -38,7 +38,9 @@ function UserProfile() {
 
   return (
     <Box sx={{ my: 10, p: "2rem" }}>
-      <Typography variant="h2">Your Profile</Typography>
+      <Typography variant="h2" sx={{ textDecoration: "underline", mb: 3 }}>
+        Your Profile
+      </Typography>
       {user && !edit && !updatePW && (
         <Grid
           container

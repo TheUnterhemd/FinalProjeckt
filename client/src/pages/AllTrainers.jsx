@@ -14,8 +14,10 @@ export default function AllTrainers() {
   }, [data]);
 
   return (
-    <Container sx={{ padding: "2rem", my: 10 }}>
-      <Typography variant="h2">Our Trainers</Typography>
+    <Container sx={{ p: 4, my: 10 }}>
+      <Typography variant="h2" sx={{ textDecoration: "underline", mb: 3 }}>
+        Our Trainers
+      </Typography>
       <Grid container spacing={2} justifyContent="center">
         {data &&
           data.map((trainer) => (

@@ -51,7 +51,9 @@ export default function AllCourses() {
 
   return (
     <Container sx={{ padding: "2rem", my: 10 }}>
-      <Typography variant="h2">Our Courses</Typography>
+      <Typography variant="h2" sx={{ textDecoration: "underline", mb: 3 }}>
+        Our Courses
+      </Typography>
       <SortMenu />
 
       {data && <MapTest markerOptions={{ data }} />}

@@ -50,6 +50,10 @@ export default function CourseDetailPage() {
     }
     setData(newCourse.course);
     const newUser = await updateBookedCourses(user, data);
+
+    if (newUser.error) {
+      return setError(newUser.content);
+    }
     dispatch({ type: "LOGIN", payload: newUser });
   }
   /** updates bookedCourses Array with current course id (data._id) and updates user in db. Returns updated user */
