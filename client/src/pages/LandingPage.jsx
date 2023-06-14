@@ -212,31 +212,57 @@ function Carousel() {
       dragStep={1}
       infinite={true}
     >
-      <h2>Our Courses</h2>
+      <h2 style={{ fontSize: "1.9rem" }}>Our Courses</h2>
       <Slider className={s.slider}>
-
         <Slide index={0}>
           <RouterLink to="/search?q= ">
-
             <Image
               src={onlineCourse}
               alt="Online Course"
               isBgImage="true"
-              children={<p style={{ color: "whitesmoke" }}>Online Course</p>}
+              children={
+                <p
+                  style={{
+                    color: "#0a1d30",
+                    fontSize: "1.8rem",
+                    textAlign: "center",
+                    position: "absolute",
+                    top: "70%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Online Course
+                </p>
+              }
               tag="div"
             />
           </RouterLink>
-
         </Slide>
 
         <Slide index={1}>
           <RouterLink to="/search?q= ">
-            
             <Image
               src={outdoorCourse}
               alt="Outdoor Course"
               isBgImage="true"
-              children={<p style={{ color: "whitesmoke" }}>Outdoor Course</p>}
+              children={
+                <p
+                  style={{
+                    color: "#293c52",
+                    fontSize: "1.8rem",
+                    textAlign: "center",
+                    position: "absolute",
+                    top: "15%",
+                    left: "60%",
+                    transform: "translate(-50%, -50%)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Outdoor Course
+                </p>
+              }
               tag="div"
             />
           </RouterLink>
@@ -248,13 +274,30 @@ function Carousel() {
               src={indoorCourse}
               alt="Indoor Course"
               isBgImage="true"
-              children={<p style={{ color: "whitesmoke" }}>Indoor Course</p>}
+              children={
+                <p
+                  style={{
+                    color: "#f5f5f5",
+                    fontSize: "1.8rem",
+                    textAlign: "center",
+                    position: "absolute",
+                    top: "75%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Indoor Course
+                </p>
+              }
               tag="div"
             />
           </RouterLink>
         </Slide>
       </Slider>
+
       <ButtonBack>{"<"}</ButtonBack>
+
       <ButtonNext>{">"}</ButtonNext>
     </CarouselProvider>
   );
