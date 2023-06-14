@@ -202,7 +202,7 @@ function Card({ title, text }) {
         </Typography>
       ) : (
         <Typography
-          variant="h3"
+          variant="h4"
           style={{
             textAlign: "center",
             whiteSpace: "nowrap",
