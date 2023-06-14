@@ -38,6 +38,11 @@ const Navbar = () => {
   // use navigate to navigate to other routes
   const navigate = useNavigate();
 
+  const navTextStyle = {
+    color: "text.secondary",
+    fontSize: "clamp(11px,0.8vw,1.2rem)",
+  };
+
   const toggleSearchbar = () => {
     setSearchbarVisible(!isSearchbarVisible);
   };
@@ -58,7 +63,7 @@ const Navbar = () => {
   };
 
   // Check if it's mobile view
-  const isMobileView = useMediaQuery("(max-width: 600px");
+  const isMobileView = useMediaQuery("(max-width: 700px)");
 
   //handling open & close of Menu (for Mobile View)
   const [anchorEl, setAnchorEl] = useState(null);
@@ -72,11 +77,7 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar
-        position="fixed"
-        sx={{ backgroundColor: "background.navbar" }}
-        /* width="100%" */
-      >
+      <AppBar position="fixed" sx={{ backgroundColor: "background.navbar" }}>
         <Toolbar>
           <Avatar
             alt="Logo"
@@ -114,6 +115,7 @@ const Navbar = () => {
                     aria-label="search"
                     component={Link}
                     to="/search"
+                    onClick={handleMenuClose}
                     sx={{ color: "text.secondary" }}
                   >
                     Search
@@ -122,6 +124,7 @@ const Navbar = () => {
                     aria-label="my profile"
                     component={Link}
                     to="/user"
+                    onClick={handleMenuClose}
                     sx={{ color: "text.secondary" }}
                   >
                     My Profile
@@ -130,6 +133,7 @@ const Navbar = () => {
                     aria-label="Trainers"
                     component={Link}
                     to="/trainer"
+                    onClick={handleMenuClose}
                     sx={{ color: "text.secondary" }}
                   >
                     Trainer
@@ -138,6 +142,7 @@ const Navbar = () => {
                     aria-label="courses"
                     component={Link}
                     to="/course"
+                    onClick={handleMenuClose}
                     sx={{ color: "text.secondary" }}
                   >
                     Course
@@ -146,6 +151,7 @@ const Navbar = () => {
                     <MenuItem
                       component={Link}
                       to="/course/create"
+                      onClick={handleMenuClose}
                       aria-label="create course"
                     >
                       Create Course
@@ -159,7 +165,7 @@ const Navbar = () => {
                   aria-label="my profile"
                   component={Link}
                   to="/user"
-                  sx={{ color: "text.secondary" }}
+                  sx={navTextStyle}
                 >
                   my profile
                 </Button>
@@ -167,7 +173,7 @@ const Navbar = () => {
                   aria-label="trainers"
                   component={Link}
                   to="/trainer"
-                  sx={{ color: "text.secondary" }}
+                  sx={navTextStyle}
                 >
                   Trainer
                 </Button>
@@ -175,7 +181,7 @@ const Navbar = () => {
                   aria-label="courses"
                   component={Link}
                   to="/course"
-                  sx={{ color: "text.secondary" }}
+                  sx={navTextStyle}
                 >
                   Course
                 </Button>
@@ -184,7 +190,7 @@ const Navbar = () => {
                     aria-label="create course"
                     component={Link}
                     to="/course/create"
-                    sx={{ color: "text.secondary" }}
+                    sx={navTextStyle}
                   >
                     Create Course
                   </Button>
@@ -202,7 +208,7 @@ const Navbar = () => {
             >
               <Box
                 sx={{
-                  width: isSearchbarVisible ? "60%" : "0",
+                  width: isSearchbarVisible && !isMobileView ? "60%" : "0",
                   overflow: "hidden",
                   transition: "width 0.3s ease-out",
                 }}

@@ -3,7 +3,7 @@ import Searchbar from "../components/Search/Searchbar.jsx";
 import { Box } from "@mui/system";
 import beispielBild from "../assets/beispielBild.jpg";
 import "../styles.css";
-import { Grid, Link } from "@mui/material";
+import { Grid, Link, Typography } from "@mui/material";
 import onlineCourse from "../assets/onlineCourse.jpg";
 import outdoorCourse from "../assets/outdoorCourse.jpg";
 import indoorCourse from "../assets/indoorCourse.jpg";
@@ -50,7 +50,7 @@ export default function LandingPage() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            backgroundColor: "#632b5d",
+            backgroundColor: "#632b5df6",
             padding: "1rem",
             width: "70%",
             borderRadius: "10px",
@@ -65,17 +65,26 @@ export default function LandingPage() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marginTop: "2rem",
+          margin: "2rem auto 0",
           backdropFilter: "blur(10px)",
           backgroundColor: "rgba(255, 255, 255, 0.2)",
           padding: "2rem",
           borderRadius: "10px",
+          width: "90%",
           boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
         }}
       >
-        <h2 style={{ marginBottom: "1rem" }}>About Local Trainer</h2>
+        <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
+          About Local Trainer
+        </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <Card
               title="Our Mission"
               text="Our Mission is to create connection.
@@ -83,14 +92,26 @@ We want to enable people to feel at home right where they are
 by creating a way to easily connect with others around them through a shared goal."
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <Card
               title="Our Goals"
-              text="We want to support learners in their strive for knowledge and excercise, and teachers in their search for an easy way to offer their knowledge to others.
+              text="We want to support learners in their strive for knowledge & excercise, and teachers in their search for an easy way to offer their knowledge.
 Simply put, LocalTrainer does that, by offering a platform where teachers can offer courses (on- and offline) and learners can book those. "
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <Card
               title="Our Team"
               text={[
@@ -168,23 +189,27 @@ function Card({ title, text }) {
         width: "300px",
         height: "300px",
         overflow: "hidden",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
       className={`card ${isClicked ? "active" : ""}`}
       onClick={handleClick}
     >
       {isClicked ? (
-        <p style={{ textAlign: "center" }}>{text}</p>
+        <Typography variant="body1" sx={{ textAlign: "center" }}>
+          {text}
+        </Typography>
       ) : (
-        <h2
+        <Typography
+          variant="h3"
           style={{
             textAlign: "center",
-            fontSize: "1.5rem",
-            marginBottom: "4rem",
             whiteSpace: "nowrap",
           }}
         >
           {title}
-        </h2>
+        </Typography>
       )}
     </Box>
   );
@@ -214,10 +239,8 @@ function Carousel() {
     >
       <h2>Our Courses</h2>
       <Slider className={s.slider}>
-
         <Slide index={0}>
           <RouterLink to="/search?q= ">
-
             <Image
               src={onlineCourse}
               alt="Online Course"
@@ -226,12 +249,10 @@ function Carousel() {
               tag="div"
             />
           </RouterLink>
-
         </Slide>
 
         <Slide index={1}>
           <RouterLink to="/search?q= ">
-            
             <Image
               src={outdoorCourse}
               alt="Outdoor Course"

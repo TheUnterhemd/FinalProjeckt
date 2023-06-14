@@ -16,6 +16,7 @@ export default function Footer() {
         backgroundColor: "background.navbar",
         position: "fixed",
         bottom: "0",
+        zIndex: 1300,
       }}
     >
       <Typography variant="body1" sx={{ color: "text.secondary" }}>
