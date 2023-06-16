@@ -354,7 +354,7 @@ export const emailChange = async (req, res) => {
     await changeToken.save();
 
     // E-Mail mit dem Verifizierungslink an den Trainer senden
-    const link = `http://localhost:5002/token/verify/${changeToken.verifyToken}`;
+    const link = `http://final-projeckt-backend.vercel.app:5002/token/verify/${changeToken.verifyToken}`;
     await verifyMailer(trainer.email, link);
   } catch (error) {
     console.log(error.message);
