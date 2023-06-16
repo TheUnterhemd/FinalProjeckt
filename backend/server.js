@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 import tokenRouter from "./routes/tokenRouter.js";
 
 dotenv.config();
-const app = express();
+export const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
