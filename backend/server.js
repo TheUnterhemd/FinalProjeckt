@@ -15,7 +15,7 @@ export const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const whitelist = ["https://localtrainer.vercel.app/"];
+const whitelist = ["https://localtrainer.vercel.app"];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
