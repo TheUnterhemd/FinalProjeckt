@@ -50,7 +50,7 @@ export const addTrainer = async (req, res) => {
   }
   // Wenn der Trainer bereits existiert, Fehlermeldung zurückgeben
   if (exist) {
-    return res
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app')
       .status(404)
       .json({ message: "Trainer already exists! Login instead" });
   }
@@ -99,12 +99,12 @@ export const addTrainer = async (req, res) => {
     await trainerToken.save();
 
     // E-Mail mit dem Verifizierungslink an den Trainer senden
-    const link = `http://localhost:5002/token/verify/${trainerToken.verifyToken}`;
+    const link = `http://final-projeckt-backend.vercel.app:5002/token/verify/${trainerToken.verifyToken}`;
     await verifyMailer(trainer.email, link);
   } catch (error) {
     console.log(error.message);
   }
-  return res.status(200).json({
+  return  res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(200).json({
     message: "Trainer saved successfully, check your email",
   });
 };
@@ -124,14 +124,14 @@ export const loginTrainer = async (req, res, next) => {
 
     // Wenn kein Trainer mit der angegebenen E-Mail-Adresse gefunden wurde, Fehlermeldung zurückgeben
     if (!trainer) {
-      return res
+      return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app')
         .status(404)
         .json({ message: "Trainer not found! Register instead" });
     }
 
     // Wenn der Trainer nicht verifiziert ist, Fehlermeldung zurückgeben
     if (!trainer.verified) {
-      return res.status(401).json({ message: "Trainer not verified" });
+      return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(401).json({ message: "Trainer not verified" });
     }
 
     // Überprüfen, ob das eingegebene Passwort korrekt ist
@@ -139,7 +139,7 @@ export const loginTrainer = async (req, res, next) => {
 
     // Wenn das Passwort nicht korrekt ist, Fehlermeldung zurückgeben
     if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Wrong password" });
+      return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(400).json({ message: "Wrong password" });
     }
 
     // Payload für den Zugriffstoken erstellen
@@ -199,12 +199,12 @@ export const loginTrainer = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ message: "Server error" });
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(500).json({ message: "Server error" });
   }
 };
 
 export const logoutTrainer = async (req, res) => {
-  res.clearCookie("LocalTrainer").json({ message: "logged out" });
+  res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').clearCookie("LocalTrainer").json({ message: "logged out" });
 };
 
 //Funktion um den Trainer zu updaten
@@ -246,7 +246,7 @@ export const updateTrainer = async (req, res) => {
   // wenn das nicht die gleiche ist, wird Fehler geworfen
 
   if (!trainer._id.equals(req.trainer.user._id)) {
-    return res
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app')
       .status(403)
       .json({ message: "You are not allowed to update this trainer." });
   }
@@ -276,11 +276,11 @@ export const updateTrainer = async (req, res) => {
 
     // Wenn kein Trainer gefunden wurde, gibt es einen Fehler bei der Aktualisierung
     if (!result) {
-      return res.status(500).json({ message: "Not able to update trainer" });
+      return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(500).json({ message: "Not able to update trainer" });
     }
 
     // Erfolgreiche Aktualisierung des Trainers und den aktualisierten Trainer zurückgeben
-    return res.status(200).json({ user: result, message: "trainer updated" });
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(200).json({ user: result, message: "trainer updated" });
   } catch (error) {
     console.log(error.message);
   }
@@ -294,14 +294,14 @@ export const passwordChange = async (req, res) => {
     //Suche nach dem Trainer in der Datenbank
     const trainer = await Trainer.findById(id);
     if (!trainer) {
-      return res.status(404).json({ error: "Trainer not found" });
+      return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(404).json({ error: "Trainer not found" });
     }
 
     // Validierung des alten Passworts
     const isPasswordCorrect = await bcrypt.compare(currentPassword, trainer.password);
 
     if (!isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid old password" });
+      return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(400).json({ error: "Invalid old password" });
     }
 
     // Sicherstellung ob die beiden neuen Eingaben identisch sind
@@ -316,29 +316,28 @@ export const passwordChange = async (req, res) => {
     trainer.password = hashedPassword;
     await trainer.save();
 
-    return res.status(200).json({ message: "Password changed successfully" });
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(200).json({ message: "Password changed successfully" });
   } catch (error) {
     console.error("Error changing password:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(500).json({ error: "Internal server error" });
   }
 };
 
 export const emailChange = async (req, res) => {
   const id = req.params.id;
   const {email,currentPassword} = req.body;
-  console.log(req.body);
 
   try {
       const trainer = await Trainer.findById(id);
       if(!trainer){
-        return res.status(404).json({ error: "Trainer not found" });
+        return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(404).json({ error: "Trainer not found" });
       }
       console.log(trainer.password);
       // Validierung des alten Passworts
     const isPasswordCorrect = await bcrypt.compare(currentPassword, trainer.password);
 
     if (!isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid password" });
+      return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(400).json({ error: "Invalid password" });
     }
 
     trainer.email = email,
@@ -361,7 +360,7 @@ export const emailChange = async (req, res) => {
     console.log(error.message);
   }
 
-    return res.status(200).json({ message: "check your emails" });
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(200).json({ message: "check your emails" });
   } catch (error) {
     console.log(error.message);
   }
@@ -383,9 +382,9 @@ export const getAllTrainers = async (req, res, next) => {
     console.log(error.message);
   }
   if (!trainers) {
-    return res.status(404).json({ message: "No trainers found" });
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(404).json({ message: "No trainers found" });
   }
-  return res.status(200).json(trainers);
+  return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(200).json(trainers);
 };
 
 export const getTrainer = async (req, res, next) => {
@@ -405,7 +404,7 @@ export const getTrainer = async (req, res, next) => {
     console.log(error.message);
   }
   if (!trainer) {
-    return res.status(404).json({ message: "No trainer found" });
+    return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(404).json({ message: "No trainer found" });
   }
-  return res.status(200).json(trainer);
+  return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(200).json(trainer);
 };
