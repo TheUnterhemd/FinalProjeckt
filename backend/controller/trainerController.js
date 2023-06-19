@@ -175,10 +175,9 @@ export const loginTrainer = async (req, res, next) => {
     // Cookie mit dem Refresh Token im Response setzen
     res.cookie("LocalTrainer", refreshToken.refreshToken, {
       maxAge: 86400000, // Gültigkeitsdauer des Cookies: 24 Stunden
-      httpOnly: true,
       withCredentials: true,
-      sameSite: "None", // Kommentiert, da es potenziell zu Problemen führen kann
-      secure: false, // Kommentiert, da es potenziell zu Problemen führen kann
+      //sameSite: "None", // Kommentiert, da es potenziell zu Problemen führen kann
+      secure: true, // Kommentiert, da es potenziell zu Problemen führen kann
     });
 
     // Erfolgreiche Anmeldung und Trainerinformationen zurückgeben
