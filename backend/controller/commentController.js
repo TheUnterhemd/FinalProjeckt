@@ -19,7 +19,6 @@ export const addComment = async (req, res, next) => {
       { path: "trainerId", select: "firstName lastName imgURL" },
       { path: "userId", select: "firstName lastName imgURL" }
     ]);
-    console.log(populatedComment);
     return res.status(200).json({ populatedComment, message: "Comment added" });
   } catch (error) {
     console.log(error.message);
@@ -69,7 +68,6 @@ export const getAllComments = async (req, res, next) => {
 
 export const deleteComment = async (req, res, next) => {
   const id = req.params.id;
-  console.log("deletion fired");
   try {
     const deletedComment = await Comment.findByIdAndDelete(id);
 

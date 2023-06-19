@@ -179,7 +179,6 @@ export const getAllCourses = async (req, res, next) => {
     courses = await Course.find()
       .populate("trainer", "firstName lastName imgURL")
       .populate("currentStudents", "firstName lastName imgURL");
-    console.log(courses);
   } catch (error) {
     console.log(error.message);
   }
@@ -196,7 +195,6 @@ export const getCourse = async (req, res, next) => {
     course = await Course.findOne({ _id: id })
       .populate("trainer", "firstName lastName imgURL _id")
       .populate("currentStudents", "firstName lastName imgURL _id");
-    console.log(course);
   } catch (error) {
     console.log(error.message);
   }
