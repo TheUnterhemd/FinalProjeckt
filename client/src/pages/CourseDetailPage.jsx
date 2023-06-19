@@ -1,7 +1,3 @@
-// ToDo:
-// Bezahlfunktion?
-// update needs Authorization or validator needs to be deleted from backend
-// updateCurrentStudens URL korrigieren und nur die user und course ID übergeben
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
@@ -89,7 +85,6 @@ export default function CourseDetailPage() {
         },
         user.accessToken
       );
-      console.log("newCourse CourseDetailPage:handleDelete", newCourse);
     } catch (error) {
       console.log("error CourseDetailPage:handleDelete", error);
     }
