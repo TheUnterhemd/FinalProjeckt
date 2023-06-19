@@ -15,11 +15,6 @@ export default function AllCourses() {
 
   const { sort } = useContext(SortContext);
 
-  useEffect(() => {
-    console.log("All courses", data);
-    console.log("url", url);
-  }, [data, url]);
-
   let filteredCourses = data;
 
   switch (sort) {

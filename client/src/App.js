@@ -18,7 +18,6 @@ import Success from "./pages/Success";
 
 function App() {
   const { user, dispatch } = useContext(AuthContext);
-  console.log("user on App.js", user);
 
   const refreshToken = async () => {
     const url = process.env.REACT_APP_SERVER_URL;
@@ -37,7 +36,7 @@ function App() {
       tokenUser.accessToken = data.accessToken;
       dispatch({ type: "LOGIN", payload: tokenUser });
     } catch (error) {
-      /* console.log(error); */
+      console.log(error);
     }
   };
 

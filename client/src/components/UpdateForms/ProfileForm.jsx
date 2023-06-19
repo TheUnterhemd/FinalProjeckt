@@ -18,23 +18,9 @@ function ProfileForm({ setEdit }) {
     user.trainer ? setEndpoint("trainer") : setEndpoint("user");
   }, [user.trainer]);
 
-  // user und trainer haben folgende relevante keys gemeinsam:
-  // firstName
-  // lastName
-  // address
-  // email
-  // imgURL
-  // comments
-
-  // user extra: bookedCourses, solvedCourses, interests
-  // trainer extra: courses profession
-
   function handleSubmit(e) {
     e.preventDefault();
     postData({ firstName, lastName, imgURL, street, postalCode, city });
-    /* console.log(
-      "this will submit the updated profiledata to database and dispatch with the returned user to update context"
-    ); */
   }
 
   const postData = async ({
@@ -50,10 +36,7 @@ function ProfileForm({ setEdit }) {
       formData.append("firstName", firstName);
       formData.append("lastName", lastName);
       formData.append("imgURL", imgURL);
-      /* formData.append(
-        "address",
-        JSON.stringify({ street: street, code: postalCode, city: city })
-      ); */
+
       formData.append("street", street);
       formData.append("city", city);
       formData.append("postalCode", postalCode);
@@ -77,7 +60,6 @@ function ProfileForm({ setEdit }) {
 
       const data = await response.json();
       dispatch({ type: "LOGIN", payload: data.user });
-      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {

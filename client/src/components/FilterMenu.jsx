@@ -16,7 +16,6 @@ const FilterMenu = ({ setFilter, data }) => {
   const valueText = (value) => {
     return `${value}€`;
   };
-  console.log("data in filtermenü", data);
   return (
     <>
       <Button variant="outlined" onClick={toggleFilter} sx={{ m: 1 }}>

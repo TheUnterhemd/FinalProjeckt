@@ -8,10 +8,6 @@ import { v4 as uuid } from "uuid";
 export default function AllTrainers() {
   const url = process.env.REACT_APP_SERVER_URL;
   const { data } = useFetch(`${url}/trainer/`);
-  useEffect(() => {
-    console.log("All Trainers", data);
-    console.log("url", url);
-  }, [data]);
 
   return (
     <Container sx={{ p: 4, my: 10 }}>

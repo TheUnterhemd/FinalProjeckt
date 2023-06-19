@@ -8,11 +8,10 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function SmallCards({ data }) {
-  const navigate = useNavigate();
   return (
     <Grid
       container
