@@ -51,7 +51,6 @@ const Login = ({ setReg, close, setWarningToast }) => {
       }
 
       const data = await response.json();
-      console.log(data);
       dispatch({ type: "LOGIN", payload: data.user });
     } catch (error) {
       console.log(error);
@@ -63,7 +62,7 @@ const Login = ({ setReg, close, setWarningToast }) => {
 
   const handleWarning = async () => {
     setWarningToast(true);
-  }
+  };
 
   return (
     <>
