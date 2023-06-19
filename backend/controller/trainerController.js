@@ -177,7 +177,7 @@ export const loginTrainer = async (req, res, next) => {
       maxAge: 86400000, // Gültigkeitsdauer des Cookies: 24 Stunden
       withCredentials: true,
       //sameSite: "None", // Kommentiert, da es potenziell zu Problemen führen kann
-      //secure: false, // Kommentiert, da es potenziell zu Problemen führen kann
+      secure: true, // Kommentiert, da es potenziell zu Problemen führen kann
     });
 
     // Erfolgreiche Anmeldung und Trainerinformationen zurückgeben
