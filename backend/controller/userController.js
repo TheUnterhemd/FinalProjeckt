@@ -30,7 +30,6 @@ cloudinary.config({
 //register
 export const registerUser = async (req, res) => {
   const { firstName, lastName, email, password, imgURL } = req.body;
-  console.log(req.file);
 
   const salt = bcrypt.genSaltSync(saltRounds);
   const hash = bcrypt.hashSync(password, salt);
@@ -64,7 +63,6 @@ export const registerUser = async (req, res) => {
       userID: newUser._id,
       verifyToken: crypto.randomBytes(16).toString("hex"),
     });
-    console.log(userToken);
     await userToken.save();
 
     const link = `http://localhost:5002/token/verify/${userToken.verifyToken}`;
@@ -328,7 +326,6 @@ export const emailChange = async (req, res) => {
       userID: user._id,
       verifyToken: crypto.randomBytes(16).toString("hex"),
     });
-    console.log(changeToken);
     await changeToken.save();
 
     // E-Mail mit dem Verifizierungslink an den Trainer senden

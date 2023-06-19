@@ -331,7 +331,6 @@ export const emailChange = async (req, res) => {
       if(!trainer){
         return res.header('Access-Control-Allow-Origin', 'https://localtrainer.vercel.app').status(404).json({ error: "Trainer not found" });
       }
-      console.log(trainer.password);
       // Validierung des alten Passworts
     const isPasswordCorrect = await bcrypt.compare(currentPassword, trainer.password);
 
@@ -349,7 +348,6 @@ export const emailChange = async (req, res) => {
       userID: trainer._id,
       verifyToken: crypto.randomBytes(16).toString("hex"),
     });
-    console.log(changeToken);
     await changeToken.save();
 
     // E-Mail mit dem Verifizierungslink an den Trainer senden
