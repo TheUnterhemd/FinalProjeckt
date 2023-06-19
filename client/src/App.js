@@ -36,7 +36,7 @@ function App() {
       tokenUser.accessToken = data.accessToken;
       dispatch({ type: "LOGIN", payload: tokenUser });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
