@@ -4,7 +4,11 @@ import CourseCard from "../CourseCard";
 import MapTest from "../map/Map";
 const SearchList = ({ searchData, courseFilter }) => {
   if (searchData.trainer.length === 0 && searchData.courses.length === 0) {
-    return <Alert sx={{ height: "50px", width: "100%" }} severity="info">No matches found!</Alert>;
+    return (
+      <Alert sx={{ height: "50px", width: "100%" }} severity="info">
+        No matches found!
+      </Alert>
+    );
   }
 
   //filter & conditions
@@ -48,12 +52,14 @@ const SearchList = ({ searchData, courseFilter }) => {
     const courseStartDate = course.start.split("T")[0];
     const today = new Date().toISOString().split("T")[0];
     return courseStartDate >= today;
-  })
+  });
 
   return (
     <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
       {searchData && <MapTest markerOptions={{ data: filteredCourses }} />}
-      <Typography variant="h5">Trainer:</Typography>
+      {searchData.trainer.length > 0 && (
+        <Typography variant="h5">Trainer:</Typography>
+      )}
       <Box display="flex" flexWrap="wrap" justifyContent="center">
         {searchData.trainer.length > 0 &&
           searchData?.trainer.map((searchData) => (
@@ -62,7 +68,9 @@ const SearchList = ({ searchData, courseFilter }) => {
             </Box>
           ))}
       </Box>
-      <Typography variant="h5">Courses:</Typography>
+      {filteredCourses.length > 0 && (
+        <Typography variant="h5">Courses:</Typography>
+      )}
       <Box display="flex" flexWrap="wrap" justifyContent="center">
         {filteredCourses.length > 0 &&
           filteredCourses.map((courseData) => (
