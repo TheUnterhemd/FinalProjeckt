@@ -41,7 +41,7 @@ const SearchPage = () => {
   const queryParams = new URLSearchParams(queryString);
   const query = queryParams.get("q");
   //fetching data
-  let searchURL = `http://localhost:5002/search/?q=${query}`;
+  let searchURL = `${process.env.REACT_APP_SERVER_URL}/search/?q=${query}`;
   const { data, isPending, error } = useFetch(searchURL);
 
   return (
